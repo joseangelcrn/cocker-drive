@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,23 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+
+    if (Auth::user() === null) {
+        return view('welcome');
+    } else {
+        return redirect()->route('home');
+    }
+
     return view('welcome');
+});
+
+Auth::routes();
+
+
+//Rutas protegidas
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::resource('/fichero', 'FicheroController')->name('fichero','*');
+
 });
