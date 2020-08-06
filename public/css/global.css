@@ -1,0 +1,17 @@
+body{
+    background-color: #4d4dff;
+
+/* darkblue */
+}
+
+#img_perro_welcome{
+    border-radius: 50%;
+    border: solid cadetblue;
+}
+@media screen and (min-width: 800px) {
+    #img_perro_welcome:hover{
+        border: solid rgb(255, 255, 255) 30px;
+        transition: 1s;
+    }
+}
+
