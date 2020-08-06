@@ -15,3 +15,9 @@ body{
     }
 }
 
+#img_perro_home{
+    border-radius: 50%;
+    border: solid cadetblue;
+    width: 115px;
+    height: 115px;
+}
