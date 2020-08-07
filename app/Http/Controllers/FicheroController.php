@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Fichero;
 use Illuminate\Http\Request;
+use Auth;
+use Symfony\Component\Console\Input\Input;
 
 class FicheroController extends Controller
 {
@@ -35,7 +38,17 @@ class FicheroController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = Auth::user();
+        $resultado = false;
+
+        if ($user != null) {
+
+            $ficheros = $request->ficheros;
+            $user = Auth()->user();
+            $resultado = Fichero::fullGuardado($ficheros,$user->id);
+        }
+
+        return response()->json(['resultado'=>$resultado]);
     }
 
     /**
