@@ -2058,6 +2058,7 @@ __webpack_require__.r(__webpack_exports__);
       this.ficheros.forEach(function (fichero) {
         data.append('ficheros[]', fichero.bin, fichero.nombre_real);
       });
+      this.resultado = -1;
       axios.post('/fichero', data, config).then(function (response) {
         console.log('response data');
         var resultado = response.data['resultado'];
@@ -37863,7 +37864,10 @@ var render = function() {
               "button",
               {
                 staticClass: "btn btn-primary",
-                attrs: { type: "button", disabled: _vm.disabledForm },
+                attrs: {
+                  type: "button",
+                  disabled: _vm.disabledForm || _vm.resultado != null
+                },
                 on: {
                   click: function($event) {
                     return _vm.guardar()
