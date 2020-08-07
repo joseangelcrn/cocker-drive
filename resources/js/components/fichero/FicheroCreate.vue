@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <button @click="guardar()" type="button" :disabled="disabledForm" class="btn btn-primary">
+                        <button @click="guardar()" type="button" :disabled="disabledForm || resultado!= null" class="btn btn-primary">
                             Guardar Fichero
                         </button>
                     </div>
@@ -128,6 +128,8 @@
                 this.ficheros.forEach(fichero => {
                     data.append('ficheros[]',fichero.bin,fichero.nombre_real);
                 });
+
+                this.resultado = -1;
 
                 axios.post('/fichero', data, config).then(
                     response => {
