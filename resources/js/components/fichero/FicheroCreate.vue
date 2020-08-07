@@ -37,7 +37,14 @@
                             <button type="button" class="btn btn-sm btn-danger w-100 align-bottom" @click="eliminarFichero(index)">Eliminar</button>
                         </div>
                     </div>
-
+                    <div class="form-group">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert" v-if="resultado === false">
+                            <strong>Oops..!</strong> Ha habido un problema al guardar tu(s) archivo(s).
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <button @click="guardar()" type="button" :disabled="disabledForm" class="btn btn-primary">
                             Guardar Fichero
@@ -65,7 +72,8 @@
                     'docs',
                     'doc',
                     'docx'
-                ]
+                ],
+                resultado:null
             }
         },
         methods:{
@@ -123,8 +131,14 @@
 
                 axios.post('/fichero', data, config).then(
                     response => {
-                        console.log('response !');
-                        console.log(response    );
+                        console.log('response data');
+                        let resultado = response.data['resultado'];
+                        console.log(response.data);
+                        if (resultado) {
+                            window.location.href = "/home";
+                        } else {
+
+                        }
                     }
                 )
             }
