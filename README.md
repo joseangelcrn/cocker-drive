@@ -1,6 +1,11 @@
 # Cocker Drive (..en desarrollo !)
 
 Cocker Drive es una web inspirada en google drive. <br>
+
+#  !# Importante !# :
+
+### Al estar actualmente en *desarrollo* habrá momentos en que las *clonaciones y pulls* que hagáis no os funcione el proyecto ya que lo estaré desarrollando en mis ramas locales.
+
 Las **versiones estables** estaran en la rama **master** mergeandose como **release acompañados de numero de version**.
 
 <hr>
