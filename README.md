@@ -36,16 +36,20 @@ DB_PASSWORD= (password  de tu base de datos local, por defecto: vacio) <br>
 
 > php artisan migrate
 
-## 6. Ejecuta los seeders (Opcional).
+## 6. Crear un enlace simbolico en el directorio public de la aplicación para poder acceder al storage.
+
+> php artisan storage:link
+
+## 7. Ejecuta los seeders (Opcional).
 
 > php artisan db:seed
 
-### 6.1 Seed de usuario.
+### 7.1 Seed de usuario.
 
     Email: jose@gmail.com
     Contraseña: josejose 
 
 
-## 7. Ejecuta el servidor de pruebas.
+## 8. Ejecuta el servidor de pruebas.
 
 > php artisan serve
