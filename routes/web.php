@@ -32,6 +32,7 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/mis-ficheros', 'FicheroController@misFicheros')->name('fichero.mis-ficheros');
     Route::resource('/fichero', 'FicheroController')->name('fichero','*');
 
 });
