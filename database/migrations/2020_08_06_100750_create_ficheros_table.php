@@ -17,6 +17,7 @@ class CreateFicherosTable extends Migration
             $table->id();
             $table->string('nombre_real');
             $table->string('nombre_hash');
+            $table->string('extension');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
         });
