@@ -1932,6 +1932,148 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Fichero/FicheroCreate.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Fichero/FicheroCreate.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      ficheros: [],
+      //extensiones de imagenes permitidas
+      extImagenesPermitidas: ['png', 'jpg', 'jpeg'],
+      extDocs: ['docs', 'doc', 'docx']
+    };
+  },
+  methods: {
+    precargarFicheros: function precargarFicheros(event) {
+      var ficheros = event.target.files;
+      console.log('Ficheros precargados');
+      console.log(ficheros);
+
+      for (var i = 0; i < ficheros.length; i++) {
+        var fichero = ficheros[i];
+        /**
+         * Aqui me preparo un json personalizado parahacer mas comoda la legibilidad y
+         * su uso mas adelante en la vista.
+         */
+
+        var customJson = {};
+        customJson.bin = fichero;
+        customJson.url = URL.createObjectURL(fichero);
+        customJson.nombre_real = fichero.name.split('.')[0]; // customJson.nombre_real =
+
+        customJson.extension = fichero.name.split('.').pop();
+        this.ficheros.push(customJson);
+      } // ficheros.forEach(fichero => {
+      //     this.ficheros.push(fichero);
+      // });
+
+
+      console.log(this.ficheros);
+    },
+    eliminarFichero: function eliminarFichero(index) {
+      var seguro = confirm('¿Estas seguro que deseas eliminar esta imagen?');
+
+      if (seguro) {
+        // alert('Imagen borrada');
+        delete this.ficheros.splice(index, 1);
+      }
+    },
+    guardar: function guardar() {
+      console.log('Guardar Ficheros !');
+      console.log(this.ficheros);
+      var config = {
+        header: {
+          'Content-Type': 'multipart/form-data',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+      };
+      var data = new FormData();
+      this.ficheros.forEach(function (fichero) {
+        data.append('ficheros[]', fichero.bin, fichero.nombre_real);
+      });
+      axios.post('/fichero', data, config).then(function (response) {
+        console.log('response !');
+        console.log(response);
+      });
+    }
+  },
+  mounted: function mounted() {},
+  computed: {
+    //sera true siempre que este vacio el array de ficheros
+    // create-stage
+    disabledForm: function disabledForm() {
+      var resultado = true;
+
+      if (this.ficheros.length > 0) {
+        resultado = false;
+      }
+
+      return resultado;
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/bootstrap/dist/js/bootstrap.js":
 /*!*****************************************************!*\
   !*** ./node_modules/bootstrap/dist/js/bootstrap.js ***!
@@ -37546,6 +37688,189 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Fichero/FicheroCreate.vue?vue&type=template&id=53c25e46&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Fichero/FicheroCreate.vue?vue&type=template&id=53c25e46& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row bg-white rounded p-3" }, [
+      _c("div", { staticClass: "col-12 " }, [
+        _c("form", { attrs: { action: "", method: "post" } }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: { type: "file", name: "ficheros", multiple: "" },
+              on: { change: _vm.precargarFicheros }
+            }),
+            _vm._v(" "),
+            _c("span", { staticClass: "ml-3" }, [
+              _vm._v("Extensiones permitidas: .jpg, .jpeg, .png, .txt, .pdf")
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "form-group row h-100" },
+            _vm._l(_vm.ficheros, function(fichero, index) {
+              return _c(
+                "div",
+                {
+                  key: fichero + index,
+                  staticClass: "col-lg-3 col-md-6   mt-2"
+                },
+                [
+                  _vm.extImagenesPermitidas.includes(fichero.extension)
+                    ? _c("div", { staticClass: "text-center" }, [
+                        _c("img", {
+                          staticClass: "img-thumbnail",
+                          staticStyle: { height: "250px" },
+                          attrs: { src: fichero.url, alt: "fichero" }
+                        })
+                      ])
+                    : fichero.extension == "pdf"
+                    ? _c("div", { staticClass: "text-center" }, [
+                        _c("img", {
+                          staticClass: "img-thumbnail",
+                          staticStyle: { height: "250px" },
+                          attrs: {
+                            src: "../storage/sistema/iconos/pdf.svg",
+                            alt: "Icono PDF"
+                          }
+                        })
+                      ])
+                    : _vm.extDocs.includes(fichero.extension)
+                    ? _c("div", { staticClass: "text-center" }, [
+                        _c("img", {
+                          staticClass: "img-thumbnail",
+                          staticStyle: { height: "250px" },
+                          attrs: {
+                            src: "../storage/sistema/iconos/doc.jpg",
+                            alt: "Icono PDF"
+                          }
+                        })
+                      ])
+                    : fichero.extension == "txt"
+                    ? _c("div", { staticClass: "text-center" }, [
+                        _c("img", {
+                          staticClass: "img-thumbnail",
+                          staticStyle: { height: "250px" },
+                          attrs: {
+                            src: "../storage/sistema/iconos/txt.png",
+                            alt: "Icono TXT"
+                          }
+                        })
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: fichero.nombre_real,
+                        expression: "fichero.nombre_real"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      title: "Nombre con el que se guardara el fichero."
+                    },
+                    domProps: { value: fichero.nombre_real },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(fichero, "nombre_real", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-sm btn-danger w-100 align-bottom",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.eliminarFichero(index)
+                        }
+                      }
+                    },
+                    [_vm._v("Eliminar")]
+                  )
+                ]
+              )
+            }),
+            0
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary",
+                attrs: { type: "button", disabled: _vm.disabledForm },
+                on: {
+                  click: function($event) {
+                    return _vm.guardar()
+                  }
+                }
+              },
+              [
+                _vm._v(
+                  "\n                          Guardar Fichero\n                      "
+                )
+              ]
+            )
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c("h3", [_vm._v("Subida de fichero")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", [_c("b", [_vm._v("Fichero:")])])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js":
 /*!********************************************************************!*\
   !*** ./node_modules/vue-loader/lib/runtime/componentNormalizer.js ***!
@@ -49734,6 +50059,7 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
+Vue.component('fichero-create', __webpack_require__(/*! ./components/Fichero/FicheroCreate.vue */ "./resources/js/components/Fichero/FicheroCreate.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -49750,9 +50076,13 @@ var app = new Vue({
 /*!***********************************!*\
   !*** ./resources/js/bootstrap.js ***!
   \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -49781,7 +50111,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  * allows your team to easily build robust real-time web applications.
  */
 // import Echo from 'laravel-echo';
-// window.Pusher = require('pusher-js');
+
+ // window.Pusher = require('pusher-js');
 // window.Echo = new Echo({
 //     broadcaster: 'pusher',
 //     key: process.env.MIX_PUSHER_APP_KEY,
@@ -49855,6 +50186,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Fichero/FicheroCreate.vue":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/Fichero/FicheroCreate.vue ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _FicheroCreate_vue_vue_type_template_id_53c25e46___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FicheroCreate.vue?vue&type=template&id=53c25e46& */ "./resources/js/components/Fichero/FicheroCreate.vue?vue&type=template&id=53c25e46&");
+/* harmony import */ var _FicheroCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FicheroCreate.vue?vue&type=script&lang=js& */ "./resources/js/components/Fichero/FicheroCreate.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _FicheroCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _FicheroCreate_vue_vue_type_template_id_53c25e46___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _FicheroCreate_vue_vue_type_template_id_53c25e46___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Fichero/FicheroCreate.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Fichero/FicheroCreate.vue?vue&type=script&lang=js&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/Fichero/FicheroCreate.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FicheroCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./FicheroCreate.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Fichero/FicheroCreate.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FicheroCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Fichero/FicheroCreate.vue?vue&type=template&id=53c25e46&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/Fichero/FicheroCreate.vue?vue&type=template&id=53c25e46& ***!
+  \******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FicheroCreate_vue_vue_type_template_id_53c25e46___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./FicheroCreate.vue?vue&type=template&id=53c25e46& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Fichero/FicheroCreate.vue?vue&type=template&id=53c25e46&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FicheroCreate_vue_vue_type_template_id_53c25e46___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FicheroCreate_vue_vue_type_template_id_53c25e46___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
