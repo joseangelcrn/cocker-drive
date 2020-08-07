@@ -73,7 +73,7 @@ class Fichero extends Model
 
      public static function crearData($nombreReal,$nombreHash,$extension,$userId)
      {
-        $resultado = Fichero::create(
+        $nuevoFichero = Fichero::create(
             [
             'nombre_real'=>$nombreReal,
             'nombre_hash'=>$nombreHash,
@@ -83,8 +83,49 @@ class Fichero extends Model
 
         );
 
+        return $nuevoFichero != null ? true : false;
+     }
+
+     /**
+      * Funcion general para subir un fichero guardarlo en el storage y en bd
+      */
+
+     public static function guardar($fichero,$userId)
+     {
+        $resultado = false;
+        $resultBin = self::crearBin($fichero);
+
+        $nombreReal = $resultBin['nombre_real'];
+        $nombreHash = $resultBin['nombre_hash'];
+        $extension = $resultBin['extension'];
+
+        if ($nombreReal != null and $nombreHash != null) {
+            $resultado = self::crearData($nombreReal,$nombreHash,$extension,$userId);
+        }
+
         return $resultado;
      }
 
+     /**
+      * Guardado en bin y bd + comprobacion de si todos los ficheros se subiron correctamente
+      * o no..
+      * Esta funcion es la que se usa para guardar.
+      */
 
+
+    public static function fullGuardado($ficheros,$userId)
+    {
+        $resultado = false;
+        $statusFicherosGuardados = array();
+        foreach ($ficheros as $fichero) {
+           $guardado =  Fichero::guardar($fichero,$userId);
+           array_push($statusFicherosGuardados,$guardado);
+        }
+        //si todos los status son true no habra habido ningun problema
+        if (count(array_unique($statusFicherosGuardados)) === 1 && end($statusFicherosGuardados) === true) {
+            $resultado = true;
+        }
+
+        return $resultado;
+    }
 }
