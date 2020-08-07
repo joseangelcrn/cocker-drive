@@ -1993,13 +1993,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       ficheros: [],
       //extensiones de imagenes permitidas
       extImagenesPermitidas: ['png', 'jpg', 'jpeg'],
-      extDocs: ['docs', 'doc', 'docx']
+      extDocs: ['docs', 'doc', 'docx'],
+      resultado: null
     };
   },
   methods: {
@@ -2051,8 +2059,13 @@ __webpack_require__.r(__webpack_exports__);
         data.append('ficheros[]', fichero.bin, fichero.nombre_real);
       });
       axios.post('/fichero', data, config).then(function (response) {
-        console.log('response !');
-        console.log(response);
+        console.log('response data');
+        var resultado = response.data['resultado'];
+        console.log(response.data);
+
+        if (resultado) {
+          window.location.href = "/home";
+        } else {}
       });
     }
   },
@@ -37826,6 +37839,26 @@ var render = function() {
           ),
           _vm._v(" "),
           _c("div", { staticClass: "form-group" }, [
+            _vm.resultado === false
+              ? _c(
+                  "div",
+                  {
+                    staticClass:
+                      "alert alert-danger alert-dismissible fade show",
+                    attrs: { role: "alert" }
+                  },
+                  [
+                    _c("strong", [_vm._v("Oops..!")]),
+                    _vm._v(
+                      " Ha habido un problema al guardar tu(s) archivo(s).\n                          "
+                    ),
+                    _vm._m(2)
+                  ]
+                )
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
             _c(
               "button",
               {
@@ -37863,6 +37896,23 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("label", [_c("b", [_vm._v("Fichero:")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "alert",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
   }
 ]
 render._withStripped = true
