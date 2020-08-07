@@ -40,6 +40,12 @@ DB_PASSWORD= (password  de tu base de datos local, por defecto: vacio) <br>
 
 > php artisan db:seed
 
+### 6.1 Seed de usuario.
+
+    Email: jose@gmail.com
+    Contraseña: josejose 
+
+
 ## 7. Ejecuta el servidor de pruebas.
 
 > php artisan serve
