@@ -45,7 +45,7 @@ class FicheroController extends Controller
 
             $ficheros = $request->ficheros;
             $user = Auth()->user();
-            $resultado = Fichero::fullGuardado($ficheros,$user->id);
+            $resultado = Fichero::fullGuardado($ficheros,$user);
         }
 
         return response()->json(['resultado'=>$resultado]);
