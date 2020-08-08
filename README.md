@@ -38,13 +38,13 @@ DB_DATABASE=cocker-drive (nombre de la base de datos, previamente tienes que ir 
 DB_USERNAME=root (nombre usuario de tu base de datos local, por defecto: root) <br>
 DB_PASSWORD= (password  de tu base de datos local, por defecto: vacio) <br>
 
-## 3. Crea la key para el proyecto.
+## 3. Instalar las dependencias del proyecto correspondiente a laravel/composer.
+
+> composer install
+
+## 4. Crea la key para el proyecto.
 
 > php artisan key:generate
-
-## 4. Instala las dependencias js.
-
-> npm install
 
 ## 5. Ejecuta las migraciones de la base de datos.
 
@@ -62,7 +62,6 @@ DB_PASSWORD= (password  de tu base de datos local, por defecto: vacio) <br>
 
     Email: jose@gmail.com
     Contraseña: josejose 
-
 
 ## 8. Ejecuta el servidor de pruebas.
 
