@@ -21,6 +21,9 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('fichero-create', require('./components/Fichero/FicheroCreate.vue').default);
+Vue.component('fichero-miniatura', require('./components/Fichero/FicheroMiniatura.vue').default);
+Vue.component('iconizador', require('./components/Icono/Iconizador.vue').default);
+Vue.component('buscador', require('./components/Buscador/Buscador.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
