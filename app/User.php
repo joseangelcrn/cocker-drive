@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Seguridad;
 
 class User extends Authenticatable
 {
@@ -16,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','hash_root_file'
     ];
 
     /**
@@ -45,4 +46,23 @@ class User extends Authenticatable
      {
         return $this->hasMany(Fichero::class);
      }
+
+     /**
+      * Funciones
+      */
+
+      public static function crear($name,$email,$password)
+      {
+          //este sera el directorio raiz de ese usuario (donde se almacenara todos sus ficheros)
+          $hashedRootDir = Seguridad::uniqueId();
+          $resultado = User::create([
+              'name'=>$name,
+              'email'=>$email,
+              'password'=>bcrypt($password),
+              'hash_root_file'=>bcrypt($hashedRootDir)
+          ]);
+
+          return $resultado;
+      }
+
 }
