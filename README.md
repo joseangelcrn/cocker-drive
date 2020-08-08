@@ -10,6 +10,11 @@ Mas adelante iré añadiendo en la documentacion (README) las diferentes condigu
 ### Al estar actualmente en *desarrollo* habrá momentos en que las *clonaciones y pulls* que hagáis no os funcione el proyecto ya que lo estaré desarrollando en mis ramas locales.
 
 Las **versiones estables** estaran en la rama **master** mergeandose como **release acompañados de numero de version**.
+<hr>
+
+# A tener en cuenta .. :
+
+La aplicacion web contiene ciertos archivos como son el logo de la aplicacion e imagenes usadas como iconos para ciertos ficheros.
 
 <hr>
 
