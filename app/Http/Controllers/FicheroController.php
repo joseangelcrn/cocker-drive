@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Fichero;
 use Illuminate\Http\Request;
 use Auth;
-use Symfony\Component\Console\Input\Input;
+use Illuminate\Support\Facades\Storage;
 
 class FicheroController extends Controller
 {
@@ -57,9 +57,11 @@ class FicheroController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Fichero $fichero)
     {
         //
+        $url = public_path('storage\\ficheros\\'.$fichero->nombre_hash);
+        return response()->file($url);
     }
 
     /**
@@ -95,4 +97,16 @@ class FicheroController extends Controller
     {
         //
     }
+
+    /**
+     * Funciones personalizadas
+     */
+    public function misFicheros()
+    {
+        $user = auth()->user();
+        $ficheros = $user->ficheros;
+        return view('fichero.mis-ficheros',compact('ficheros'));
+    }
+
+
 }
