@@ -60,7 +60,8 @@ class FicheroController extends Controller
     public function show(Fichero $fichero)
     {
         //
-        $url = public_path('storage\\ficheros\\'.$fichero->nombre_hash);
+        $rootDirPath = $fichero->user->hash_root_dir;
+        $url = public_path('storage\\ficheros\\'.$rootDirPath.'\\'.$fichero->nombre_hash);
         return response()->file($url);
     }
 
