@@ -1,6 +1,6 @@
 <template>
     <div class="card" style="width: 18rem;" :style="[hover ? estilosHover : {}]"  @mouseover="hover=true" @mouseleave="hover=false" title="loremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremlorem">
-        <iconizador :fichero_param="fichero"></iconizador>
+        <iconizador :fichero_param="fichero" :root_dir="root_dir" ></iconizador>
         <div class="card-body">
             <h6 class="card-title" style="overflow-x: scroll; height:50px;">{{fichero.nombre_real}}</h6>
             <a :href="'/fichero/'+fichero.id" class="btn btn-primary" target="_blank">Ver</a>
@@ -12,7 +12,16 @@
 
 <script>
     export default {
-        props:['fichero_param'],
+        props:
+        {
+            'fichero_param':{
+                default:{}
+            },
+            'root_dir':{
+                type:String,
+                default:''
+            }
+        },
         data(){
             return{
                 fichero:null,
