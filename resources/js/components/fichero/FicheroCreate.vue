@@ -138,9 +138,13 @@
                         console.log(response.data);
                         if (resultado) {
                             window.location.href = "/home";
-                        } else {
-
                         }
+                        else{
+                            this.resultado = false;
+                        }
+                    },
+                    error=>{
+                        this.resultado = false;
                     }
                 )
             }
