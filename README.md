@@ -13,6 +13,12 @@ Las **versiones estables** estaran en la rama **master** mergeandose como **rele
 
 <hr>
 
+# Prerequisitos:
+
+- Guia oficial de instalacion de laravel: https://laravel.com/docs/7.x/installation
+
+<hr>
+
 # Despues de clonar haz esto:
 
 ## 1. Metete en el directorio raiz del proyecto.
