@@ -1,6 +1,11 @@
 # Cocker Drive (..en desarrollo !)
 
 Cocker Drive es una web inspirada en google drive. <br>
+
+#  !# Importante !# :
+
+### Al estar actualmente en *desarrollo* habrá momentos en que las *clonaciones y pulls* que hagáis no os funcione el proyecto ya que lo estaré desarrollando en mis ramas locales.
+
 Las **versiones estables** estaran en la rama **master** mergeandose como **release acompañados de numero de version**.
 
 <hr>
@@ -36,10 +41,20 @@ DB_PASSWORD= (password  de tu base de datos local, por defecto: vacio) <br>
 
 > php artisan migrate
 
-## 6. Ejecuta los seeders (Opcional).
+## 6. Crear un enlace simbolico en el directorio public de la aplicación para poder acceder al storage.
+
+> php artisan storage:link
+
+## 7. Ejecuta los seeders (Opcional).
 
 > php artisan db:seed
 
-## 7. Ejecuta el servidor de pruebas.
+### 7.1 Seed de usuario.
+
+    Email: jose@gmail.com
+    Contraseña: josejose 
+
+
+## 8. Ejecuta el servidor de pruebas.
 
 > php artisan serve
