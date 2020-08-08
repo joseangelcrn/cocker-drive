@@ -2147,6 +2147,8 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     guardar: function guardar() {
+      var _this = this;
+
       console.log('Guardar Ficheros !');
       console.log(this.ficheros);
       var config = {
@@ -2167,7 +2169,11 @@ __webpack_require__.r(__webpack_exports__);
 
         if (resultado) {
           window.location.href = "/home";
-        } else {}
+        } else {
+          _this.resultado = false;
+        }
+      }, function (error) {
+        _this.resultado = false;
       });
     }
   },
