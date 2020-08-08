@@ -2217,7 +2217,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['fichero_param'],
+  props: {
+    'fichero_param': {
+      "default": {}
+    },
+    'root_dir': {
+      type: String,
+      "default": ''
+    }
+  },
   data: function data() {
     return {
       fichero: null,
@@ -2274,7 +2282,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['fichero_param'],
+  props: {
+    'fichero_param': {
+      "default": {}
+    },
+    'root_dir': {
+      type: String,
+      "default": ''
+    }
+  },
   data: function data() {
     return {
       fichero: null,
@@ -38462,7 +38478,9 @@ var render = function() {
       }
     },
     [
-      _c("iconizador", { attrs: { fichero_param: _vm.fichero } }),
+      _c("iconizador", {
+        attrs: { fichero_param: _vm.fichero, root_dir: _vm.root_dir }
+      }),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
         _c(
@@ -38529,7 +38547,11 @@ var render = function() {
             staticClass: "img-thumbnail w-100",
             staticStyle: { height: "250px" },
             attrs: {
-              src: "../storage/ficheros/" + _vm.fichero.nombre_hash,
+              src:
+                "../storage/ficheros/" +
+                _vm.root_dir +
+                "/" +
+                _vm.fichero.nombre_hash,
               alt: "Imagen"
             }
           })
