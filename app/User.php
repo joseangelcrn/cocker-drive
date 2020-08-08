@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','hash_root_file'
+        'name', 'email', 'password','hash_root_dir'
     ];
 
     /**
@@ -59,7 +59,7 @@ class User extends Authenticatable
               'name'=>$name,
               'email'=>$email,
               'password'=>bcrypt($password),
-              'hash_root_file'=>bcrypt($hashedRootDir)
+              'hash_root_dir'=>bcrypt($hashedRootDir)
           ]);
 
           return $resultado;
