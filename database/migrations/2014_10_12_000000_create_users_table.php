@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('hash_root_file'); //dir root a partir del ucal se guardara todo lo de ese usuario
             $table->rememberToken();
             $table->timestamps();
         });
