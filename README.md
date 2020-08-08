@@ -9,6 +9,12 @@ Mas adelante iré añadiendo en la documentacion (README) las diferentes condigu
 
 ### Al estar actualmente en *desarrollo* habrá momentos en que las *clonaciones y pulls* que hagáis no os funcione el proyecto ya que lo estaré desarrollando en mis ramas locales.
 
+#### Commit estables en la rama develop mientras no exista master. (ordenado de menos a mas actualizado)
+
+- https://github.com/joseangelcrn/cocker-drive/tree/15a8dee9438211f6547a31f5485900b59816a9b9
+
+<br>
+
 Las **versiones estables** estaran en la rama **master** mergeandose como **release acompañados de numero de version**.
 <hr>
 
