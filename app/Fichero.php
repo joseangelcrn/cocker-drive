@@ -39,7 +39,7 @@ class Fichero extends Model
      }
 
     /**
-     * Te devuelv e nombre del fichero (y su extension) a partir del path
+     * Te devuelve nombre del fichero (y su extension) a partir del path
      */
     public static  function getNombreFicheroByPath($path)
     {
@@ -48,13 +48,13 @@ class Fichero extends Model
      /**
       * Crea el binario del fichero en el disco por defecto
       */
-     public static function crearBin($fichero)
+     public static function crearBin($fichero,$hashRootDir)
      {
         $nombreReal = $fichero->getClientOriginalName();
         $extension = $fichero->extension();
         $fullNombreReal = $nombreReal.'.'.$extension;
 
-        $path = self::defaultDisk()->put(self::$DIR_FICHEROS,$fichero);
+        $path = self::defaultDisk()->put(self::$DIR_FICHEROS.'/'.$hashRootDir.'/',$fichero);
 
         $nombreHash = self::getNombreFicheroByPath($path);
 
@@ -90,17 +90,17 @@ class Fichero extends Model
       * Funcion general para subir un fichero guardarlo en el storage y en bd
       */
 
-     public static function guardar($fichero,$userId)
+     public static function guardar($fichero,$user)
      {
         $resultado = false;
-        $resultBin = self::crearBin($fichero);
+        $resultBin = self::crearBin($fichero,$user->hash_root_dir);
 
         $nombreReal = $resultBin['nombre_real'];
         $nombreHash = $resultBin['nombre_hash'];
         $extension = $resultBin['extension'];
 
         if ($nombreReal != null and $nombreHash != null) {
-            $resultado = self::crearData($nombreReal,$nombreHash,$extension,$userId);
+            $resultado = self::crearData($nombreReal,$nombreHash,$extension,$user->id);
         }
 
         return $resultado;
@@ -113,12 +113,12 @@ class Fichero extends Model
       */
 
 
-    public static function fullGuardado($ficheros,$userId)
+    public static function fullGuardado($ficheros,User $user)
     {
         $resultado = false;
         $statusFicherosGuardados = array();
         foreach ($ficheros as $fichero) {
-           $guardado =  Fichero::guardar($fichero,$userId);
+           $guardado =  Fichero::guardar($fichero,$user);
            array_push($statusFicherosGuardados,$guardado);
         }
         //si todos los status son true no habra habido ningun problema
