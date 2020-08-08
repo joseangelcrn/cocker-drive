@@ -2,7 +2,7 @@
     <div>
         <!-- Si es Imagen pongo su imagen preview -->
         <div v-if="extImagenesPermitidas.includes(fichero.extension)" class="text-center">
-            <img style="height:250px;" class="img-thumbnail w-100" :src="'../storage/ficheros/'+fichero.nombre_hash" alt="Imagen">
+            <img style="height:250px;" class="img-thumbnail w-100" :src="'../storage/ficheros/'+root_dir+'/'+fichero.nombre_hash" alt="Imagen">
         </div>
 
         <!-- Si es PDF: Icono PDF -->
@@ -25,7 +25,16 @@
 
 <script>
     export default {
-        props:['fichero_param'],
+         props:
+        {
+            'fichero_param':{
+                default:{}
+            },
+            'root_dir':{
+                type:String,
+                default:''
+            }
+        },
         data(){
             return{
                 fichero:null,
