@@ -102,6 +102,10 @@ class FicheroController extends Controller
     /**
      * Funciones personalizadas
      */
+
+     /**
+      * Devuelve la vista, mis ficheros
+      */
     public function misFicheros()
     {
         $user = auth()->user();
