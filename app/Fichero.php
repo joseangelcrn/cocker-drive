@@ -38,6 +38,30 @@ class Fichero extends Model
         return Storage::disk('public');
      }
 
+     /**
+      * Retorna el espacio total usado de un directorio (en MB)
+      */
+      public static function getEspacioUsado($rootDir = '')
+      {
+        $path = public_path('storage\\ficheros\\'.$rootDir);
+
+        $file_size = 0;
+
+        if (file_exists($path)) {
+
+            foreach( File::allFiles($path) as $file)
+            {
+                $file_size += $file->getSize();
+            }
+
+        }
+
+        return number_format($file_size/1048576,2);
+        // dd(number_format($file_size / 1048576,2));
+
+      }
+
+
     /**
      * Te devuelve nombre del fichero (y su extension) a partir del path
      */
