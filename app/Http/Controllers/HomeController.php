@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Fichero;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +24,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $rootDir = auth()->user()->getRootDir();
+        $espacioTotalUsado = Fichero::getEspacioUsado($rootDir);
+        return view('home',compact('espacioTotalUsado'));
     }
 }
