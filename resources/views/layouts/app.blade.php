@@ -81,7 +81,9 @@
                 <div class="container mb-3">
                     <div class="row d-flex justify-content-center">
                         <div class="col-12 text-center">
-                            <img class="img-fluid img-thumbnail" id="img_perro_home" src="{{url('storage/sistema/cocker.jpg')}}" alt="Imagen Cocker">
+                            <a href="{{route('home')}}">
+                                <img class="img-fluid img-thumbnail" id="img_perro_home" src="{{url('storage/sistema/cocker.jpg')}}" alt="Imagen Cocker">
+                            </a>
                         </div>
                     </div>
                 </div>
