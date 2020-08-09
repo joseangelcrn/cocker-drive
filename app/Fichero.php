@@ -16,7 +16,7 @@ class Fichero extends Model
     public static  $DIR_FICHEROS = '/ficheros';
 
     /**
-     * Relaciones
+     * Relations
      */
 
     public function user()
@@ -25,12 +25,11 @@ class Fichero extends Model
     }
 
     /**
-     * Funciones
+     * Functions
      */
 
      /**
-      * retorna el disco por defecto que vamos a usar, en este caso el
-      * disco publico.
+      * Return the default disk we are going to use, in this case: public disk
       */
 
      public static function defaultDisk()
@@ -39,7 +38,7 @@ class Fichero extends Model
      }
 
      /**
-      * Retorna el espacio total usado de un directorio (en MB)
+      * Returns total used disk space from a directory (MB)
       */
       public static function getEspacioUsado($rootDir = '')
       {
@@ -57,20 +56,18 @@ class Fichero extends Model
         }
 
         return number_format($file_size/1048576,2);
-        // dd(number_format($file_size / 1048576,2));
-
       }
 
 
     /**
-     * Te devuelve nombre del fichero (y su extension) a partir del path
+     * Return filename (and its extension) from path
      */
     public static  function getNombreFicheroByPath($path)
     {
         return substr($path, strrpos($path, '/') + 1);
     }
      /**
-      * Crea el binario del fichero en el disco por defecto
+      * Create bin of file in default disk
       */
      public static function crearBin($fichero,$hashRootDir)
      {
@@ -92,7 +89,7 @@ class Fichero extends Model
      }
 
      /**
-      * Guarda la info en la base de datos
+      * Store info of file on the  database
       */
 
      public static function crearData($nombreReal,$nombreHash,$extension,$userId)
@@ -111,8 +108,8 @@ class Fichero extends Model
      }
 
      /**
-      * Funcion general para subir un fichero guardarlo en el storage y en bd
-      * Sin comprobaciones de errores
+      * General function to upload files, store bin in storage and data in database.
+      * Without errors checks.
       */
 
      public static function guardar($fichero,$user)
@@ -132,9 +129,8 @@ class Fichero extends Model
      }
 
      /**
-      * Guardado en bin y bd + comprobacion de si todos los ficheros se subiron correctamente
-      * o no..
-      * Esta funcion es la que se usa para guardar.
+      * Save bin and data bd + check if all files was correctly uploaded.
+      * Main function to upload files.
       */
 
 
@@ -146,7 +142,7 @@ class Fichero extends Model
            $guardado =  Fichero::guardar($fichero,$user);
            array_push($statusFicherosGuardados,$guardado);
         }
-        //si todos los status son true no habra habido ningun problema
+        //if all status are true, every file was successfully uploaded.
         if (count(array_unique($statusFicherosGuardados)) === 1 && end($statusFicherosGuardados) === true) {
             $resultado = true;
         }
