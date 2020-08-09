@@ -112,6 +112,7 @@ class Fichero extends Model
 
      /**
       * Funcion general para subir un fichero guardarlo en el storage y en bd
+      * Sin comprobaciones de errores
       */
 
      public static function guardar($fichero,$user)
@@ -124,10 +125,6 @@ class Fichero extends Model
         $extension = $resultBin['extension'];
 
         if ($nombreReal != null and $nombreHash != null) {
-            //al nombre real le quito la extension.
-            /**
-             * todo ...
-             */
             $resultado = self::crearData($nombreReal,$nombreHash,$extension,$user->id);
         }
 
