@@ -24,8 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $rootDir = auth()->user()->getRootDir();
-        $espacioTotalUsado = Fichero::getEspacioUsado($rootDir);
+        $espacioTotalUsado = auth()->user()->getEspacioTotalUsado();
         return view('home',compact('espacioTotalUsado'));
     }
 }
