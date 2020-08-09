@@ -65,4 +65,26 @@ class User extends Authenticatable
           return $resultado;
       }
 
+
+      /**
+       * Getter de root dir
+       */
+
+      public function getRootDir()
+      {
+        return $this->hash_root_dir;
+      }
+
+
+      /**
+       * Retorna el espacio total usado de este usuario del disco por defecto
+       */
+
+       public function getEspacioTotalUsado()
+       {
+        $espacioTotalUsado = Fichero::getEspacioUsado($this->getRootDir());
+        return $espacioTotalUsado;
+       }
+
+
 }
