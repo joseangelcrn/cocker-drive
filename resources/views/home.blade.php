@@ -7,7 +7,11 @@
                 <p class="text-white">Espacio total usado: <b>{{$espacioTotalUsado}} MB</b> </p>
             </div>
             <div class="col-12 text-center">
-                <a href="{{route('fichero.mis-ficheros')}}" class="btn btn-secondary">Ver mis archivos subidos</a>
+                @if ($espacioTotalUsado > 0)
+                    <a href="{{route('fichero.mis-ficheros')}}" class="btn btn-secondary">Ver mis archivos subidos</a>
+                @else
+                    <button disabled class="btn btn-secondary">Ver mis archivos subidos</button>
+                @endif
                 <a href="{{route('fichero.create')}}" class="btn btn-success">Subir fichero</a>
             </div>
         </div>
