@@ -76,7 +76,7 @@ class Fichero extends Model
      {
         $nombreReal = $fichero->getClientOriginalName();
         $extension = $fichero->extension();
-        $fullNombreReal = $nombreReal.'.'.$extension;
+        // $fullNombreReal = $nombreReal.'.'.$extension;
 
         $path = self::defaultDisk()->put(self::$DIR_FICHEROS.'/'.$hashRootDir.'/',$fichero);
 
@@ -84,7 +84,7 @@ class Fichero extends Model
 
         $resultado = array(
             'nombre_hash'=> $nombreHash,
-            'nombre_real'=> $fullNombreReal,
+            'nombre_real'=> $nombreReal,
             'extension'=>$extension
         );
 
@@ -124,6 +124,10 @@ class Fichero extends Model
         $extension = $resultBin['extension'];
 
         if ($nombreReal != null and $nombreHash != null) {
+            //al nombre real le quito la extension.
+            /**
+             * todo ...
+             */
             $resultado = self::crearData($nombreReal,$nombreHash,$extension,$user->id);
         }
 
