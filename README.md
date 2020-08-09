@@ -11,7 +11,9 @@ Mas adelante iré añadiendo en la documentacion (README) las diferentes configu
 
 #### Commit estables en la rama develop mientras no exista master. (ordenado de menos a mas actualizado)
 
-- https://github.com/joseangelcrn/cocker-drive/tree/15a8dee9438211f6547a31f5485900b59816a9b9
++ https://github.com/joseangelcrn/cocker-drive/tree/15a8dee9438211f6547a31f5485900b59816a9b9
+    - Subir Ficheros.
+    - Listar todos los ficheros sin posibilidad de filtros.
 
 <br>
 
