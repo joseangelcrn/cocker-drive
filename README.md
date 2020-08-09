@@ -3,13 +3,24 @@
 ## Descripción.
 Cocker Drive es una web dedicada a la gestion de archivos. <br><br> La finalidad de este proyecto sera tener un gestor de almacenamiento con versatilidad en cuanto al lugar fisico de almacenaje, pudiendo ser este desde *tu propio pc, un servidor linux casero, un NAS o servidores de mas potentes como AWS*. Este proyecto aporta la logica, el almacenaje fisico es elección suya. <br>
 
-Mas adelante iré añadiendo en la documentacion (README) las diferentes condiguraciones según el lugar de almacenaje fisico que quieres, actualmente solo tengo como almacenaje la propia maquina que corre el servidor.
+Mas adelante iré añadiendo en la documentacion (README) las diferentes configuraciones según el lugar de almacenaje fisico que quieres, actualmente solo tengo como almacenaje la propia maquina que corre el servidor.
 
 #  !# Importante !# :
 
 ### Al estar actualmente en *desarrollo* habrá momentos en que las *clonaciones y pulls* que hagáis no os funcione el proyecto ya que lo estaré desarrollando en mis ramas locales.
 
+#### Commit estables en la rama develop mientras no exista master. (ordenado de menos a mas actualizado)
+
+- https://github.com/joseangelcrn/cocker-drive/tree/15a8dee9438211f6547a31f5485900b59816a9b9
+
+<br>
+
 Las **versiones estables** estaran en la rama **master** mergeandose como **release acompañados de numero de version**.
+<hr>
+
+# A tener en cuenta .. :
+
+La aplicacion web contiene ciertos archivos como son el logo de la aplicacion e imagenes usadas como iconos para ciertos ficheros.
 
 <hr>
 
