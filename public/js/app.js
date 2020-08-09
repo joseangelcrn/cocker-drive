@@ -37924,7 +37924,12 @@ var render = function() {
           ? _c(
               "div",
               {
-                staticClass: "bg-whie trounded p-3",
+                staticClass: " rounded bg-primary p-3",
+                staticStyle: {
+                  position: "absolute",
+                  "z-index": "3",
+                  width: "100%"
+                },
                 attrs: { id: "cajon_busqueda_avanzada" }
               },
               [_vm._m(0), _vm._v(" "), _vm._m(1), _vm._v(" "), _vm._m(2)]
@@ -37942,7 +37947,7 @@ var staticRenderFns = [
     return _c(
       "div",
       {
-        staticClass: "form-group bg-white rounded p-3",
+        staticClass: "form-group border bg-secondary text-light p-3",
         attrs: { id: "orden" }
       },
       [
@@ -38053,7 +38058,7 @@ var staticRenderFns = [
     return _c(
       "div",
       {
-        staticClass: "form-group bg-white rounded p-3",
+        staticClass: "form-group border bg-secondary text-light p-3",
         attrs: { id: "tipo_archivo" }
       },
       [
@@ -38117,7 +38122,7 @@ var staticRenderFns = [
     return _c(
       "div",
       {
-        staticClass: "form-group bg-white rounded p-3",
+        staticClass: "form-group border bg-secondary text-light p-3",
         attrs: { id: "tipo_extension" }
       },
       [
@@ -51216,8 +51221,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\PROGRAMACION\PROYECTOS\LARAVEL\cocker-drive\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\PROGRAMACION\PROYECTOS\LARAVEL\cocker-drive\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\xampp\htdocs\cocker-drive\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\xampp\htdocs\cocker-drive\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
