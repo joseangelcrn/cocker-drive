@@ -1988,6 +1988,7 @@ __webpack_require__.r(__webpack_exports__);
   props: [''],
   data: function data() {
     return {
+      fileNameToFind: '',
       busqAv: false
     };
   },
@@ -2216,10 +2217,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     'fichero_param': {
-      "default": {}
+      type: String,
+      "default": {
+        nombre_real: 'error'
+      }
     },
     'root_dir': {
       type: String,
@@ -2228,7 +2242,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      fichero: null,
+      fichero: {},
       hover: false,
       estilosHover: {
         'box-shadow': '30px 1px 5px blue',
@@ -2236,12 +2250,62 @@ __webpack_require__.r(__webpack_exports__);
         'transition': '0.5s',
         'border-bottom-right-radius': '30%' // 'cursor': 'pointer'
 
-      }
+      },
+      editableName: false,
+      deletableFile: false,
+      newName: ''
     };
   },
-  methods: {},
+  methods: {
+    renameOrDelete: function renameOrDelete() {
+      var config = {
+        header: {
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+      };
+
+      if (this.editableName) {
+        console.log('rename !');
+        this.rename();
+      } else {
+        this["delete"]();
+      }
+    },
+    rename: function rename() {
+      // console.log(this.fichero);
+      var data = new FormData();
+      data.append('file', this.fichero);
+      data.append('new_name', this.newName);
+      data.append('_method', 'patch');
+      console.log('new name = ' + this.newName);
+      var that = this;
+      axios.post('/fichero/' + this.fichero.id, data).then(function (response) {
+        console.log('response.data');
+        console.log(response.data);
+        var data = response.data;
+
+        if (data.result === true) {
+          that.fichero = data.file;
+          that.editableName = false;
+        }
+      }, function (error) {
+        console.log('Error al actualizar el nombre de la imagen');
+      });
+    },
+    "delete": function _delete() {
+      console.log('delete !');
+      axios["delete"]('/fichero/' + this.fichero.id).then(function (response) {
+        console.log('response.data');
+        console.log(response.data);
+        var data = response.data;
+      }, function (error) {
+        console.log('Error al actualizar el nombre de la imagen');
+      });
+    }
+  },
   beforeMount: function beforeMount() {
     this.fichero = JSON.parse(this.$props.fichero_param);
+    this.newName = this.fichero.nombre_real;
   }
 });
 
@@ -37900,6 +37964,7 @@ var render = function() {
                 type: "text",
                 placeholder: "Nombre del archivo que deseas bucar.."
               },
+              domProps: { value: _vm.fileNameToFind },
               on: { keyup: _vm.buscar }
             })
           ]
@@ -38488,36 +38553,105 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
-        _c(
-          "h6",
-          {
-            staticClass: "card-title",
-            staticStyle: { "overflow-x": "scroll", height: "50px" }
-          },
-          [_vm._v(_vm._s(_vm.fichero.nombre_real))]
-        ),
+        !_vm.editableName
+          ? _c(
+              "h6",
+              {
+                staticClass: "card-title",
+                staticStyle: { "overflow-x": "scroll", height: "50px" }
+              },
+              [_vm._v(_vm._s(_vm.fichero.nombre_real))]
+            )
+          : _vm._e(),
         _vm._v(" "),
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-primary",
-            attrs: { href: "/fichero/" + _vm.fichero.id, target: "_blank" }
-          },
-          [_vm._v("Ver")]
-        ),
+        _vm.editableName
+          ? _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.newName,
+                  expression: "newName"
+                }
+              ],
+              staticClass: "form-control-sm",
+              domProps: { value: _vm.newName },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.newName = $event.target.value
+                }
+              }
+            })
+          : _vm._e(),
         _vm._v(" "),
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-warning",
-            attrs: { href: "/fichero/" + _vm.fichero.id + "/edit" }
-          },
-          [_vm._v("Editar")]
-        ),
-        _vm._v(" "),
-        _c("a", { staticClass: "btn btn-danger", attrs: { href: "#" } }, [
-          _vm._v("Borrar")
-        ])
+        !_vm.editableName && !_vm.deletableFile
+          ? _c("div", { attrs: { id: "botonera" } }, [
+              _c(
+                "a",
+                {
+                  staticClass: "btn btn-sm btn-primary",
+                  attrs: {
+                    href: "/fichero/" + _vm.fichero.id,
+                    target: "_blank"
+                  }
+                },
+                [_vm._v("Ver")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-sm btn-warning",
+                  on: {
+                    click: function($event) {
+                      _vm.editableName = true
+                    }
+                  }
+                },
+                [_vm._v("Renombrar")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-sm  btn-danger",
+                  on: {
+                    click: function($event) {
+                      _vm.deletableFile = true
+                    }
+                  }
+                },
+                [_vm._v("Borrar")]
+              )
+            ])
+          : _c("div", { staticClass: "mt-4" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-sm btn-success",
+                  on: { click: _vm.renameOrDelete }
+                },
+                [_vm._v("OK")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-sm btn-danger",
+                  on: {
+                    click: function($event) {
+                      _vm.editableName = false
+                      _vm.deletableFile = false
+                      _vm.newName = _vm.fichero.nombre_real
+                    }
+                  }
+                },
+                [_vm._v("Cancelar")]
+              )
+            ])
       ])
     ],
     1
