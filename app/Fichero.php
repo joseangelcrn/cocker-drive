@@ -156,7 +156,7 @@ class Fichero extends Model
      */
     public function deleteBin()
     {
-        $rootDir = $this->user->hash_root_dir;
+        $rootDir = $this->user->getRootDir();
         $pathFile = self::$DIR_FICHEROS.'/'. $rootDir.'/'.$this->nombre_hash;
 
         $deletedFile = self::defaultDisk()->delete($pathFile);
