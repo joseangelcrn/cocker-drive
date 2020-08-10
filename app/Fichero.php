@@ -149,4 +149,62 @@ class Fichero extends Model
 
         return $resultado;
     }
+
+
+    /**
+     *  Function to delete bin of storage
+     */
+    public function deleteBin()
+    {
+        $rootDir = $this->user->hash_root_dir;
+        $pathFile = self::$DIR_FICHEROS.'/'. $rootDir.'/'.$this->nombre_hash;
+
+        $deletedFile = self::defaultDisk()->delete($pathFile);
+
+
+        return $deletedFile;
+    }
+
+    /**
+     *  Function to delete file data of database
+     */
+    public function deleteData()
+    {
+        return $this->delete();
+    }
+
+
+    /**
+     * Function to full delete file (bin and data db)
+     */
+
+     public function fullDelete()
+     {
+         $result = false;
+
+         $deletedBin = $this->deleteBin();
+
+         if ($deletedBin) {
+             $deletedData = $this->deleteData();
+             if ($deletedData) {
+                 $result = true;
+             }
+         }
+
+         return $result;
+     }
+
+
+    /**
+     * Function to update filename (db)
+     */
+    public function updateFileNameDb($newName)
+    {
+
+        $result =  tap($this)->update([
+            'nombre_real'=> $newName
+        ]);
+
+        return $result;
+    }
 }
