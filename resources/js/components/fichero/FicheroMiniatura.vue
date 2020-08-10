@@ -64,7 +64,6 @@
                 }
 
                 if (this.editableName) {
-                    console.log('rename !');
                     this.rename();
                 } else {
                     this.delete();
