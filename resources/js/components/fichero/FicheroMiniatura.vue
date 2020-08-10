@@ -7,13 +7,14 @@
             <h6  v-if="!editableName" class="card-title" style="overflow-x: scroll; height:50px;">{{fichero.nombre_real}}</h6>
             <input  v-if="editableName" class="form-control-sm" v-model="newName" >
 
+            <!-- Renombrar - Borrar -->
             <div id="botonera" v-if="!editableName && !deletableFile">
-                <!-- <a :href="'/fichero/'+fichero.id" class="btn btn-sm btn-primary" target="_blank">Ver</a> -->
                 <button @click="editableName = true" class="btn btn-sm btn-warning">Renombrar</button>
                 <button @click="deletableFile = true" class="btn btn-sm  btn-danger">Borrar</button>
             </div>
 
-            <div v-else class="mt-4">
+            <!-- OK - Cancelar -->
+            <div v-else class="mt-3">
                 <button @click="renameOrDelete" class="btn btn-sm btn-success">OK</button>
                 <button @click="editableName = false; deletableFile = false; newName=fichero.nombre_real" class="btn btn-sm btn-danger">Cancelar</button>
             </div>
