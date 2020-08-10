@@ -2,10 +2,20 @@
     <div class="card" style="width: 18rem;" :style="[hover ? estilosHover : {}]"  @mouseover="hover=true" @mouseleave="hover=false" title="loremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremlorem">
         <iconizador :fichero_param="fichero" :root_dir="root_dir" ></iconizador>
         <div class="card-body">
-            <h6 class="card-title" style="overflow-x: scroll; height:50px;">{{fichero.nombre_real}}</h6>
-            <a :href="'/fichero/'+fichero.id" class="btn btn-primary" target="_blank">Ver</a>
-            <a :href="'/fichero/'+fichero.id+'/edit'" class="btn btn-warning">Editar</a>
-            <a href="#" class="btn btn-danger">Borrar</a>
+            <h6  v-if="!editableName" class="card-title" style="overflow-x: scroll; height:50px;">{{fichero.nombre_real}}</h6>
+            <input  v-if="editableName" class="form-control-sm" v-model="newName" >
+
+            <div id="botonera" v-if="!editableName && !deletableFile">
+                <a :href="'/fichero/'+fichero.id" class="btn btn-sm btn-primary" target="_blank">Ver</a>
+                <!-- <a :href="'/fichero/'+fichero.id+'/edit'" class="btn btn-warning">Editar</a> -->
+                <button @click="editableName = true" class="btn btn-sm btn-warning">Renombrar</button>
+                <button @click="deletableFile = true" class="btn btn-sm  btn-danger">Borrar</button>
+            </div>
+
+            <div v-else class="mt-4">
+                <button @click="renameOrDelete" class="btn btn-sm btn-success">OK</button>
+                <button @click="editableName = false; deletableFile = false; newName=fichero.nombre_real" class="btn btn-sm btn-danger">Cancelar</button>
+            </div>
         </div>
     </div>
 </template>
@@ -15,7 +25,10 @@
         props:
         {
             'fichero_param':{
-                default:{}
+                type:String,
+                default:{
+                    nombre_real:'error'
+                }
             },
             'root_dir':{
                 type:String,
@@ -24,21 +37,78 @@
         },
         data(){
             return{
-                fichero:null,
+                fichero:{},
                 hover: false,
                 estilosHover:{
                     'box-shadow':'30px 1px 5px blue',
                     'width':'80%','transition':'0.5s',
                     'border-bottom-right-radius':'30%',
                     // 'cursor': 'pointer'
-                }
+                },
+                editableName:false,
+                deletableFile:false,
+                newName:''
             }
         },
         methods:{
+            renameOrDelete(){
+                let config = {
+                    header : {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    }
+                }
+
+                if (this.editableName) {
+                    console.log('rename !');
+                    this.rename();
+                } else {
+                    this.delete();
+                }
+            },
+            rename(){
+                // console.log(this.fichero);
+                let data = new FormData();
+                data.append('file',this.fichero);
+                data.append('new_name',this.newName);
+                data.append('_method','patch');
+
+                console.log('new name = '+this.newName);
+                let that = this;
+                axios.post('/fichero/'+this.fichero.id, data).then(
+                    response => {
+                        console.log('response.data');
+                        console.log(response.data);
+                        let data = response.data;
+
+                        if (data.result === true) {
+                            that.fichero = data.file
+                            that.editableName = false;
+                        }
+                    },
+                    error=>{
+                        console.log('Error al actualizar el nombre de la imagen');
+                    }
+                )
+            },
+            delete(){
+                console.log('delete !');
+                axios.delete('/fichero/'+this.fichero.id).then(
+                    response => {
+                        console.log('response.data');
+                        console.log(response.data);
+                        let data = response.data;
+
+                    },
+                    error=>{
+                        console.log('Error al actualizar el nombre de la imagen');
+                    }
+                )
+            }
         },
-        beforeMount() {
-            this.fichero = JSON.parse(this.$props.fichero_param);
-        }
+         beforeMount() {
+                this.fichero = JSON.parse(this.$props.fichero_param);
+                this.newName = this.fichero.nombre_real;
+            }
     }
 </script>
 
