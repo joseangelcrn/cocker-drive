@@ -5,7 +5,7 @@
                 <div class="col-lg-12 col-md-12">
                     <div class="form-group" style="position:relative;">
                         <gif-loading style="position:absolute; right:0;bottom:3px;right:3px; " :show="labelButtonAdvancedSearching === 'Buscando ..' ? true : false"></gif-loading>
-                        <input class="form-control" type="text" @keydown="buscar" placeholder="Nombre del archivo que deseas bucar.." v-model="fileNameToFind">
+                        <input class="form-control" type="text" @keyup="buscar" placeholder="Nombre del archivo que deseas bucar.." v-model="fileNameToFind">
                     </div>
                     <div class="text-right my-2">
                         <!-- <button class="btn btn-primary">Hola</button> -->
