@@ -2266,6 +2266,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     'fichero_param': {
@@ -38699,7 +38700,7 @@ var render = function() {
                 },
                 domProps: { value: _vm.fileNameToFind },
                 on: {
-                  keydown: _vm.buscar,
+                  keyup: _vm.buscar,
                   input: function($event) {
                     if ($event.target.composing) {
                       return
@@ -39391,7 +39392,7 @@ var render = function() {
                 [_vm._v("Borrar")]
               )
             ])
-          : _c("div", { staticClass: "mt-4" }, [
+          : _c("div", { staticClass: "mt-3" }, [
               _c(
                 "button",
                 {
