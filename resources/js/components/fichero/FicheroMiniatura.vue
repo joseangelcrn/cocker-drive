@@ -1,13 +1,14 @@
 <template>
-    <div class="card" style="width: 18rem;" :style="[hover ? estilosHover : {}]"  @mouseover="hover=true" @mouseleave="hover=false" title="loremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremloremlorem">
-        <iconizador :fichero_param="fichero" :root_dir="root_dir" ></iconizador>
+    <div class="card" style="width: 18rem;"  title="">
+        <a id="imagen" :href="'/fichero/'+fichero.id" target="_blank">
+            <iconizador  :fichero_param="fichero" :root_dir="root_dir" ></iconizador>
+        </a>
         <div class="card-body">
             <h6  v-if="!editableName" class="card-title" style="overflow-x: scroll; height:50px;">{{fichero.nombre_real}}</h6>
             <input  v-if="editableName" class="form-control-sm" v-model="newName" >
 
             <div id="botonera" v-if="!editableName && !deletableFile">
-                <a :href="'/fichero/'+fichero.id" class="btn btn-sm btn-primary" target="_blank">Ver</a>
-                <!-- <a :href="'/fichero/'+fichero.id+'/edit'" class="btn btn-warning">Editar</a> -->
+                <!-- <a :href="'/fichero/'+fichero.id" class="btn btn-sm btn-primary" target="_blank">Ver</a> -->
                 <button @click="editableName = true" class="btn btn-sm btn-warning">Renombrar</button>
                 <button @click="deletableFile = true" class="btn btn-sm  btn-danger">Borrar</button>
             </div>
@@ -20,12 +21,23 @@
     </div>
 </template>
 
+<style scoped>
+    #imagen :hover{
+        box-shadow:'30px 1px 5px blue';
+        width:'80%';
+        transition:0.5s;
+        border-bottom-right-radius:30%;
+        border: red  10px;
+
+    }
+</style>
+
 <script>
     export default {
         props:
         {
             'fichero_param':{
-                type:String,
+                type:Object,
                 default:{
                     nombre_real:'error'
                 }
@@ -38,13 +50,6 @@
         data(){
             return{
                 fichero:{},
-                hover: false,
-                estilosHover:{
-                    'box-shadow':'30px 1px 5px blue',
-                    'width':'80%','transition':'0.5s',
-                    'border-bottom-right-radius':'30%',
-                    // 'cursor': 'pointer'
-                },
                 editableName:false,
                 deletableFile:false,
                 newName:''
@@ -106,7 +111,7 @@
             }
         },
          beforeMount() {
-                this.fichero = JSON.parse(this.$props.fichero_param);
+                this.fichero = this.$props.fichero_param;
                 this.newName = this.fichero.nombre_real;
             }
     }
