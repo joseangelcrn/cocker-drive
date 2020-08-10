@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\Storage;
 
+
 class FicheroController extends Controller
 {
     /**
@@ -83,9 +84,28 @@ class FicheroController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    /**
+     * At this point, we will be able to change just the real_name field
+     * of the model, if you want to change photo you need delete this
+     * and re store new one.
+     */
+    public function update(Request $request,$id)
     {
         //
+        $result = false;
+        $newFileName = $request->new_name;
+        $file = Fichero::findOrFail($id);
+
+        if ($newFileName != null  and $newFileName != '') {
+            $updatedFile = $file->updateFileNameDb($newFileName);
+            $newFileName == $updatedFile->nombre_real ? $result = true: $result = false;
+        }
+
+        return response()->json([
+            'result' => $result,
+            'file' => $file
+        ]);
+
     }
 
     /**
@@ -97,6 +117,12 @@ class FicheroController extends Controller
     public function destroy($id)
     {
         //
+        $file = Fichero::findOrFail($id);
+
+        $result = $file->fullDelete();
+
+        return response()->json(['result'=>$result]);
+
     }
 
     /**
