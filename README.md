@@ -1,79 +1,81 @@
-# Cocker Drive (..en desarrollo !)
+# Cocker Drive (..developing.. !)
 
-## Descripción.
-Cocker Drive es una web dedicada a la gestion de archivos. <br><br> La finalidad de este proyecto sera tener un gestor de almacenamiento con versatilidad en cuanto al lugar fisico de almacenaje, pudiendo ser este desde *tu propio pc, un servidor linux casero, un NAS o servidores de mas potentes como AWS*. Este proyecto aporta la logica, el almacenaje fisico es elección suya. <br>
+## Description.
+Cocker Drive is a file manager web. <br><br> Purpose of this project is to have a versatile file manager in terms of phisic storage place, could be *your own pc, a home server, NAS or servers more powerfull like AWS*. This project contribute the  programming logic, physical storage place is your choise.
 
-Mas adelante iré añadiendo en la documentacion (README) las diferentes configuraciones según el lugar de almacenaje fisico que quieres, actualmente solo tengo como almacenaje la propia maquina que corre el servidor.
+Later I will add in the documentation (README) the different configurations according to the physical storage place you can use, currently I have only written localhost storage system way.
 
-#  !# Importante !# :
+#  !# Important !# :
 
-### Al estar actualmente en *desarrollo* habrá momentos en que las *clonaciones y pulls* que hagáis no os funcione el proyecto ya que lo estaré desarrollando en mis ramas locales.
+### Being currently in  *development* there will be times when  you *pull or clone* you do will not work the project since I will developing in local branch develop.
 
-#### Commit estables en la rama develop mientras no exista master. (ordenado de menos a mas actualizado)
+#### Stables commits on develop branch while doesnt exist branch master (ordered by UPDATE ASC).
 
-- https://github.com/joseangelcrn/cocker-drive/tree/15a8dee9438211f6547a31f5485900b59816a9b9
++ https://github.com/joseangelcrn/cocker-drive/tree/15a8dee9438211f6547a31f5485900b59816a9b9
+    - Can upload files.
+    - List your uploaded files but you cant filter it.
 
 <br>
 
-Las **versiones estables** estaran en la rama **master** mergeandose como **release acompañados de numero de version**.
+The **stables versions** will be in  **master branch** merging as  **release [version number]**.
 <hr>
 
-# A tener en cuenta .. :
+# To consider .. :
 
-La aplicacion web contiene ciertos archivos como son el logo de la aplicacion e imagenes usadas como iconos para ciertos ficheros.
-
-<hr>
-
-# Prerequisitos:
-
-- Guia oficial de instalacion de laravel: https://laravel.com/docs/7.x/installation
+This web aplication contains  uploaded files such as icon of web, images as icons of different types of files
 
 <hr>
 
-# Despues de clonar haz esto:
+# Prerequisites:
 
-## 1. Metete en el directorio raiz del proyecto.
+- Official guide of laravel installation: https://laravel.com/docs/7.x/installation
+
+<hr>
+
+# After cloning do this:
+
+## 1. Access to root dir of project.
 
 > cd cocker-drive
 
-## 2. Crea el archivo .ENV.
+## 2. Create .ENV file.
 
 > cp .env.example .env
 
-### 2.1 Configuración del fichero .ENV para servidor local (XAMP,WAMP,etc..).
+### 2.1 Configuration for localhost (XAMP,WAMP,..).
 
 > DB_CONNECTION=mysql <br>
 DB_HOST=127.0.0.1 <br>
 DB_PORT=3306 <br>
-DB_DATABASE=cocker-drive (nombre de la base de datos, previamente tienes que ir y crear dicha base de datos en tu gestor de base de datos o te dará error.)<br>
-DB_USERNAME=root (nombre usuario de tu base de datos local, por defecto: root) <br>
-DB_PASSWORD= (password  de tu base de datos local, por defecto: vacio) <br>
+DB_DATABASE=cocker-drive (database name, it must previously exist  or you will get error. So yout must create it in your database manager as phpmyadmin. )<br>
+DB_USERNAME=root (database username, default: root) <br>
+DB_PASSWORD= (password  database, default: 'empty') <br>
 
-## 3. Instalar las dependencias del proyecto correspondiente a laravel/composer.
+## 3. Install composer/laravel dependences of project.
 
 > composer install
 
-## 4. Crea la key para el proyecto.
+## 4. Create project key.
 
 > php artisan key:generate
 
-## 5. Ejecuta las migraciones de la base de datos.
+## 5. Run migrations.
 
 > php artisan migrate
 
-## 6. Crear un enlace simbolico en el directorio public de la aplicación para poder acceder al storage.
+## 6. Create storage link for public directory.
 
 > php artisan storage:link
 
-## 7. Ejecuta los seeders (Opcional).
+## 7. Run seeders (Optional).
 
 > php artisan db:seed
 
-### 7.1 Seed de usuario.
+### 7.1 Info users seeds.
 
     Email: jose@gmail.com
     Contraseña: josejose 
 
-## 8. Ejecuta el servidor de pruebas.
+## 8. Run serve.
 
 > php artisan serve
