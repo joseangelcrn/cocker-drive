@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Fichero;
 use Illuminate\Http\Request;
 use Auth;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -126,17 +127,31 @@ class FicheroController extends Controller
     }
 
     /**
-     * Funciones personalizadas
+     * Custom Functions
      */
 
      /**
-      * Devuelve la vista, mis ficheros
+      * Return view : mis-ficheros (my files)
       */
     public function misFicheros()
     {
         $user = auth()->user();
         $ficheros = $user->ficheros;
         return view('fichero.mis-ficheros',compact('ficheros'));
+    }
+
+    /**
+     * Returns all matching files by user search
+     */
+
+    public function advancedSearching(Request $request)
+    {
+        $user = auth()->user();
+        $fileNameToFind = $request->file_name_to_find;
+
+        $matchedFiles = $user->ficheros()->where('nombre_real','like',$fileNameToFind.'%')->get();
+
+        return response()->json(['result'=>$matchedFiles]);
     }
 
 
