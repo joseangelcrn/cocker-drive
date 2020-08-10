@@ -24,6 +24,7 @@ Vue.component('fichero-create', require('./components/Fichero/FicheroCreate.vue'
 Vue.component('fichero-miniatura', require('./components/Fichero/FicheroMiniatura.vue').default);
 Vue.component('iconizador', require('./components/Icono/Iconizador.vue').default);
 Vue.component('buscador', require('./components/Buscador/Buscador.vue').default);
+Vue.component('gif-loading', require('./components/Gif/GifLoading.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
