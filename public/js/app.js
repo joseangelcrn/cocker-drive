@@ -2280,14 +2280,6 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       fichero: {},
-      hover: false,
-      estilosHover: {
-        'box-shadow': '30px 1px 5px blue',
-        'width': '80%',
-        'transition': '0.5s',
-        'border-bottom-right-radius': '30%' // 'cursor': 'pointer'
-
-      },
       editableName: false,
       deletableFile: false,
       newName: ''
