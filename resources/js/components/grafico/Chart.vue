@@ -24,8 +24,6 @@
       };
     },
     beforeMount(){
-        console.log('Data param');
-        // console.log(this.$props.data_param);
         this.sections = JSON.parse(this.$props.data_param);
     },
     methods: {
