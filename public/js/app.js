@@ -1994,6 +1994,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['root_dir'],
   data: function data() {
@@ -2001,27 +2033,38 @@ __webpack_require__.r(__webpack_exports__);
       fileNameToFind: '',
       busqAv: false,
       foundFiles: [],
-      labelButtonAdvancedSearching: 'Busqueda Avanzada'
+      labelButtonAdvancedSearching: 'Busqueda Avanzada',
+      currentPage: 1
     };
   },
   methods: {
     buscar: function buscar() {
-      var _this = this;
-
+      console.log('Page : ' + this.currentPage);
       this.labelButtonAdvancedSearching = 'Buscando ..';
       var that = this;
       var data = new FormData();
       data.append('file_name_to_find', this.fileNameToFind);
-      axios.post('/file/advanced_searching', data).then(function (response) {
-        // console.log('response.data');
-        // console.log(response.data);
+      axios.post('/file/advanced_searching?page=' + this.currentPage, data).then(function (response) {
         var data = response.data;
         that.foundFiles = data.result;
-        _this.labelButtonAdvancedSearching = 'Busqueda Avanzada';
+        that.labelButtonAdvancedSearching = 'Busqueda Avanzada';
+        console.log(that.foundFiles);
       }, function (error) {
         console.log('Error al actualizar el nombre de la imagen');
-        _this.labelButtonAdvancedSearching = 'Busqueda Avanzada';
+        that.labelButtonAdvancedSearching = 'Busqueda Avanzada';
       });
+    },
+    getPage: function getPage(page) {
+      this.currentPage = page;
+      this.buscar();
+    },
+    getPreviousPage: function getPreviousPage() {
+      this.currentPage--;
+      this.buscar();
+    },
+    getNextPage: function getNextPage() {
+      this.currentPage++;
+      this.buscar();
     }
   }
 });
@@ -2425,9 +2468,7 @@ __webpack_require__.r(__webpack_exports__);
       extDocs: ['docs', 'doc', 'docx']
     };
   },
-  beforeMount: function beforeMount() {
-    this.fichero = this.$props.fichero_param;
-  }
+  beforeMount: function beforeMount() {}
 });
 
 /***/ }),
@@ -2471,8 +2512,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   beforeMount: function beforeMount() {
-    console.log('Data param'); // console.log(this.$props.data_param);
-
     this.sections = JSON.parse(this.$props.data_param);
   },
   methods: {
@@ -39686,12 +39725,12 @@ var render = function() {
         _c(
           "div",
           { staticClass: "row" },
-          _vm._l(_vm.foundFiles, function(file, index) {
+          _vm._l(_vm.foundFiles["data"], function(file, index) {
             return _c(
               "div",
               {
                 key: file + index,
-                staticClass: "col-lg-4 col-md-6 col-sm-12  my-2"
+                staticClass: "col-lg-4 col-md-12 col-sm-12  my-2"
               },
               [
                 _c("fichero-miniatura", {
@@ -39704,7 +39743,119 @@ var render = function() {
           0
         )
       ]
-    )
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "container" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-12" }, [
+          _c("nav", [
+            _c(
+              "ul",
+              { staticClass: "pagination" },
+              [
+                _c(
+                  "li",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.foundFiles["prev_page_url"],
+                        expression: "foundFiles['prev_page_url']"
+                      }
+                    ],
+                    staticClass: "page-item"
+                  },
+                  [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "page-link",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.getPreviousPage($event)
+                          }
+                        }
+                      },
+                      [_vm._m(3)]
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _vm._l(_vm.foundFiles["last_page"], function(n) {
+                  return _c(
+                    "li",
+                    {
+                      key: n,
+                      staticClass: "page-item text-white",
+                      class: { active: _vm.foundFiles["current_page"] === n }
+                    },
+                    [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "page-link",
+                          attrs: { href: "#" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.getPage(n)
+                            }
+                          }
+                        },
+                        [
+                          _c("span", [
+                            _vm._v(
+                              "\n                                    " +
+                                _vm._s(n) +
+                                "\n                                "
+                            )
+                          ])
+                        ]
+                      )
+                    ]
+                  )
+                }),
+                _vm._v(" "),
+                _c(
+                  "li",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.foundFiles["next_page_url"],
+                        expression: "foundFiles['next_page_url']"
+                      }
+                    ],
+                    staticClass: "page-item"
+                  },
+                  [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "page-link",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            return _vm.getNextPage($event)
+                          }
+                        }
+                      },
+                      [_vm._m(4)]
+                    )
+                  ]
+                )
+              ],
+              2
+            )
+          ])
+        ])
+      ])
+    ])
   ])
 }
 var staticRenderFns = [
@@ -39938,6 +40089,22 @@ var staticRenderFns = [
         ])
       ]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", [
+      _c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("«")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", [
+      _c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("»")])
+    ])
   }
 ]
 render._withStripped = true
@@ -40244,13 +40411,13 @@ var render = function() {
         {
           attrs: {
             id: "imagen",
-            href: "/fichero/" + _vm.fichero.id,
+            href: "/fichero/" + _vm.fichero_param.id,
             target: "_blank"
           }
         },
         [
           _c("iconizador", {
-            attrs: { fichero_param: _vm.fichero, root_dir: _vm.root_dir }
+            attrs: { fichero_param: _vm.fichero_param, root_dir: _vm.root_dir }
           })
         ],
         1
@@ -40264,7 +40431,7 @@ var render = function() {
                 staticClass: "card-title",
                 staticStyle: { "overflow-x": "scroll", height: "50px" }
               },
-              [_vm._v(_vm._s(_vm.fichero.nombre_real))]
+              [_vm._v(_vm._s(_vm.fichero_param.nombre_real))]
             )
           : _vm._e(),
         _vm._v(" "),
@@ -40337,7 +40504,7 @@ var render = function() {
                     click: function($event) {
                       _vm.editableName = false
                       _vm.deletableFile = false
-                      _vm.newName = _vm.fichero.nombre_real
+                      _vm.newName = _vm.fichero_param.nombre_real
                     }
                   }
                 },
@@ -40406,7 +40573,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm.extImagenesPermitidas.includes(_vm.fichero.extension)
+    _vm.extImagenesPermitidas.includes(_vm.fichero_param.extension)
       ? _c("div", { staticClass: "text-center" }, [
           _c("img", {
             staticClass: "img-thumbnail w-100",
@@ -40416,12 +40583,12 @@ var render = function() {
                 "../storage/ficheros/" +
                 _vm.root_dir +
                 "/" +
-                _vm.fichero.nombre_hash,
+                _vm.fichero_param.nombre_hash,
               alt: "Imagen"
             }
           })
         ])
-      : _vm.fichero.extension == "pdf"
+      : _vm.fichero_param.extension == "pdf"
       ? _c("div", { staticClass: "text-center" }, [
           _c("img", {
             staticClass: "img-thumbnail w-100",
@@ -40432,7 +40599,7 @@ var render = function() {
             }
           })
         ])
-      : _vm.extDocs.includes(_vm.fichero.extension)
+      : _vm.extDocs.includes(_vm.fichero_param.extension)
       ? _c("div", { staticClass: "text-center" }, [
           _c("img", {
             staticClass: "img-thumbnail w-100",
@@ -40443,7 +40610,7 @@ var render = function() {
             }
           })
         ])
-      : _vm.fichero.extension == "txt"
+      : _vm.fichero_param.extension == "txt"
       ? _c("div", { staticClass: "text-center" }, [
           _c("img", {
             staticClass: "img-thumbnail w-100",
