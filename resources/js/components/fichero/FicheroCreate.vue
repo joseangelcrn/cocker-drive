@@ -45,10 +45,12 @@
                             </button>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group row">
                         <button @click="guardar()" type="button" :disabled="disabledForm || resultado!= null" class="btn btn-primary">
                             Guardar Fichero
                         </button>
+                        <gif-loading class="ml-3"  :show="resultado != null"></gif-loading>
+
                     </div>
                 </form>
             </div>
@@ -99,16 +101,12 @@
 
                     this.ficheros.push(customJson);
                 }
-                // ficheros.forEach(fichero => {
-                //     this.ficheros.push(fichero);
-                // });
 
                 console.log(this.ficheros);
             },
             eliminarFichero(index){
                 let seguro = confirm('¿Estas seguro que deseas eliminar esta imagen?');
                 if (seguro) {
-                    // alert('Imagen borrada');
                     delete this.ficheros.splice(index, 1);
                 }
             },
