@@ -8,6 +8,11 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+// donut chart
+import Donut from 'vue-css-donut-chart';
+import 'vue-css-donut-chart/dist/vcdonut.css';
+
+Vue.use(Donut);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -20,11 +25,17 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+
 Vue.component('fichero-create', require('./components/Fichero/FicheroCreate.vue').default);
 Vue.component('fichero-miniatura', require('./components/Fichero/FicheroMiniatura.vue').default);
+
 Vue.component('iconizador', require('./components/Icono/Iconizador.vue').default);
+
 Vue.component('buscador', require('./components/Buscador/Buscador.vue').default);
+
 Vue.component('gif-loading', require('./components/Gif/GifLoading.vue').default);
+
+Vue.component('chart', require('./components/grafico/Chart.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
