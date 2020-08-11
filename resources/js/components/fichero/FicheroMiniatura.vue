@@ -1,10 +1,10 @@
 <template>
     <div class="card" style="width: 18rem;"  title="">
-        <a id="imagen" :href="'/fichero/'+fichero.id" target="_blank">
-            <iconizador  :fichero_param="fichero" :root_dir="root_dir" ></iconizador>
+        <a id="imagen" :href="'/fichero/'+fichero_param.id" target="_blank">
+            <iconizador  :fichero_param="fichero_param" :root_dir="root_dir" ></iconizador>
         </a>
         <div class="card-body">
-            <h6  v-if="!editableName" class="card-title" style="overflow-x: scroll; height:50px;">{{fichero.nombre_real}}</h6>
+            <h6  v-if="!editableName" class="card-title" style="overflow-x: scroll; height:50px;">{{fichero_param.nombre_real}}</h6>
             <input  v-if="editableName" class="form-control-sm" v-model="newName" >
 
             <!-- Renombrar - Borrar -->
@@ -16,7 +16,7 @@
             <!-- OK - Cancelar -->
             <div v-else class="mt-3">
                 <button @click="renameOrDelete" class="btn btn-sm btn-success">OK</button>
-                <button @click="editableName = false; deletableFile = false; newName=fichero.nombre_real" class="btn btn-sm btn-danger">Cancelar</button>
+                <button @click="editableName = false; deletableFile = false; newName=fichero_param.nombre_real" class="btn btn-sm btn-danger">Cancelar</button>
             </div>
         </div>
     </div>
