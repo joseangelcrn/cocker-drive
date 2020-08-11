@@ -1,4 +1,4 @@
-# Cocker Drive (stables versions)
+# Cocker Drive (stable version)
 
 ## Description.
 Cocker Drive is a file manager web. <br><br> Purpose of this project is to have a versatile file manager in terms of phisic storage place, could be *your own pc, a home server, NAS or servers more powerfull like AWS*. This project contribute the  programming logic, physical storage place is your choise.
@@ -67,4 +67,9 @@ DB_PASSWORD= (password  database, default: 'empty') <br>
 > php artisan serve
 
 <hr>
-# Release 1.0.0
+
+# Release 0.1.0
+
+ - Can upload , rename and delete files.
+ - Can search your files by it filename.
+ - Home view display used storage group by extension type.
