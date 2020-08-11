@@ -26,8 +26,8 @@ class HomeController extends Controller
     {
         $fileUsageInfo = auth()->user()->getEspacioTotalUsado();
         $parsedData = Fichero::parseToCircleChart($fileUsageInfo);
-        $sizeDiskUsed =number_format($fileUsageInfo['total'],2);
-        // dd($parsedData);
+        //if doesnt exist the key 'total' mean user still doesnt upload any file.
+        $sizeDiskUsed =isset($fileUsageInfo['total'])?number_format($fileUsageInfo['total'],2) : 0;
         return view('home',compact('parsedData','sizeDiskUsed'));
     }
 }
