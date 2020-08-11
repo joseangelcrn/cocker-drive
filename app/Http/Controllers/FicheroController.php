@@ -135,9 +135,7 @@ class FicheroController extends Controller
       */
     public function misFicheros()
     {
-        $user = auth()->user();
-        $ficheros = $user->ficheros;
-        return view('fichero.mis-ficheros',compact('ficheros'));
+        return view('fichero.mis-ficheros');
     }
 
     /**
@@ -148,8 +146,9 @@ class FicheroController extends Controller
     {
         $user = auth()->user();
         $fileNameToFind = $request->file_name_to_find;
+        $filesPerPage = 3;
 
-        $matchedFiles = $user->ficheros()->where('nombre_real','like',$fileNameToFind.'%')->get();
+        $matchedFiles = $user->ficheros()->where('nombre_real','like',$fileNameToFind.'%')->paginate($filesPerPage);
 
         return response()->json(['result'=>$matchedFiles]);
     }
