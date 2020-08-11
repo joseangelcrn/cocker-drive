@@ -76,8 +76,40 @@
         </div>
         <div class="container" id="advanced_searching_result">
             <div class="row">
-                <div class="col-lg-4 col-md-6 col-sm-12  my-2" v-for="(file,index) in foundFiles" :key="file+index">
-                    <fichero-miniatura  :fichero_param="file" :root_dir="root_dir"></fichero-miniatura>
+                <div class="col-lg-4 col-md-12 col-sm-12  my-2" v-for="(file,index) in foundFiles['data']" :key="file+index">
+                    <fichero-miniatura  :fichero_param="file" :root_dir="root_dir" ></fichero-miniatura>
+                </div>
+            </div>
+        </div>
+        <!-- Pagination -->
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                     <nav>
+                        <ul class="pagination">
+                            <li class="page-item" v-show="foundFiles['prev_page_url']">
+                                <a href="#" class="page-link" @click.prevent="getPreviousPage">
+                                    <span>
+                                        <span aria-hidden="true">«</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="page-item text-white" :class="{ 'active': (foundFiles['current_page']=== n) }" :key="n" v-for="n in foundFiles['last_page']">
+                                <a href="#" class="page-link" @click.prevent="getPage(n)">
+                                    <span >
+                                        {{ n }}
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="page-item" v-show="foundFiles['next_page_url']">
+                                <a href="#" class="page-link" @click.prevent="getNextPage">
+                                    <span>
+                                    <span aria-hidden="true">»</span>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
@@ -93,34 +125,43 @@
                 busqAv:false,
                 foundFiles:[],
                 labelButtonAdvancedSearching:'Busqueda Avanzada',
-
+                currentPage:1
             }
         },
         methods:{
             buscar(){
+                console.log('Page : '+this.currentPage);
                 this.labelButtonAdvancedSearching = 'Buscando ..';
                 let that = this;
                 let data = new FormData();
                 data.append('file_name_to_find',this.fileNameToFind);
 
-                 axios.post('/file/advanced_searching',data).then(
-                    response => {
-                        // console.log('response.data');
-                        // console.log(response.data);
+                 axios.post('/file/advanced_searching?page='+this.currentPage,data).then(
+                    (response) => {
                         let data = response.data;
                         that.foundFiles = data.result;
-                        this.labelButtonAdvancedSearching = 'Busqueda Avanzada';
-
+                        that.labelButtonAdvancedSearching = 'Busqueda Avanzada';
+                        console.log(that.foundFiles);
                     },
                     error=>{
                         console.log('Error al actualizar el nombre de la imagen');
-                        this.labelButtonAdvancedSearching = 'Busqueda Avanzada';
-
+                        that.labelButtonAdvancedSearching = 'Busqueda Avanzada';
                     }
                 )
+            },
+            getPage(page){
+                this.currentPage = page;
+                this.buscar();
 
-
-            }
+            },
+            getPreviousPage(){
+                this.currentPage--;
+                this.buscar();
+            },
+            getNextPage(){
+                this.currentPage++;
+                this.buscar();
+            },
         },
 
     }
