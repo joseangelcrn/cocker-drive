@@ -24,7 +24,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $espacioTotalUsado = auth()->user()->getEspacioTotalUsado();
-        return view('home',compact('espacioTotalUsado'));
+        $fileUsageInfo = auth()->user()->getEspacioTotalUsado();
+        $parsedData = Fichero::parseToCircleChart($fileUsageInfo);
+        $sizeDiskUsed =number_format($fileUsageInfo['total'],2);
+        // dd($parsedData);
+        return view('home',compact('parsedData','sizeDiskUsed'));
     }
 }
