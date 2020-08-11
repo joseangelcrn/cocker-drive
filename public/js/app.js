@@ -2172,6 +2172,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2202,10 +2204,7 @@ __webpack_require__.r(__webpack_exports__);
 
         customJson.extension = fichero.name.split('.').pop();
         this.ficheros.push(customJson);
-      } // ficheros.forEach(fichero => {
-      //     this.ficheros.push(fichero);
-      // });
-
+      }
 
       console.log(this.ficheros);
     },
@@ -2213,7 +2212,6 @@ __webpack_require__.r(__webpack_exports__);
       var seguro = confirm('¿Estas seguro que deseas eliminar esta imagen?');
 
       if (seguro) {
-        // alert('Imagen borrada');
         delete this.ficheros.splice(index, 1);
       }
     },
@@ -40317,28 +40315,38 @@ var render = function() {
               : _vm._e()
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-primary",
-                attrs: {
-                  type: "button",
-                  disabled: _vm.disabledForm || _vm.resultado != null
-                },
-                on: {
-                  click: function($event) {
-                    return _vm.guardar()
+          _c(
+            "div",
+            { staticClass: "form-group row" },
+            [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  attrs: {
+                    type: "button",
+                    disabled: _vm.disabledForm || _vm.resultado != null
+                  },
+                  on: {
+                    click: function($event) {
+                      return _vm.guardar()
+                    }
                   }
-                }
-              },
-              [
-                _vm._v(
-                  "\n                          Guardar Fichero\n                      "
-                )
-              ]
-            )
-          ])
+                },
+                [
+                  _vm._v(
+                    "\n                          Guardar Fichero\n                      "
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c("gif-loading", {
+                staticClass: "ml-3",
+                attrs: { show: _vm.resultado != null }
+              })
+            ],
+            1
+          )
         ])
       ])
     ])
