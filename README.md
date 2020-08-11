@@ -70,6 +70,7 @@ DB_PASSWORD= (password  database, default: 'empty') <br>
 
 # Release 0.1.0
 
+ - **Link**: https://github.com/joseangelcrn/cocker-drive/releases/tag/0.1.0
  - Can upload , rename and delete files.
  - Can search your files by it filename.
  - Home view display used storage group by extension type.
