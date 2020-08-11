@@ -44,18 +44,36 @@ class Fichero extends Model
       {
         $path = public_path('storage\\ficheros\\'.$rootDir);
 
-        $file_size = 0;
+        $infoFile = array();
 
         if (file_exists($path)) {
 
             foreach( File::allFiles($path) as $file)
             {
-                $file_size += $file->getSize();
+                //parsed file size to MB
+                $fileSize = number_format($file->getSize()/1048576,2);
+                $fileExtension = $file->getExtension();
+
+                //sum all filesize
+                if (!isset($infoFile['total'])) {
+                    $infoFile['total'] = $fileSize;
+                } else {
+                    $infoFile['total'] += $fileSize;
+                }
+
+                //grouping size by file extension
+
+                if (!isset($infoFile['ext'][$fileExtension])) {
+                    $infoFile['ext'][$fileExtension] = $fileSize;
+                } else {
+                    $infoFile['ext'][$fileExtension] += $fileSize;
+                }
+
             }
 
         }
 
-        return number_format($file_size/1048576,2);
+        return $infoFile;
       }
 
 
@@ -150,6 +168,38 @@ class Fichero extends Model
         return $resultado;
     }
 
+    /**
+     * Prepare data to Circle Chart Usage.
+     *
+     * Example structure:
+     * sections: [
+     *    { label: 'Red section', value: 25 },
+     *    { label: 'Green section', value: 25},
+     *    { label: 'Blue section', value: 25}
+     * ]
+     * ---------------------------------------
+     *
+     * $infoFiles: must be a returned value of function =  getEspacioUsado()
+     */
+    public static function parseToCircleChart($infoFiles)
+    {
+        $parsedData = array();
+        $totalDiskUsed = $infoFiles['total'];
+
+        foreach ($infoFiles['ext'] as $extension=>$size) {
+
+            $tempArray = array(
+                'label' => $extension,
+                'value' => floatval(number_format((floatval($size) /number_format($totalDiskUsed,2)) * 100,2))
+            );
+            array_push($parsedData,$tempArray);
+        }
+
+        // dd($parsedData);
+        return $parsedData;
+
+    }
+
 
     /**
      *  Function to delete bin of storage
@@ -207,4 +257,5 @@ class Fichero extends Model
 
         return $result;
     }
+
 }
