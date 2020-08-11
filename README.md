@@ -19,6 +19,9 @@ Later I will add in the documentation (README) the different configurations acco
     - CRUD file created.
     - Now you can filter your files by it filenames. (Advance Searching still doesnt work).
 
+3. https://github.com/joseangelcrn/cocker-drive/tree/aa8abf28a92c7354764e503fc855358b14e8afe0
+    - Donut chart in home view which display percent of different extensions files stored in your account.
+
 <br>
 
 The **stables versions** will be in  **master branch** merging as  **release [version number]**.
