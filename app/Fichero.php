@@ -184,15 +184,18 @@ class Fichero extends Model
     public static function parseToCircleChart($infoFiles)
     {
         $parsedData = array();
-        $totalDiskUsed = $infoFiles['total'];
+        //if not exist this array key mean user still doesnt upload any file, so value is 0.
+        $totalDiskUsed = isset($infoFiles['total']) ? $infoFiles['total'] : 0;
 
-        foreach ($infoFiles['ext'] as $extension=>$size) {
+        if (isset($infoFiles['ext'])) {
+            foreach ($infoFiles['ext'] as $extension=>$size) {
 
-            $tempArray = array(
-                'label' => $extension,
-                'value' => floatval(number_format((floatval($size) /number_format($totalDiskUsed,2)) * 100,2))
-            );
-            array_push($parsedData,$tempArray);
+                $tempArray = array(
+                    'label' => $extension,
+                    'value' => floatval(number_format((floatval($size) /number_format($totalDiskUsed,2)) * 100,2))
+                );
+                array_push($parsedData,$tempArray);
+            }
         }
 
         // dd($parsedData);
