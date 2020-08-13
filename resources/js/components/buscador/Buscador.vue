@@ -154,18 +154,11 @@
                 this.buscar(false);
             },
             getOperation(value){
-                console.log('Child event value = '+value+' ! ');
 
-                //renaming  file..
-                // if ( && typeof(value) === Boolean) {
-                //     console.log('renaming file parent event');
-
-                // }
                 //deleting file...
                 if (Number.isInteger(value)) {
                     console.log('deleting file parent event');
                    this.foundFiles['data'].splice(value, 1);
-
                 }
 
 
