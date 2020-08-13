@@ -2059,8 +2059,7 @@ __webpack_require__.r(__webpack_exports__);
       this.buscar(false);
     },
     getOperation: function getOperation(value) {
-      console.log('Child event value = ' + value + ' ! '); //deleting file...
-
+      //deleting file...
       if (Number.isInteger(value)) {
         console.log('deleting file parent event');
         this.foundFiles['data'].splice(value, 1);
