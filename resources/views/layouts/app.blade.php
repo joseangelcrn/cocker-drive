@@ -25,6 +25,9 @@
 </head>
 <body>
     <div id="app">
+        {{-- Confirm dialog vue component --}}
+        <vue-confirm-dialog></vue-confirm-dialog>
+
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
