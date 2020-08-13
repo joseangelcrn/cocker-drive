@@ -12,7 +12,18 @@ window.Vue = require('vue');
 import Donut from 'vue-css-donut-chart';
 import 'vue-css-donut-chart/dist/vcdonut.css';
 
+//confirm dialog
+import VueConfirmDialog from 'vue-confirm-dialog'
+
+//uses
+
+//chart donut
 Vue.use(Donut);
+
+//vue-confirm-dialog
+Vue.use(VueConfirmDialog)
+
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -36,6 +47,11 @@ Vue.component('buscador', require('./components/Buscador/Buscador.vue').default)
 Vue.component('gif-loading', require('./components/Gif/GifLoading.vue').default);
 
 Vue.component('chart', require('./components/grafico/Chart.vue').default);
+
+
+//confirm dialog
+Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

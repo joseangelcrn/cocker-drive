@@ -7,16 +7,16 @@
             <h6  v-if="!editableName" class="card-title" style="overflow-x: scroll; height:50px;">{{fichero_param.nombre_real}}</h6>
             <input  v-if="editableName" class="form-control-sm" v-model="newName" >
 
-            <!-- Renombrar - Borrar -->
-            <div id="botonera" v-if="!editableName && !deletableFile">
-                <button @click="editableName = true" class="btn btn-sm btn-warning">Renombrar</button>
-                <button @click="deletableFile = true" class="btn btn-sm  btn-danger">Borrar</button>
+            <!-- Rename - Delete -->
+            <div id="botonera" v-if="!editableName">
+                <button :disabled="operating" @click="editableName = true; newName=fichero_param.nombre_real" class="btn btn-sm btn-warning">Renombrar</button>
+                <button :disabled="operating" @click="renameOrDelete(2)" class="btn btn-sm  btn-danger">Borrar</button>
             </div>
 
-            <!-- OK - Cancelar -->
+            <!-- OK - Cancel -->
             <div v-else class="mt-3">
-                <button @click="renameOrDelete" class="btn btn-sm btn-success">OK</button>
-                <button @click="editableName = false; deletableFile = false; newName=fichero_param.nombre_real" class="btn btn-sm btn-danger">Cancelar</button>
+                <button :disabled="operating" @click="renameOrDelete(1)" class="btn btn-sm btn-success">OK</button>
+                <button :disabled="operating" @click="editableName = false;" class="btn btn-sm btn-danger">Cancelar</button>
             </div>
         </div>
     </div>
@@ -37,15 +37,22 @@
     export default {
         props:
         {
-            'fichero_param':{
+            'fichero_param':{ //object with information to display data (file information)
                 type:Object,
                 default:{
                     nombre_real:'error'
                 }
             },
-            'root_dir':{
+            'root_dir':{ //root dir where is doing the searching
                 type:String,
                 default:''
+            },
+            'operating':{ //mean this component is renaming/deleting file
+                type:Boolean,
+                default:false
+            },
+            'index':{
+                type:Number
             }
         },
         data(){
@@ -57,61 +64,84 @@
             }
         },
         methods:{
-            renameOrDelete(){
-                let config = {
-                    header : {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    }
-                }
+            renameOrDelete(option){
+                //option = 1 -> renaming
+                //option = 2 -> deleting
 
-                if (this.editableName) {
+                this.$emit('operating',true);
+                if (option === 1) {
                     this.rename();
                 } else {
-                    this.delete();
+
+                    this.$confirm(
+                            {
+                            message: `¿Estas seguro que deseas eliminar este archivo?`,
+                            button: {
+                                no: 'No',
+                                yes: 'Si'
+                            },
+                            /**
+                             * Callback Function
+                             * @param {Boolean} confirm
+                             */
+                            callback: confirm => {
+                                if (confirm) {
+                                    this.delete();
+                                }
+                            }
+                            }
+                        );
                 }
             },
             rename(){
                 // console.log(this.fichero);
                 let data = new FormData();
-                data.append('file',this.fichero);
+                data.append('file',this.$props.fichero_param);
                 data.append('new_name',this.newName);
                 data.append('_method','patch');
 
                 console.log('new name = '+this.newName);
                 let that = this;
-                axios.post('/fichero/'+this.fichero.id, data).then(
+                axios.post('/fichero/'+this.$props.fichero_param.id, data).then(
                     response => {
-                        console.log('response.data');
-                        console.log(response.data);
                         let data = response.data;
 
                         if (data.result === true) {
-                            that.fichero = data.file
+                            // that.fichero = data.file
+                            console.log('that.newName = '+that.newName);
+                            that.$props.fichero_param.nombre_real = that.newName;
                             that.editableName = false;
+                            that.$emit('operation_done',true);
                         }
                     },
                     error=>{
-                        console.log('Error al actualizar el nombre de la imagen');
+                        console.log('Error on remane file.');
                     }
                 )
             },
             delete(){
                 console.log('delete !');
-                axios.delete('/fichero/'+this.fichero.id).then(
+                let that = this;
+
+                axios.delete('/fichero/'+this.$props.fichero_param.id).then(
                     response => {
                         console.log('response.data');
                         console.log(response.data);
                         let data = response.data;
 
+                         console.log('enviar evento');
+                        that.$emit('operation_done',that.$props.index);
+
                     },
                     error=>{
+                        that.$emit('deleted','error');
                         console.log('Error al actualizar el nombre de la imagen');
                     }
                 )
             }
         },
          beforeMount() {
-                this.fichero = this.$props.fichero_param;
+                // this.fichero = this.$props.fichero_param;
                 this.newName = this.fichero.nombre_real;
             }
     }

@@ -33,9 +33,6 @@ body{
         0 100px 80px rgba(0, 0, 0, 0.12);
 }
 
-fichero-miniatura :hover{
-    /* width: 110%;
-    height: auto;
-    box-shadow: crimson; */
-    background-color: red;
+.config_box {
+    border: solid 10px red;
 }

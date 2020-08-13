@@ -11,7 +11,7 @@
                         <!-- <button class="btn btn-primary">Hola</button> -->
                         <button class="btn" :class="[labelButtonAdvancedSearching === 'Buscando ..' ? 'btn-warning' : 'btn-secondary']" @click="busqAv = !busqAv">{{labelButtonAdvancedSearching}}</button>
                     </div>
-                    <div class=" rounded bg-primary p-3" v-if="busqAv" id="cajon_busqueda_avanzada" style="position:absolute;z-index:3;width:100%;">
+                    <div class=" rounded bg-primary p-3 sombra"  v-if="busqAv"  style="position:absolute;z-index:3;width:100%;">
                         <div class="form-group border bg-secondary text-light p-3" id="orden">
                             <h5>Orden.</h5>
                             <hr>
@@ -77,39 +77,23 @@
         <div class="container" id="advanced_searching_result">
             <div class="row">
                 <div class="col-lg-4 col-md-12 col-sm-12  my-2" v-for="(file,index) in foundFiles['data']" :key="file+index">
-                    <fichero-miniatura  :fichero_param="file" :root_dir="root_dir" ></fichero-miniatura>
+                    <fichero-miniatura
+                    :fichero_param="file"
+                    :root_dir="root_dir"
+                    :index="index"
+                    :operating="operating"
+
+                    @operating="operating = true"
+                    @operation_done="getOperation"></fichero-miniatura>
+                <!-- {{file.nombre_real}} -->
                 </div>
             </div>
         </div>
-        <!-- Pagination -->
-        <div class="container">
+        <!-- Load More button -->
+        <div class="container" v-if="currentPage < foundFiles['last_page']">
             <div class="row">
-                <div class="col-12">
-                     <nav>
-                        <ul class="pagination">
-                            <li class="page-item" v-show="foundFiles['prev_page_url']">
-                                <a href="#" class="page-link" @click.prevent="getPreviousPage">
-                                    <span>
-                                        <span aria-hidden="true">«</span>
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="page-item text-white" :class="{ 'active': (foundFiles['current_page']=== n) }" :key="n" v-for="n in foundFiles['last_page']">
-                                <a href="#" class="page-link" @click.prevent="getPage(n)">
-                                    <span >
-                                        {{ n }}
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="page-item" v-show="foundFiles['next_page_url']">
-                                <a href="#" class="page-link" @click.prevent="getNextPage">
-                                    <span>
-                                    <span aria-hidden="true">»</span>
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
+                <div class="col-lg-12 col-md-12">
+                    <button @click="loadMore" class="btn btn-sm btn-primary w-100">Cargar mas..</button>
                 </div>
             </div>
         </div>
@@ -125,23 +109,40 @@
                 busqAv:false,
                 foundFiles:[],
                 labelButtonAdvancedSearching:'Busqueda Avanzada',
-                currentPage:1
+                currentPage:1,
+                lastPage:1,
+                operating:false,
             }
         },
         methods:{
-            buscar(){
-                console.log('Page : '+this.currentPage);
+            buscar(reset = true){
                 this.labelButtonAdvancedSearching = 'Buscando ..';
                 let that = this;
                 let data = new FormData();
                 data.append('file_name_to_find',this.fileNameToFind);
 
+                if (reset) {
+                    this.currentPage = 1;
+                }
+                else{
+                    this.currentPage++;
+                }
+
                  axios.post('/file/advanced_searching?page='+this.currentPage,data).then(
                     (response) => {
-                        let data = response.data;
-                        that.foundFiles = data.result;
+                        // that.foundFiles = data.result;
+
+                        if (reset) {
+                            console.log('[reset]');
+                            that.foundFiles = response.data.result;
+                        } else {
+                            console.log('[append]');
+                            response.data.result['data'].forEach(element => {
+                                that.foundFiles['data'].push(element);
+                            });
+                        }
+
                         that.labelButtonAdvancedSearching = 'Busqueda Avanzada';
-                        console.log(that.foundFiles);
                     },
                     error=>{
                         console.log('Error al actualizar el nombre de la imagen');
@@ -149,19 +150,20 @@
                     }
                 )
             },
-            getPage(page){
-                this.currentPage = page;
-                this.buscar();
+            loadMore(){
+                this.buscar(false);
+            },
+            getOperation(value){
 
-            },
-            getPreviousPage(){
-                this.currentPage--;
-                this.buscar();
-            },
-            getNextPage(){
-                this.currentPage++;
-                this.buscar();
-            },
+                //deleting file...
+                if (Number.isInteger(value)) {
+                    console.log('deleting file parent event');
+                   this.foundFiles['data'].splice(value, 1);
+                }
+
+
+                this.operating = false;
+            }
         },
 
     }
