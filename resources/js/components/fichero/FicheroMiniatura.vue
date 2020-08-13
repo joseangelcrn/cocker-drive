@@ -7,16 +7,16 @@
             <h6  v-if="!editableName" class="card-title" style="overflow-x: scroll; height:50px;">{{fichero_param.nombre_real}}</h6>
             <input  v-if="editableName" class="form-control-sm" v-model="newName" >
 
-            <!-- Renombrar - Borrar -->
-            <div id="botonera" v-if="!editableName && !deletableFile">
+            <!-- Rename - Delete -->
+            <div id="botonera" v-if="!editableName">
                 <button :disabled="operating" @click="editableName = true; newName=fichero_param.nombre_real" class="btn btn-sm btn-warning">Renombrar</button>
-                <button :disabled="operating" @click="deletableFile = true" class="btn btn-sm  btn-danger">Borrar</button>
+                <button :disabled="operating" @click="renameOrDelete(2)" class="btn btn-sm  btn-danger">Borrar</button>
             </div>
 
-            <!-- OK - Cancelar -->
+            <!-- OK - Cancel -->
             <div v-else class="mt-3">
-                <button :disabled="operating" @click="renameOrDelete" class="btn btn-sm btn-success">OK</button>
-                <button :disabled="operating" @click="editableName = false; deletableFile = false" class="btn btn-sm btn-danger">Cancelar</button>
+                <button :disabled="operating" @click="renameOrDelete(1)" class="btn btn-sm btn-success">OK</button>
+                <button :disabled="operating" @click="editableName = false;" class="btn btn-sm btn-danger">Cancelar</button>
             </div>
         </div>
     </div>
@@ -37,17 +37,17 @@
     export default {
         props:
         {
-            'fichero_param':{
+            'fichero_param':{ //object with information to display data (file information)
                 type:Object,
                 default:{
                     nombre_real:'error'
                 }
             },
-            'root_dir':{
+            'root_dir':{ //root dir where is doing the searching
                 type:String,
                 default:''
             },
-            'operating':{
+            'operating':{ //mean this component is renaming/deleting file
                 type:Boolean,
                 default:false
             },
@@ -64,13 +64,33 @@
             }
         },
         methods:{
-            renameOrDelete(){
-                this.$emit('operating',true);
+            renameOrDelete(option){
+                //option = 1 -> renaming
+                //option = 2 -> deleting
 
-                if (this.editableName) {
+                this.$emit('operating',true);
+                if (option === 1) {
                     this.rename();
                 } else {
-                    this.delete();
+
+                    this.$confirm(
+                            {
+                            message: `¿Estas seguro que deseas eliminar este archivo?`,
+                            button: {
+                                no: 'No',
+                                yes: 'Si'
+                            },
+                            /**
+                             * Callback Function
+                             * @param {Boolean} confirm
+                             */
+                            callback: confirm => {
+                                if (confirm) {
+                                    this.delete();
+                                }
+                            }
+                            }
+                        );
                 }
             },
             rename(){
