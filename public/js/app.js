@@ -2010,22 +2010,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['root_dir'],
   data: function data() {
@@ -2034,37 +2018,59 @@ __webpack_require__.r(__webpack_exports__);
       busqAv: false,
       foundFiles: [],
       labelButtonAdvancedSearching: 'Busqueda Avanzada',
-      currentPage: 1
+      currentPage: 1,
+      lastPage: 1,
+      operating: false
     };
   },
   methods: {
     buscar: function buscar() {
-      console.log('Page : ' + this.currentPage);
+      var reset = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
       this.labelButtonAdvancedSearching = 'Buscando ..';
       var that = this;
       var data = new FormData();
       data.append('file_name_to_find', this.fileNameToFind);
+
+      if (reset) {
+        this.currentPage = 1;
+      } else {
+        this.currentPage++;
+      }
+
       axios.post('/file/advanced_searching?page=' + this.currentPage, data).then(function (response) {
-        var data = response.data;
-        that.foundFiles = data.result;
+        // that.foundFiles = data.result;
+        if (reset) {
+          console.log('[reset]');
+          that.foundFiles = response.data.result;
+        } else {
+          console.log('[append]');
+          response.data.result['data'].forEach(function (element) {
+            that.foundFiles['data'].push(element);
+          });
+        }
+
         that.labelButtonAdvancedSearching = 'Busqueda Avanzada';
-        console.log(that.foundFiles);
       }, function (error) {
         console.log('Error al actualizar el nombre de la imagen');
         that.labelButtonAdvancedSearching = 'Busqueda Avanzada';
       });
     },
-    getPage: function getPage(page) {
-      this.currentPage = page;
-      this.buscar();
+    loadMore: function loadMore() {
+      this.buscar(false);
     },
-    getPreviousPage: function getPreviousPage() {
-      this.currentPage--;
-      this.buscar();
-    },
-    getNextPage: function getNextPage() {
-      this.currentPage++;
-      this.buscar();
+    getOperation: function getOperation(value) {
+      console.log('Child event value = ' + value + ' ! '); //renaming  file..
+      // if ( && typeof(value) === Boolean) {
+      //     console.log('renaming file parent event');
+      // }
+      //deleting file...
+
+      if (Number.isInteger(value)) {
+        console.log('deleting file parent event');
+        this.foundFiles['data'].splice(value, 1);
+      }
+
+      this.operating = false;
     }
   }
 });
@@ -2319,6 +2325,13 @@ __webpack_require__.r(__webpack_exports__);
     'root_dir': {
       type: String,
       "default": ''
+    },
+    'operating': {
+      type: Boolean,
+      "default": false
+    },
+    'index': {
+      type: Number
     }
   },
   data: function data() {
@@ -2331,11 +2344,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     renameOrDelete: function renameOrDelete() {
-      var config = {
-        header: {
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        }
-      };
+      this.$emit('operating', true);
 
       if (this.editableName) {
         this.rename();
@@ -2346,37 +2355,42 @@ __webpack_require__.r(__webpack_exports__);
     rename: function rename() {
       // console.log(this.fichero);
       var data = new FormData();
-      data.append('file', this.fichero);
+      data.append('file', this.$props.fichero_param);
       data.append('new_name', this.newName);
       data.append('_method', 'patch');
       console.log('new name = ' + this.newName);
       var that = this;
-      axios.post('/fichero/' + this.fichero.id, data).then(function (response) {
-        console.log('response.data');
-        console.log(response.data);
+      axios.post('/fichero/' + this.$props.fichero_param.id, data).then(function (response) {
         var data = response.data;
 
         if (data.result === true) {
-          that.fichero = data.file;
+          // that.fichero = data.file
+          console.log('that.newName = ' + that.newName);
+          that.$props.fichero_param.nombre_real = that.newName;
           that.editableName = false;
+          that.$emit('operation_done', true);
         }
       }, function (error) {
-        console.log('Error al actualizar el nombre de la imagen');
+        console.log('Error on remane file.');
       });
     },
     "delete": function _delete() {
       console.log('delete !');
-      axios["delete"]('/fichero/' + this.fichero.id).then(function (response) {
+      var that = this;
+      axios["delete"]('/fichero/' + this.$props.fichero_param.id).then(function (response) {
         console.log('response.data');
         console.log(response.data);
         var data = response.data;
+        console.log('enviar evento');
+        that.$emit('operation_done', that.$props.index);
       }, function (error) {
+        that.$emit('deleted', 'error');
         console.log('Error al actualizar el nombre de la imagen');
       });
     }
   },
   beforeMount: function beforeMount() {
-    this.fichero = this.$props.fichero_param;
+    // this.fichero = this.$props.fichero_param;
     this.newName = this.fichero.nombre_real;
   }
 });
@@ -39701,13 +39715,12 @@ var render = function() {
             ? _c(
                 "div",
                 {
-                  staticClass: " rounded bg-primary p-3",
+                  staticClass: " rounded bg-primary p-3 sombra",
                   staticStyle: {
                     position: "absolute",
                     "z-index": "3",
                     width: "100%"
-                  },
-                  attrs: { id: "cajon_busqueda_avanzada" }
+                  }
                 },
                 [_vm._m(0), _vm._v(" "), _vm._m(1), _vm._v(" "), _vm._m(2)]
               )
@@ -39732,7 +39745,18 @@ var render = function() {
               },
               [
                 _c("fichero-miniatura", {
-                  attrs: { fichero_param: file, root_dir: _vm.root_dir }
+                  attrs: {
+                    fichero_param: file,
+                    root_dir: _vm.root_dir,
+                    index: index,
+                    operating: _vm.operating
+                  },
+                  on: {
+                    operating: function($event) {
+                      _vm.operating = true
+                    },
+                    operation_done: _vm.getOperation
+                  }
                 })
               ],
               1
@@ -39743,117 +39767,22 @@ var render = function() {
       ]
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-12" }, [
-          _c("nav", [
-            _c(
-              "ul",
-              { staticClass: "pagination" },
-              [
-                _c(
-                  "li",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.foundFiles["prev_page_url"],
-                        expression: "foundFiles['prev_page_url']"
-                      }
-                    ],
-                    staticClass: "page-item"
-                  },
-                  [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "page-link",
-                        attrs: { href: "#" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.getPreviousPage($event)
-                          }
-                        }
-                      },
-                      [_vm._m(3)]
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _vm._l(_vm.foundFiles["last_page"], function(n) {
-                  return _c(
-                    "li",
-                    {
-                      key: n,
-                      staticClass: "page-item text-white",
-                      class: { active: _vm.foundFiles["current_page"] === n }
-                    },
-                    [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "page-link",
-                          attrs: { href: "#" },
-                          on: {
-                            click: function($event) {
-                              $event.preventDefault()
-                              return _vm.getPage(n)
-                            }
-                          }
-                        },
-                        [
-                          _c("span", [
-                            _vm._v(
-                              "\n                                    " +
-                                _vm._s(n) +
-                                "\n                                "
-                            )
-                          ])
-                        ]
-                      )
-                    ]
-                  )
-                }),
-                _vm._v(" "),
-                _c(
-                  "li",
-                  {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.foundFiles["next_page_url"],
-                        expression: "foundFiles['next_page_url']"
-                      }
-                    ],
-                    staticClass: "page-item"
-                  },
-                  [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "page-link",
-                        attrs: { href: "#" },
-                        on: {
-                          click: function($event) {
-                            $event.preventDefault()
-                            return _vm.getNextPage($event)
-                          }
-                        }
-                      },
-                      [_vm._m(4)]
-                    )
-                  ]
-                )
-              ],
-              2
-            )
+    _vm.currentPage < _vm.foundFiles["last_page"]
+      ? _c("div", { staticClass: "container" }, [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-lg-12 col-md-12" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-sm btn-primary w-100",
+                  on: { click: _vm.loadMore }
+                },
+                [_vm._v("Cargar mas..")]
+              )
+            ])
           ])
         ])
-      ])
-    ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
@@ -40087,22 +40016,6 @@ var staticRenderFns = [
         ])
       ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", [
-      _c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("«")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", [
-      _c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("»")])
-    ])
   }
 ]
 render._withStripped = true
@@ -40472,9 +40385,11 @@ var render = function() {
                 "button",
                 {
                   staticClass: "btn btn-sm btn-warning",
+                  attrs: { disabled: _vm.operating },
                   on: {
                     click: function($event) {
                       _vm.editableName = true
+                      _vm.newName = _vm.fichero_param.nombre_real
                     }
                   }
                 },
@@ -40485,6 +40400,7 @@ var render = function() {
                 "button",
                 {
                   staticClass: "btn btn-sm  btn-danger",
+                  attrs: { disabled: _vm.operating },
                   on: {
                     click: function($event) {
                       _vm.deletableFile = true
@@ -40499,6 +40415,7 @@ var render = function() {
                 "button",
                 {
                   staticClass: "btn btn-sm btn-success",
+                  attrs: { disabled: _vm.operating },
                   on: { click: _vm.renameOrDelete }
                 },
                 [_vm._v("OK")]
@@ -40508,11 +40425,11 @@ var render = function() {
                 "button",
                 {
                   staticClass: "btn btn-sm btn-danger",
+                  attrs: { disabled: _vm.operating },
                   on: {
                     click: function($event) {
                       _vm.editableName = false
                       _vm.deletableFile = false
-                      _vm.newName = _vm.fichero_param.nombre_real
                     }
                   }
                 },
