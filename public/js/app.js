@@ -2312,24 +2312,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     'fichero_param': {
-      //object with information to display data (file information)
       type: Object,
       "default": {
         nombre_real: 'error'
       }
     },
     'root_dir': {
-      //root dir where is doing the searching
       type: String,
       "default": ''
-    },
-    'operating': {
-      //mean this component is renaming/deleting file
-      type: Boolean,
-      "default": false
-    },
-    'index': {
-      type: Number
     }
   },
   data: function data() {
@@ -2341,74 +2331,53 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    renameOrDelete: function renameOrDelete(option) {
-      var _this = this;
+    renameOrDelete: function renameOrDelete() {
+      var config = {
+        header: {
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+      };
 
-      //option = 1 -> renaming
-      //option = 2 -> deleting
-      this.$emit('operating', true);
-
-      if (option === 1) {
+      if (this.editableName) {
         this.rename();
       } else {
-        this.$confirm({
-          message: "\xBFEstas seguro que deseas eliminar este archivo?",
-          button: {
-            no: 'No',
-            yes: 'Si'
-          },
-
-          /**
-           * Callback Function
-           * @param {Boolean} confirm
-           */
-          callback: function callback(confirm) {
-            if (confirm) {
-              _this["delete"]();
-            }
-          }
-        });
+        this["delete"]();
       }
     },
     rename: function rename() {
       // console.log(this.fichero);
       var data = new FormData();
-      data.append('file', this.$props.fichero_param);
+      data.append('file', this.fichero);
       data.append('new_name', this.newName);
       data.append('_method', 'patch');
       console.log('new name = ' + this.newName);
       var that = this;
-      axios.post('/fichero/' + this.$props.fichero_param.id, data).then(function (response) {
+      axios.post('/fichero/' + this.fichero.id, data).then(function (response) {
+        console.log('response.data');
+        console.log(response.data);
         var data = response.data;
 
         if (data.result === true) {
-          // that.fichero = data.file
-          console.log('that.newName = ' + that.newName);
-          that.$props.fichero_param.nombre_real = that.newName;
+          that.fichero = data.file;
           that.editableName = false;
-          that.$emit('operation_done', true);
         }
       }, function (error) {
-        console.log('Error on remane file.');
+        console.log('Error al actualizar el nombre de la imagen');
       });
     },
     "delete": function _delete() {
       console.log('delete !');
-      var that = this;
-      axios["delete"]('/fichero/' + this.$props.fichero_param.id).then(function (response) {
+      axios["delete"]('/fichero/' + this.fichero.id).then(function (response) {
         console.log('response.data');
         console.log(response.data);
         var data = response.data;
-        console.log('enviar evento');
-        that.$emit('operation_done', that.$props.index);
       }, function (error) {
-        that.$emit('deleted', 'error');
         console.log('Error al actualizar el nombre de la imagen');
       });
     }
   },
   beforeMount: function beforeMount() {
-    // this.fichero = this.$props.fichero_param;
+    this.fichero = this.$props.fichero_param;
     this.newName = this.fichero.nombre_real;
   }
 });
@@ -41205,17 +41174,15 @@ var render = function() {
             })
           : _vm._e(),
         _vm._v(" "),
-        !_vm.editableName
+        !_vm.editableName && !_vm.deletableFile
           ? _c("div", { attrs: { id: "botonera" } }, [
               _c(
                 "button",
                 {
                   staticClass: "btn btn-sm btn-warning",
-                  attrs: { disabled: _vm.operating },
                   on: {
                     click: function($event) {
                       _vm.editableName = true
-                      _vm.newName = _vm.fichero_param.nombre_real
                     }
                   }
                 },
@@ -41226,10 +41193,9 @@ var render = function() {
                 "button",
                 {
                   staticClass: "btn btn-sm  btn-danger",
-                  attrs: { disabled: _vm.operating },
                   on: {
                     click: function($event) {
-                      return _vm.renameOrDelete(2)
+                      _vm.deletableFile = true
                     }
                   }
                 },
@@ -41241,12 +41207,7 @@ var render = function() {
                 "button",
                 {
                   staticClass: "btn btn-sm btn-success",
-                  attrs: { disabled: _vm.operating },
-                  on: {
-                    click: function($event) {
-                      return _vm.renameOrDelete(1)
-                    }
-                  }
+                  on: { click: _vm.renameOrDelete }
                 },
                 [_vm._v("OK")]
               ),
@@ -41255,10 +41216,11 @@ var render = function() {
                 "button",
                 {
                   staticClass: "btn btn-sm btn-danger",
-                  attrs: { disabled: _vm.operating },
                   on: {
                     click: function($event) {
                       _vm.editableName = false
+                      _vm.deletableFile = false
+                      _vm.newName = _vm.fichero_param.nombre_real
                     }
                   }
                 },
