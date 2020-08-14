@@ -5,28 +5,6 @@ Cocker Drive is a file manager web. <br><br> Purpose of this project is to have 
 
 Later I will add in the documentation (README) the different configurations according to the physical storage place you can use, currently I have only written localhost storage system way.
 
-#  !# Important !# :
-
-### Being currently in  *development* there will be times when  you *pull or clone* you do will not work the project since I will developing in local branch develop.
-
-#### Stables commits on develop branch while doesnt exist branch master (ordered by UPDATE ASC).
-
-1. https://github.com/joseangelcrn/cocker-drive/tree/15a8dee9438211f6547a31f5485900b59816a9b9
-    - Can upload files.
-    - List your uploaded files but you cant filter it.
-    
-2. https://github.com/joseangelcrn/cocker-drive/tree/f0f50c529e4cdd928866ba2da6d3b716173e5827
-    - CRUD file created.
-    - Now you can filter your files by it filenames. (Advance Searching still doesnt work).
-
-3. https://github.com/joseangelcrn/cocker-drive/tree/aa8abf28a92c7354764e503fc855358b14e8afe0
-    - Donut chart in home view which display percent of different extensions files stored in your account.
-
-<br>
-
-The **stables versions** will be in  **master branch** merging as  **release [version number]**.
-<hr>
-
 # To consider .. :
 
 This web aplication contains  uploaded files such as icon of web, images as icons of different types of files
