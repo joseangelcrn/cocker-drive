@@ -59,9 +59,9 @@ class User extends Authenticatable
               'name'=>$name,
               'email'=>$email,
               'password'=>bcrypt($password),
-              'hash_root_dir'=>bcrypt($hashedRootDir)
+              'hash_root_dir'=>Seguridad::uniqueId(20)
           ]);
-
+          
           return $resultado;
       }
 
