@@ -11,7 +11,7 @@ class Fichero extends Model
 {
     //
     protected $table = "ficheros";
-    protected $fillable = ['nombre_real','nombre_hash','user_id','extension'];
+    protected $fillable = ['nombre_real','nombre_hash','user_id','extension','size'];
 
     public static  $DIR_FICHEROS = '/ficheros';
 
@@ -76,6 +76,16 @@ class Fichero extends Model
         return $infoFile;
       }
 
+      /**
+       * Parse bytes to MB
+       */
+
+       public static function parseToMB($bytesAmount)
+       {
+           return $bytesAmount/1048576;
+       }
+
+
 
     /**
      * Return filename (and its extension) from path
@@ -91,7 +101,8 @@ class Fichero extends Model
      {
         $nombreReal = $fichero->getClientOriginalName();
         $extension = $fichero->extension();
-        // $fullNombreReal = $nombreReal.'.'.$extension;
+        //in MB
+        $size = $fichero->getSize();
 
         $path = self::defaultDisk()->put(self::$DIR_FICHEROS.'/'.$hashRootDir.'/',$fichero);
 
@@ -100,7 +111,9 @@ class Fichero extends Model
         $resultado = array(
             'nombre_hash'=> $nombreHash,
             'nombre_real'=> $nombreReal,
-            'extension'=>$extension
+            'extension'=>$extension,
+            'size'=>$size, //MB
+
         );
 
         return $resultado;
@@ -110,13 +123,14 @@ class Fichero extends Model
       * Store info of file on the  database
       */
 
-     public static function crearData($nombreReal,$nombreHash,$extension,$userId)
+     public static function crearData($nombreReal,$nombreHash,$extension,$size,$userId)
      {
         $nuevoFichero = Fichero::create(
             [
             'nombre_real'=>$nombreReal,
             'nombre_hash'=>$nombreHash,
             'extension'=>$extension,
+            'size'=>$size,
             'user_id'=>$userId
             ]
 
@@ -138,17 +152,19 @@ class Fichero extends Model
         $nombreReal = $resultBin['nombre_real'];
         $nombreHash = $resultBin['nombre_hash'];
         $extension = $resultBin['extension'];
+        $size = $resultBin['size'];
 
-        if ($nombreReal != null and $nombreHash != null) {
-            $resultado = self::crearData($nombreReal,$nombreHash,$extension,$user->id);
+        if ($nombreReal != null and $nombreHash != null and $size != null) {
+            $resultado = self::crearData($nombreReal,$nombreHash,$extension,$size,$user->id);
         }
 
         return $resultado;
      }
 
      /**
-      * Save bin and data bd + check if all files was correctly uploaded.
-      * Main function to upload files.
+      * Save bin and data bd + check. if all files was correctly uploaded will return true.
+      *
+      * -- Main function to upload files. --
       */
 
 
