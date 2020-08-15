@@ -4,7 +4,9 @@
             <iconizador  :fichero_param="fichero_param" :root_dir="root_dir" ></iconizador>
         </a>
         <div class="card-body">
-            <h6  v-if="!editableName" class="card-title" style="overflow-x: scroll; height:50px;">{{fichero_param.nombre_real}}</h6>
+            <h6  v-if="!editableName" class="card-title" style="overflow-x: scroll; height:50px;">{{fichero_param.nombre_real}}.{{fichero_param.extension}}</h6>
+            <h6  v-if="!editableName" class="card-title">{{fichero_param.width}}x{{fichero_param.height}}</h6>
+            <h6  v-if="!editableName" class="card-title">{{(fichero_param.size / (1024*1024)).toFixed(2)}} MB</h6>
             <input  v-if="editableName" class="form-control-sm" v-model="newName" >
 
             <!-- Rename - Delete -->
