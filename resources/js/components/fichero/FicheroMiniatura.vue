@@ -5,9 +5,10 @@
         </a>
         <div class="card-body">
             <h6  v-if="!editableName" class="card-title" style="overflow-x: scroll; height:50px;">{{fichero_param.nombre_real}}.{{fichero_param.extension}}</h6>
-            <h6  v-if="!editableName" class="card-title">{{fichero_param.width}}x{{fichero_param.height}}</h6>
-            <h6  v-if="!editableName" class="card-title">{{(fichero_param.size / (1024*1024)).toFixed(2)}} MB</h6>
-            <input  v-if="editableName" class="form-control-sm" v-model="newName" >
+            <input  v-if="editableName" class="form-control-sm mb-4" v-model="newName" >
+
+            <h6 class="card-title">{{fichero_param.width}}x{{fichero_param.height}}</h6>
+            <h6 class="card-title">{{(fichero_param.size / (1024*1024)).toFixed(2)}} MB</h6>
 
             <!-- Rename - Delete -->
             <div id="botonera" v-if="!editableName" >
@@ -74,7 +75,7 @@
                 if (option === 1) {
                     this.rename();
                 } else {
-
+                    let that = this;
                     this.$confirm(
                             {
                             message: `¿Estas seguro que deseas eliminar este archivo?`,
@@ -87,9 +88,15 @@
                              * @param {Boolean} confirm
                              */
                             callback: confirm => {
+                                console.log('call back');
                                 if (confirm) {
                                     this.delete();
                                 }
+                                //enbale buttons again
+                                else{
+                                    that.$emit('operation_done',false);
+                                }
+
                             }
                             }
                         );
