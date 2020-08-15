@@ -10,8 +10,14 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-12 text-center">
-                <h1 class=" mt-4 text-white">Cocker Drive</h1>
+            <div class="col-12">
+                <h1 class=" mt-4 text-center text-white">Cocker Drive</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <a class="btn btn-success w-75 mb-2" href="{{route('login')}}">Iniciar Sesión</a>
+                <a class="btn btn-warning w-75 " href="{{route('register')}}">Registrarse</a>
             </div>
         </div>
     </div>
