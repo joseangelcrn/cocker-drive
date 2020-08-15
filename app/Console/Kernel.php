@@ -24,7 +24,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        
+        // command to empty temporary directory
+        $schedule->command('clear:temp')->everyMinute();
+
     }
 
     /**
