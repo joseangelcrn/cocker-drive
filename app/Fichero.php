@@ -11,7 +11,23 @@ class Fichero extends Model
 {
     //
     protected $table = "ficheros";
-    protected $fillable = ['nombre_real','nombre_hash','user_id','extension','size'];
+    protected $fillable = ['nombre_real','nombre_hash','user_id','extension','size','width','height'];
+
+    private static  $extensions = [
+        'img'=>[
+            'jpg',
+            'jpeg',
+            'png',
+            'gif',
+            'webp',
+            'tiff',
+            'psd',
+            'raw',
+            'bmp',
+            'heif',
+            'indd'
+        ]
+    ];
 
     public static  $DIR_FICHEROS = '/ficheros';
 
@@ -85,6 +101,15 @@ class Fichero extends Model
            return $bytesAmount/1048576;
        }
 
+       /**
+        * Check if file is image
+        */
+
+        public static function isImage($extension)
+        {
+            return in_array($extension,self::$extensions['img']);
+        }
+
 
 
     /**
@@ -101,18 +126,27 @@ class Fichero extends Model
      {
         $nombreReal = $fichero->getClientOriginalName();
         $extension = $fichero->extension();
-        //in MB
-        $size = $fichero->getSize();
+        $size = $fichero->getSize();//in Bytes
+        $width = 0;
+        $height = 0;
 
         $path = self::defaultDisk()->put(self::$DIR_FICHEROS.'/'.$hashRootDir.'/',$fichero);
-
         $nombreHash = self::getNombreFicheroByPath($path);
+
+        //if is an image file I will save its width/height
+        if (self::isImage($extension)) {
+            $widthHeight = getimagesize($fichero);
+            $width = $widthHeight[0];
+            $height = $widthHeight[1];
+        }
 
         $resultado = array(
             'nombre_hash'=> $nombreHash,
             'nombre_real'=> $nombreReal,
             'extension'=>$extension,
             'size'=>$size, //MB
+            'width'=>$width,
+            'height'=>$height,
 
         );
 
@@ -123,7 +157,7 @@ class Fichero extends Model
       * Store info of file on the  database
       */
 
-     public static function crearData($nombreReal,$nombreHash,$extension,$size,$userId)
+     public static function crearData($nombreReal,$nombreHash,$extension,$size,$width,$height,$userId)
      {
         $nuevoFichero = Fichero::create(
             [
@@ -131,7 +165,9 @@ class Fichero extends Model
             'nombre_hash'=>$nombreHash,
             'extension'=>$extension,
             'size'=>$size,
-            'user_id'=>$userId
+            'width'=>$width,
+            'height'=>$height,
+            'user_id'=>$userId,
             ]
 
         );
@@ -153,9 +189,11 @@ class Fichero extends Model
         $nombreHash = $resultBin['nombre_hash'];
         $extension = $resultBin['extension'];
         $size = $resultBin['size'];
+        $width = $resultBin['width'];
+        $height = $resultBin['height'];
 
         if ($nombreReal != null and $nombreHash != null and $size != null) {
-            $resultado = self::crearData($nombreReal,$nombreHash,$extension,$size,$user->id);
+            $resultado = self::crearData($nombreReal,$nombreHash,$extension,$size,$width,$height,$user->id);
         }
 
         return $resultado;
