@@ -2410,6 +2410,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     'fichero_param': {
@@ -41523,8 +41525,33 @@ var render = function() {
                 staticClass: "card-title",
                 staticStyle: { "overflow-x": "scroll", height: "50px" }
               },
-              [_vm._v(_vm._s(_vm.fichero_param.nombre_real))]
+              [
+                _vm._v(
+                  _vm._s(_vm.fichero_param.nombre_real) +
+                    "." +
+                    _vm._s(_vm.fichero_param.extension)
+                )
+              ]
             )
+          : _vm._e(),
+        _vm._v(" "),
+        !_vm.editableName
+          ? _c("h6", { staticClass: "card-title" }, [
+              _vm._v(
+                _vm._s(_vm.fichero_param.width) +
+                  "x" +
+                  _vm._s(_vm.fichero_param.height)
+              )
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        !_vm.editableName
+          ? _c("h6", { staticClass: "card-title" }, [
+              _vm._v(
+                _vm._s((_vm.fichero_param.size / (1024 * 1024)).toFixed(2)) +
+                  " MB"
+              )
+            ])
           : _vm._e(),
         _vm._v(" "),
         _vm.editableName
