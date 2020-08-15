@@ -8,9 +8,9 @@
             <input  v-if="editableName" class="form-control-sm" v-model="newName" >
 
             <!-- Rename - Delete -->
-            <div id="botonera" v-if="!editableName">
-                <button :disabled="operating" @click="editableName = true; newName=fichero_param.nombre_real" class="btn btn-sm btn-warning">Renombrar</button>
-                <button :disabled="operating" @click="renameOrDelete(2)" class="btn btn-sm  btn-danger">Borrar</button>
+            <div id="botonera" v-if="!editableName" >
+                <button class="btn btn-sm btn-warning" :disabled="operating" @click="editableName = true; newName=fichero_param.nombre_real" >Renombrar</button>
+                <button class="btn btn-sm  btn-danger" :disabled="operating" @click="renameOrDelete(2)" >Borrar</button>
             </div>
 
             <!-- OK - Cancel -->
