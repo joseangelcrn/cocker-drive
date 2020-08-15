@@ -34,6 +34,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/mis-ficheros', 'FicheroController@misFicheros')->name('fichero.mis-ficheros');
     Route::post('file/advanced_searching', 'FicheroController@advancedSearching')->name('fichero.advanced-searching');
+    Route::get('file/download-all-compressed-files', 'FicheroController@downloadCompressedFiles')->name('fichero.download-all-files');
     Route::resource('/fichero', 'FicheroController')->name('fichero','*');
 
 });
