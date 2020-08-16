@@ -96,21 +96,45 @@ class Fichero extends Model
        * Parse bytes to MB
        */
 
-       public static function parseToMB($bytesAmount)
-       {
-           return $bytesAmount/1048576;
-       }
+    public static function parseToMB($bytesAmount)
+    {
+        return $bytesAmount/1048576;
+    }
 
-       /**
-        * Check if file is image
-        */
+    /**
+    * Check if file is image
+    */
 
-        public static function isImage($extension)
-        {
-            return in_array($extension,self::$extensions['img']);
+    public static function isImage($extension)
+    {
+        return in_array($extension,self::$extensions['img']);
+    }
+
+    /**
+     * Function to get files with specifics parameters(extension,size,width,height...) which was selected
+     * by user on file searcher view.
+     */
+
+    public static function applyFilters($preSearching,$filters)
+    {
+        $extensionsFilter = $filters->extensions;
+        $sortFilter = $filters->sort;
+        $widthHeigt = $filters->widthHeight;
+
+        if (sizeof($extensionsFilter) > 0) {
+
         }
 
+        //width - height
+        $widthHeigt->width != '' ? $preSearching->where('width',$widthHeigt->width) : null;
+        $widthHeigt->height != '' ? $preSearching->where('height',$widthHeigt->height) : null;
 
+        //order conditions must be last one
+        $sortFilter->field != '' ? $preSearching->orderBy($sortFilter->field,$sortFilter->type) : null;
+
+
+        return $preSearching;
+    }
 
     /**
      * Return filename (and its extension) from path
@@ -119,6 +143,7 @@ class Fichero extends Model
     {
         return substr($path, strrpos($path, '/') + 1);
     }
+
      /**
       * Create bin of file in default disk
       */
@@ -314,5 +339,8 @@ class Fichero extends Model
 
         return $result;
     }
+
+
+
 
 }
