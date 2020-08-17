@@ -122,15 +122,24 @@ class Fichero extends Model
     {
         $extensionsFilter = $filters->extensions;
         $sortFilter = $filters->sort;
-        $widthHeigt = $filters->widthHeight;
+        $widthHeight = $filters->widthHeight;
 
         if (sizeof($extensionsFilter) > 0) {
 
         }
 
         //width - height
-        $widthHeigt->width != '' ? $preSearching->where('width',$widthHeigt->width) : null;
-        $widthHeigt->height != '' ? $preSearching->where('height',$widthHeigt->height) : null;
+        // $widthHeigt->width != '' ? $preSearching->where('width',$widthHeigt->width) : null;
+        // $widthHeigt->height != '' ? $preSearching->where('height',$widthHeigt->height) : null;
+
+        if ($widthHeight->width != '') {
+            $minAllowedWidth = self::getMinSearchingRangeValue($widthHeight->width);
+            $preSearching->whereBetween('width',[$minAllowedWidth,$widthHeight->width]);
+        }
+        if ($widthHeight->height != '') {
+            $minAllowedHeight  = self::getMinSearchingRangeValue($widthHeight->height);
+            $preSearching->whereBetween('height',[$minAllowedHeight,$widthHeight->height]);
+        }
 
         //order conditions must be last one
         $sortFilter->field != '' ? $preSearching->orderBy($sortFilter->field,$sortFilter->type) : null;
@@ -138,6 +147,43 @@ class Fichero extends Model
 
         return $preSearching;
     }
+
+    /**
+     * return minimal searching range value allowed to find file by 'width' value
+     */
+    public static function getMinSearchingRangeValue($value)
+    {
+
+        switch ($value) {
+                case 144:
+                    $minAllowedValue = 0;
+                    break;
+                case 240:
+                    $minAllowedValue = 144.001;
+                    break;
+                case 360:
+                    $minAllowedValue = 240.001;
+                    break;
+                case 480:
+                    $minAllowedValue = 360.001;
+                    break;
+                case 720:
+                    $minAllowedValue = 480.001;
+                    break;
+                case 1080:
+                    $minAllowedValue = 720.001;
+                break;
+                case 1920:
+                    $minAllowedValue = 1080.001;
+                    break;
+                default:
+                    $minAllowedValue = 0;
+                break;
+        }
+
+        return $minAllowedValue;
+    }
+
 
     /**
      * Return filename (and its extension) from path
