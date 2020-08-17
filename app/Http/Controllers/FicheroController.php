@@ -168,33 +168,39 @@ class FicheroController extends Controller
     public function downloadCompressedFiles()
     {
         $user = auth()->user();
-        $ficheros = $user->ficheros;
-
-        //creating zip
-        $zip = new ZipArchive;
-
-        $fileName = 'mis_archivos_'.Seguridad::uniqueId().'.zip';
         $pathUserFiles = public_path('storage\\ficheros\\'.$user->getRootDir());
-        if ($zip->open(public_path('storage\\temp\\'.$fileName), ZipArchive::CREATE) === TRUE)
-        {
 
-            $files = File::files($pathUserFiles);
+        //first check if exist path
+        if (file_exists($pathUserFiles)) {
+            //creating zip
+            $zip = new ZipArchive;
 
-            foreach ($files as $key => $value) {
-                $relativeNameInZipFile = basename($value);
-                $dbDataFile = Fichero::select('nombre_hash','nombre_real')->where('nombre_hash',$relativeNameInZipFile)->where('user_id',$user->id)->first();
-                $realFileName = $dbDataFile->nombre_real;
-                $realExtensionFile = $dbDataFile->nombre_hash;
+            $fileName = 'mis_archivos_'.Seguridad::uniqueId().'.zip';
 
-                $fullRealName = $realFileName.".".$realExtensionFile;
-                // $zip->addFile($value, $relativeNameInZipFile);
-                $zip->addFile($value, $fullRealName);
+            if ( $zip->open(public_path('storage\\temp\\'.$fileName), ZipArchive::CREATE) === TRUE)
+            {
+
+                $files = File::files($pathUserFiles);
+
+                foreach ($files as $key => $value) {
+                    $relativeNameInZipFile = basename($value);
+                    $dbDataFile = Fichero::select('nombre_hash','nombre_real')->where('nombre_hash',$relativeNameInZipFile)->where('user_id',$user->id)->first();
+                    $realFileName = $dbDataFile->nombre_real;
+                    $realExtensionFile = $dbDataFile->nombre_hash;
+
+                    $fullRealName = $realFileName.".".$realExtensionFile;
+                    // $zip->addFile($value, $relativeNameInZipFile);
+                    $zip->addFile($value, $fullRealName);
+                }
+
+                $zip->close();
+                return response()->download(public_path('storage\\temp\\'.$fileName));
+
             }
-
-            $zip->close();
         }
 
-        return response()->download(public_path('storage\\temp\\'.$fileName));
+        return redirect()->back()->with('error', 'Aún no has subido ningún archivo.');
+
 
     }
 
