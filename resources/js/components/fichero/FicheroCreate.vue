@@ -11,6 +11,10 @@
                        <input @change="precargarFicheros" class="form-control" type="file" name="ficheros" multiple>
                        <span class="ml-3">Extensiones permitidas: .jpg, .jpeg, .png, .txt, .pdf</span>
                     </div>
+                    <div class="form-group border bg-secondary p-1" style="height:300px;" v-cloak @drop.prevent="precargarFicheros" @dragover.prevent>
+                        <label class=""><b>O arrastra aqui los ficheros:</b></label>
+
+                    </div>
 
                     <div class="form-group row h-100">
                         <div class="col-lg-3 col-md-6   mt-2" :key="fichero+index" v-for="(fichero,index) in ficheros">
@@ -50,7 +54,11 @@
                             Guardar Fichero
                         </button>
                         <gif-loading class="ml-3"  :show="resultado != null"></gif-loading>
-
+                    </div>
+                    <div class="form-group border p-2" v-if="ficheros.length > 0">
+                         <h4>Información de la subida</h4>
+                         <p class="">Archivos seleccionados: <b>{{ficheros.length}}</b>.</p>
+                         <p class="">Peso total de la subida:  <b>{{getTotalSizeOfFiles}}</b> KB. ( <b>{{Math.round((getTotalSizeOfFiles/1024 + Number.EPSILON) * 100) / 100}} MB</b> )</p>
                     </div>
                 </form>
             </div>
@@ -158,6 +166,19 @@
                     resultado =  false;
                 }
                 return resultado;
+            },
+
+            getTotalSizeOfFiles(){
+                let sumSize = 0;
+
+                this.ficheros.forEach(file => {
+                    // console.log(file);
+                    let sizeKB = file.bin.size / 1024;
+
+                    sumSize += Math.round((sizeKB + Number.EPSILON) * 100) / 100;
+                });
+
+                return sumSize;
             }
         }
     }
