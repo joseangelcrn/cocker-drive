@@ -2343,11 +2343,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -41512,24 +41507,6 @@ var render = function() {
           _vm._v(" "),
           _c(
             "div",
-            {
-              staticClass: "form-group border bg-secondary p-1",
-              staticStyle: { height: "300px" },
-              on: {
-                drop: function($event) {
-                  $event.preventDefault()
-                  return _vm.precargarFicheros($event)
-                },
-                dragover: function($event) {
-                  $event.preventDefault()
-                }
-              }
-            },
-            [_vm._m(2)]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
             { staticClass: "form-group row h-100" },
             _vm._l(_vm.ficheros, function(fichero, index) {
               return _c(
@@ -41644,7 +41621,7 @@ var render = function() {
                     _vm._v(
                       " Ha habido un problema al guardar tu(s) archivo(s).\n                          "
                     ),
-                    _vm._m(3)
+                    _vm._m(2)
                   ]
                 )
               : _vm._e()
@@ -41730,12 +41707,6 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("label", [_c("b", [_vm._v("Fichero:")])])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("label", {}, [_c("b", [_vm._v("O arrastra aqui los ficheros:")])])
   },
   function() {
     var _vm = this
