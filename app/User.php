@@ -59,7 +59,7 @@ class User extends Authenticatable
               'name'=>$name,
               'email'=>$email,
               'password'=>bcrypt($password),
-              'hash_root_dir'=>bcrypt($hashedRootDir)
+              'hash_root_dir'=>Seguridad::uniqueId(20)
           ]);
 
           return $resultado;
@@ -86,5 +86,43 @@ class User extends Authenticatable
         return $espacioTotalUsado;
        }
 
+
+      /**
+       * Returns total used disk space from a directory (MB).
+       * DB searching level !! (reworked function)
+       */
+      public  function getUsedSpaceDisk()
+      {
+          $files = $this->ficheros;
+
+          $data = array();
+
+
+          foreach ($files as $file) {
+
+            $sizeMb = Fichero::parseToMB($file->size);
+            $sizeMb = number_format($sizeMb,2);
+
+            //extension
+            if (!isset($data['ext'][$file->extension])) {
+                $data['ext'][$file->extension] = $sizeMb;
+            }
+            else{
+                $data['ext'][$file->extension] += $sizeMb;
+            }
+
+
+            //total
+            if (!isset($data['total'])) {
+                $data['total'] = $sizeMb;
+            } else {
+                $data['total'] += $sizeMb;
+            }
+
+          }
+
+
+          return $data;
+      }
 
 }

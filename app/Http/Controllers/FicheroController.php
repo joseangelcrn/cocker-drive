@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Fichero;
+use App\Seguridad;
 use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
+use File;
 use Illuminate\Support\Facades\Storage;
-
+use ZipArchive;
 
 class FicheroController extends Controller
 {
@@ -146,12 +148,54 @@ class FicheroController extends Controller
     {
         $user = auth()->user();
         $fileNameToFind = $request->file_name_to_find;
+        $filters = json_decode($request->filters);
         $filesPerPage = 3;
 
-        $matchedFiles = $user->ficheros()->where('nombre_real','like',$fileNameToFind.'%')->paginate($filesPerPage);
+        // $matchedFiles = $user->ficheros()->where('nombre_real','like',$fileNameToFind.'%')->paginate($filesPerPage);
+        $preSearching = $user->ficheros()->where('nombre_real','like',$fileNameToFind.'%');
+
+        //Additionals filters which users can select for a better searching.
+        $preSearching = Fichero::applyFilters($preSearching,$filters);
+        $matchedFiles = $preSearching->paginate($filesPerPage);
 
         return response()->json(['result'=>$matchedFiles]);
     }
 
+    /**
+     * Return all files of current user comprissed in zip package.
+     */
+
+    public function downloadCompressedFiles()
+    {
+        $user = auth()->user();
+        $ficheros = $user->ficheros;
+
+        //creating zip
+        $zip = new ZipArchive;
+
+        $fileName = 'mis_archivos_'.Seguridad::uniqueId().'.zip';
+        $pathUserFiles = public_path('storage\\ficheros\\'.$user->getRootDir());
+        if ($zip->open(public_path('storage\\temp\\'.$fileName), ZipArchive::CREATE) === TRUE)
+        {
+
+            $files = File::files($pathUserFiles);
+
+            foreach ($files as $key => $value) {
+                $relativeNameInZipFile = basename($value);
+                $dbDataFile = Fichero::select('nombre_hash','nombre_real')->where('nombre_hash',$relativeNameInZipFile)->where('user_id',$user->id)->first();
+                $realFileName = $dbDataFile->nombre_real;
+                $realExtensionFile = $dbDataFile->nombre_hash;
+
+                $fullRealName = $realFileName.".".$realExtensionFile;
+                // $zip->addFile($value, $relativeNameInZipFile);
+                $zip->addFile($value, $fullRealName);
+            }
+
+            $zip->close();
+        }
+
+        return response()->download(public_path('storage\\temp\\'.$fileName));
+
+    }
 
 }

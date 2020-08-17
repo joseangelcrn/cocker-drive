@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Fichero;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -24,10 +25,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $fileUsageInfo = auth()->user()->getEspacioTotalUsado();
+        $user = Auth::user();
+
+        $fileUsageInfo = $user->getUsedSpaceDisk();
         $parsedData = Fichero::parseToCircleChart($fileUsageInfo);
-        //if doesnt exist the key 'total' mean user still doesnt upload any file.
-        $sizeDiskUsed =isset($fileUsageInfo['total'])?number_format($fileUsageInfo['total'],2) : 0;
+        $sizeDiskUsed =isset($fileUsageInfo['total'])?$fileUsageInfo['total'] : 0;
+
+
         return view('home',compact('parsedData','sizeDiskUsed'));
     }
 }

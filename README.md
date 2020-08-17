@@ -4,11 +4,11 @@
     <img src="https://i.ibb.co/G7cBHw0/cocker-drive-icon.png" alt="Logo" width="250" height="250">
 </p>
 
+
 ## Description.
 Cocker Drive is a file manager web. <br><br> Purpose of this project is to have a versatile file manager in terms of phisic storage place, could be *your own pc, a home server, NAS or servers more powerfull like AWS*. This project contribute the  programming logic, physical storage place is your choise.
 
 Later I will add in the documentation (README) the different configurations according to the physical storage place you can use, currently I have only written localhost storage system way.
-
 
 # To consider .. :
 
