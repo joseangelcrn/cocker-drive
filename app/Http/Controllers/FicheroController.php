@@ -148,9 +148,15 @@ class FicheroController extends Controller
     {
         $user = auth()->user();
         $fileNameToFind = $request->file_name_to_find;
+        $filters = json_decode($request->filters);
         $filesPerPage = 3;
 
-        $matchedFiles = $user->ficheros()->where('nombre_real','like',$fileNameToFind.'%')->paginate($filesPerPage);
+        // $matchedFiles = $user->ficheros()->where('nombre_real','like',$fileNameToFind.'%')->paginate($filesPerPage);
+        $preSearching = $user->ficheros()->where('nombre_real','like',$fileNameToFind.'%');
+
+        //Additionals filters which users can select for a better searching.
+        $preSearching = Fichero::applyFilters($preSearching,$filters);
+        $matchedFiles = $preSearching->paginate($filesPerPage);
 
         return response()->json(['result'=>$matchedFiles]);
     }
