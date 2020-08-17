@@ -11,11 +11,6 @@
                        <input @change="precargarFicheros" class="form-control" type="file" name="ficheros" multiple>
                        <span class="ml-3">Extensiones permitidas: .jpg, .jpeg, .png, .txt, .pdf</span>
                     </div>
-                    <div class="form-group border bg-secondary p-1" style="height:300px;" v-cloak @drop.prevent="precargarFicheros" @dragover.prevent>
-                        <label class=""><b>O arrastra aqui los ficheros:</b></label>
-
-                    </div>
-
                     <div class="form-group row h-100">
                         <div class="col-lg-3 col-md-6   mt-2" :key="fichero+index" v-for="(fichero,index) in ficheros">
                             <!-- Si es Imagen pongo su imagen preview -->
