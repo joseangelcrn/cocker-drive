@@ -9,10 +9,10 @@
                     </div>
                     <div class="row my-2 ">
                       <div class="col-12 fixed-right">
-                        <button   class="btn text-white " style="background-color:  #4600bf;float:right;" @click="show.tog_but_adv_sear = !show.tog_but_adv_sear"><i class="fas fa-cog"></i></button>
+                        <button id="toggle_button_filters"  class="btn text-white "  @click="show.tog_but_adv_sear = !show.tog_but_adv_sear"><i class="fas fa-cog"></i></button>
                         <transition name="slide-fade">
                             <!-- Filters Box  (start)-->
-                            <div id="filters_box " style="max-height:200px; overflow-y:scroll;" class="bg-white mt-5  p-2 rounded border border-primary"  v-if="show.tog_but_adv_sear">
+                            <div id="filters_box" class="bg-white mt-5  p-2 rounded border border-primary"  v-if="show.tog_but_adv_sear">
 
                                 <div class="form-group">
                                     <!-- <h5>Extensiones</h5>
@@ -86,8 +86,10 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="form-group row d-flex justify-content-center">
+                                    <gif-loading style="position:fixed; right:70px; z-index:2;" :show="labelButtonAdvancedSearching === 'Buscando ..' ? true : false"></gif-loading>
+                                </div>
                                 <div class="form-group">
-                                    <gif-loading style="position:absolute; right:0;bottom:42px;right:50px; " :show="labelButtonAdvancedSearching === 'Buscando ..' ? true : false"></gif-loading>
                                     <button class="btn btn-primary w-100" @click="buscar"><i class="fas fa-search"></i></button>
                                 </div>
                             </div>
@@ -193,10 +195,27 @@
     }
 
     #filters_box{
-        position: absolute;
-        width: 1px;
+        position: fixed;
+        width: 300px;
+        height:600px;
+        overflow-y: scroll;
+        right:35px;
+        bottom:10px;
+        z-index: -1;
+         /* style="max-height:200px; overflow-y:scroll;" */
+
     }
 
+
+/* toggle buton filters */
+
+#toggle_button_filters{
+    background-color:  #4600bf;
+    float:right;
+    bottom: 0;
+    right:0;
+    position: fixed;
+}
 
     /* --- */
     /* VUEJS ANIMATIONS */
