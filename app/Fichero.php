@@ -54,7 +54,8 @@ class Fichero extends Model
      }
 
      /**
-      * Returns total used disk space from a directory (MB)
+      * Returns total used disk space from a directory (MB).
+      * File searching level !!
       */
       public static function getEspacioUsado($rootDir = '')
       {
@@ -91,6 +92,8 @@ class Fichero extends Model
 
         return $infoFile;
       }
+
+
 
       /**
        * Parse bytes to MB
@@ -271,7 +274,8 @@ class Fichero extends Model
 
                 $tempArray = array(
                     'label' => $extension,
-                    'value' => floatval(number_format((floatval($size) /number_format($totalDiskUsed,2)) * 100,2))
+                    // 'value' => floatval(number_format((floatval($size) /number_format($totalDiskUsed,2)) * 100,2))
+                    'value' => ($size/$totalDiskUsed) * 100
                 );
                 array_push($parsedData,$tempArray);
             }
