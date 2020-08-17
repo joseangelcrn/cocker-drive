@@ -1,6 +1,7 @@
 /node_modules
 /public/hot
 /public/storage/ficheros
+/public/storage/temp
 /storage/*.key
 /vendor
 .env

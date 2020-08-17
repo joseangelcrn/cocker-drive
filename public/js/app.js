@@ -2087,6 +2087,65 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['root_dir'],
   data: function data() {
@@ -2112,6 +2171,10 @@ __webpack_require__.r(__webpack_exports__);
         sort: {
           field: '',
           type: 'desc'
+        },
+        widthHeight: {
+          width: '',
+          height: ''
         }
       }
     };
@@ -2123,6 +2186,7 @@ __webpack_require__.r(__webpack_exports__);
       var that = this;
       var data = new FormData();
       data.append('file_name_to_find', this.fileNameToFind);
+      data.append('filters', JSON.stringify(this.filters));
 
       if (reset) {
         this.currentPage = 1;
@@ -2131,7 +2195,6 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       axios.post('/file/advanced_searching?page=' + this.currentPage, data).then(function (response) {
-        // that.foundFiles = data.result;
         if (reset) {
           console.log('[reset]');
           that.foundFiles = response.data.result;
@@ -2154,7 +2217,6 @@ __webpack_require__.r(__webpack_exports__);
     getOperation: function getOperation(value) {
       //deleting file...
       if (Number.isInteger(value)) {
-        console.log('deleting file parent event');
         this.foundFiles['data'].splice(value, 1);
       }
 
@@ -2167,6 +2229,8 @@ __webpack_require__.r(__webpack_exports__);
       console.log(this.filters.selectedExtensions);
       console.log('sort');
       console.log(this.filters.sort);
+      console.log('width - height');
+      console.log(this.filters.widthHeight);
     }
   }
 });
@@ -2410,6 +2474,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     'fichero_param': {
@@ -2452,6 +2519,7 @@ __webpack_require__.r(__webpack_exports__);
       if (option === 1) {
         this.rename();
       } else {
+        var that = this;
         this.$confirm({
           message: "\xBFEstas seguro que deseas eliminar este archivo?",
           button: {
@@ -2464,9 +2532,14 @@ __webpack_require__.r(__webpack_exports__);
            * @param {Boolean} confirm
            */
           callback: function callback(confirm) {
+            console.log('call back');
+
             if (confirm) {
               _this["delete"]();
-            }
+            } //enbale buttons again
+            else {
+                that.$emit('operation_done', false);
+              }
           }
         });
       }
@@ -7105,7 +7178,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.fixed-right{\n    position: fixed;\n    right: 0;\n    z-index: 1;\n}\n#filters_box{\n    position: absolute;\n    width: 1px;\n}\n\n\n/* --- */\n/* VUEJS ANIMATIONS */\n/* --- */\n/* Las animaciones de entrada y salida pueden usar */\n/* funciones de espera y duración diferentes.      */\n.slide-fade-enter-active {\n    transition: all .2s ease;\n}\n.slide-fade-leave-active {\n    transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0);\n}\n.slide-fade-enter, .slide-fade-leave-to\n/* .slide-fade-leave-active below version 2.1.8 */ {\n    transform: translateX(10px);\n    opacity: 0;\n}\n\n", ""]);
+exports.push([module.i, "\n.fixed-right{\n        position: fixed;\n        right: 0;\n        z-index: 1;\n}\n#filters_box{\n        position: fixed;\n        width: 300px;\n        height:600px;\n        overflow-y: scroll;\n        right:35px;\n        bottom:10px;\n        z-index: -1;\n         /* style=\"max-height:200px; overflow-y:scroll;\" */\n}\n\n\n/* toggle buton filters */\n#toggle_button_filters{\n    background-color:  #4600bf;\n    float:right;\n    bottom: 0;\n    right:0;\n    position: fixed;\n}\n\n    /* --- */\n    /* VUEJS ANIMATIONS */\n    /* --- */\n    /* Las animaciones de entrada y salida pueden usar */\n    /* funciones de espera y duración diferentes.      */\n.slide-fade-enter-active {\n        transition: all .2s ease;\n}\n.slide-fade-leave-active {\n        transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0);\n}\n.slide-fade-enter, .slide-fade-leave-to\n    /* .slide-fade-leave-active below version 2.1.8 */ {\n        transform: translateX(10px);\n        opacity: 0;\n}\n\n", ""]);
 
 // exports
 
@@ -40676,10 +40749,7 @@ var render = function() {
                   "button",
                   {
                     staticClass: "btn text-white ",
-                    staticStyle: {
-                      "background-color": "#4600bf",
-                      float: "right"
-                    },
+                    attrs: { id: "toggle_button_filters" },
                     on: {
                       click: function($event) {
                         _vm.show.tog_but_adv_sear = !_vm.show.tog_but_adv_sear
@@ -40696,18 +40766,10 @@ var render = function() {
                         {
                           staticClass:
                             "bg-white mt-5  p-2 rounded border border-primary",
-                          staticStyle: {
-                            "max-height": "200px",
-                            "overflow-y": "scroll"
-                          },
-                          attrs: { id: "filters_box " }
+                          attrs: { id: "filters_box" }
                         },
                         [
                           _c("div", { staticClass: "form-group" }, [
-                            _c("h5", [_vm._v("Extensiones")]),
-                            _vm._v(" "),
-                            _c("hr"),
-                            _vm._v(" "),
                             _c(
                               "ul",
                               _vm._l(_vm.filters.extensions, function(
@@ -40789,12 +40851,12 @@ var render = function() {
                           _vm._v(" "),
                           _c("div", { staticClass: "form-group row" }, [
                             _c("div", { staticClass: "col-12" }, [
-                              _c("h5", [_vm._v("Ordenar por")])
+                              _c("h5", [_vm._v("Ordenar por")]),
+                              _vm._v(" "),
+                              _c("hr")
                             ]),
                             _vm._v(" "),
-                            _c("hr"),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "col-4" }, [
+                            _c("div", { staticClass: "col-6" }, [
                               _c("label", [_vm._v("Campo")]),
                               _vm._v(" "),
                               _c(
@@ -40816,7 +40878,7 @@ var render = function() {
                                   _vm._v(" "),
                                   _c(
                                     "option",
-                                    { attrs: { value: "file_name" } },
+                                    { attrs: { value: "nombre_real" } },
                                     [_vm._v("Nombre")]
                                   ),
                                   _vm._v(" "),
@@ -40830,12 +40892,16 @@ var render = function() {
                                     "option",
                                     { attrs: { value: "extension" } },
                                     [_vm._v("Extension")]
-                                  )
+                                  ),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "size" } }, [
+                                    _vm._v("Tamaño")
+                                  ])
                                 ]
                               )
                             ]),
                             _vm._v(" "),
-                            _c("div", { staticClass: "col-4" }, [
+                            _c("div", { staticClass: "col-6" }, [
                               _c("label", [_vm._v("Forma")]),
                               _vm._v(" "),
                               _c(
@@ -40863,12 +40929,162 @@ var render = function() {
                             ])
                           ]),
                           _vm._v(" "),
+                          _c("div", { staticClass: "form-group row" }, [
+                            _c("div", { staticClass: "col-12" }, [
+                              _c("h5", [_vm._v("Calidad Imagen")]),
+                              _vm._v(" "),
+                              _c("hr")
+                            ]),
+                            _vm._v(" "),
+                            _c("hr"),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-5" }, [
+                              _c("label", [_vm._v("Ancho")]),
+                              _vm._v(" "),
+                              _c(
+                                "select",
+                                {
+                                  staticClass: "form-control",
+                                  domProps: {
+                                    value: _vm.filters.widthHeight.width
+                                  },
+                                  on: {
+                                    change: function($event) {
+                                      _vm.filters.widthHeight.width =
+                                        $event.target.value
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("option", { domProps: { value: "" } }, [
+                                    _vm._v("--")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "144" } }, [
+                                    _vm._v("144")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "240" } }, [
+                                    _vm._v("240")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "360" } }, [
+                                    _vm._v("360")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "480" } }, [
+                                    _vm._v("480")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "720" } }, [
+                                    _vm._v("720")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "1080" } }, [
+                                    _vm._v("1080")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "1920" } }, [
+                                    _vm._v("1920")
+                                  ])
+                                ]
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "col-1 text-center align-self-end align-item-bottom"
+                              },
+                              [_c("label", [_vm._v("x")])]
+                            ),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-5" }, [
+                              _c("label", [_vm._v("Alto")]),
+                              _vm._v(" "),
+                              _c(
+                                "select",
+                                {
+                                  staticClass: "form-control",
+                                  domProps: {
+                                    value: _vm.filters.widthHeight.height
+                                  },
+                                  on: {
+                                    change: function($event) {
+                                      _vm.filters.widthHeight.height =
+                                        $event.target.value
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("option", { domProps: { value: "" } }, [
+                                    _vm._v("--")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "144" } }, [
+                                    _vm._v("144")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "240" } }, [
+                                    _vm._v("240")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "360" } }, [
+                                    _vm._v("360")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "480" } }, [
+                                    _vm._v("480")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "720" } }, [
+                                    _vm._v("720")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "1080" } }, [
+                                    _vm._v("1080")
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "1920" } }, [
+                                    _vm._v("1920")
+                                  ])
+                                ]
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            {
+                              staticClass:
+                                "form-group row d-flex justify-content-center"
+                            },
+                            [
+                              _c("gif-loading", {
+                                staticStyle: {
+                                  position: "fixed",
+                                  right: "70px",
+                                  "z-index": "2"
+                                },
+                                attrs: {
+                                  show:
+                                    _vm.labelButtonAdvancedSearching ===
+                                    "Buscando .."
+                                      ? true
+                                      : false
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
                           _c("div", { staticClass: "form-group" }, [
                             _c(
                               "button",
                               {
                                 staticClass: "btn btn-primary w-100",
-                                on: { click: _vm.applyFilters }
+                                on: { click: _vm.buscar }
                               },
                               [_c("i", { staticClass: "fas fa-search" })]
                             )
@@ -41523,7 +41739,13 @@ var render = function() {
                 staticClass: "card-title",
                 staticStyle: { "overflow-x": "scroll", height: "50px" }
               },
-              [_vm._v(_vm._s(_vm.fichero_param.nombre_real))]
+              [
+                _vm._v(
+                  _vm._s(_vm.fichero_param.nombre_real) +
+                    "." +
+                    _vm._s(_vm.fichero_param.extension)
+                )
+              ]
             )
           : _vm._e(),
         _vm._v(" "),
@@ -41537,7 +41759,7 @@ var render = function() {
                   expression: "newName"
                 }
               ],
-              staticClass: "form-control-sm",
+              staticClass: "form-control-sm mb-4",
               domProps: { value: _vm.newName },
               on: {
                 input: function($event) {
@@ -41549,6 +41771,20 @@ var render = function() {
               }
             })
           : _vm._e(),
+        _vm._v(" "),
+        _c("h6", { staticClass: "card-title" }, [
+          _vm._v(
+            _vm._s(_vm.fichero_param.width) +
+              "x" +
+              _vm._s(_vm.fichero_param.height)
+          )
+        ]),
+        _vm._v(" "),
+        _c("h6", { staticClass: "card-title" }, [
+          _vm._v(
+            _vm._s((_vm.fichero_param.size / (1024 * 1024)).toFixed(2)) + " MB"
+          )
+        ]),
         _vm._v(" "),
         !_vm.editableName
           ? _c("div", { attrs: { id: "botonera" } }, [

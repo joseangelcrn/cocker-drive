@@ -7,9 +7,95 @@
                         <gif-loading style="position:absolute; right:0;bottom:3px;right:3px; " :show="labelButtonAdvancedSearching === 'Buscando ..' ? true : false"></gif-loading>
                         <input class="form-control" type="text" @keyup="buscar" placeholder="Nombre del archivo que deseas bucar.." v-model="fileNameToFind">
                     </div>
-                    <div class="text-right my-2">
-                        <!-- <button class="btn btn-primary">Hola</button> -->
-                        <button class="btn" :class="[labelButtonAdvancedSearching === 'Buscando ..' ? 'btn-warning' : 'btn-secondary']" @click="busqAv = !busqAv">{{labelButtonAdvancedSearching}}</button>
+                    <div class="row my-2 ">
+                      <div class="col-12 fixed-right">
+                        <button id="toggle_button_filters"  class="btn text-white "  @click="show.tog_but_adv_sear = !show.tog_but_adv_sear"><i class="fas fa-cog"></i></button>
+                        <transition name="slide-fade">
+                            <!-- Filters Box  (start)-->
+                            <div id="filters_box" class="bg-white mt-5  p-2 rounded border border-primary"  v-if="show.tog_but_adv_sear">
+
+                                <div class="form-group">
+                                    <!-- <h5>Extensiones</h5>
+                                    <hr> -->
+                                    <ul>
+                                        <li v-for="(extension,index) in filters.extensions" :key="index">
+                                            <input type="checkbox" :id="extension" :value="extension" v-model="filters.selectedExtensions">
+                                            <label class="mr-2" :for="extension">{{extension}}</label>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-12">
+                                        <h5>Ordenar por</h5>
+                                        <hr>
+                                    </div>
+                                    <div class="col-6">
+                                        <label>Campo</label>
+                                        <select class="form-control" :value="filters.sort.field" @change="filters.sort.field=$event.target.value ">
+                                            <option :value="''">--</option>
+                                            <option value="nombre_real">Nombre</option>
+                                            <option value="created_at">Fecha creación</option>
+                                            <option value="extension">Extension</option>
+                                            <option value="size">Tamaño</option>
+                                        </select>
+                                    </div>
+                                     <div class="col-6">
+                                        <label>Forma</label>
+                                        <select class="form-control" :value="filters.sort.type" @change="filters.sort.type=$event.target.value">
+                                            <option value="asc">Ascendente</option>
+                                            <option value="desc">Descendente</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row">
+                                    <div class="col-12">
+                                        <h5>Calidad Imagen</h5>
+                                        <hr>
+                                    </div>
+                                    <hr>
+                                    <div class="col-5">
+                                        <label>Ancho</label>
+                                        <select class="form-control" :value="filters.widthHeight.width" @change="filters.widthHeight.width=$event.target.value ">
+                                            <option :value="''">--</option>
+                                            <option value="144">144</option>
+                                            <option value="240">240</option>
+                                            <option value="360">360</option>
+                                            <option value="480">480</option>
+                                            <option value="720">720</option>
+                                            <option value="1080">1080</option>
+                                            <option value="1920">1920</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-1 text-center align-self-end align-item-bottom">
+                                        <label>x</label>
+                                    </div>
+                                    <div class="col-5">
+                                        <label>Alto</label>
+                                        <select class="form-control" :value="filters.widthHeight.height" @change="filters.widthHeight.height=$event.target.value ">
+                                            <option :value="''">--</option>
+                                            <option value="144">144</option>
+                                            <option value="240">240</option>
+                                            <option value="360">360</option>
+                                            <option value="480">480</option>
+                                            <option value="720">720</option>
+                                            <option value="1080">1080</option>
+                                            <option value="1920">1920</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row d-flex justify-content-center">
+                                    <gif-loading style="position:fixed; right:70px; z-index:2;" :show="labelButtonAdvancedSearching === 'Buscando ..' ? true : false"></gif-loading>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary w-100" @click="buscar"><i class="fas fa-search"></i></button>
+                                </div>
+                            </div>
+                            <!-- Filters Box  (end)-->
+                        </transition>
+                      </div>
                     </div>
                     <div class=" rounded bg-primary p-3 sombra"  v-if="busqAv"  style="position:absolute;z-index:3;width:100%;">
                         <div class="form-group border bg-secondary text-light p-3" id="orden">
@@ -100,6 +186,56 @@
     </div>
 </template>
 
+<style>
+
+    .fixed-right{
+        position: fixed;
+        right: 0;
+        z-index: 1;
+    }
+
+    #filters_box{
+        position: fixed;
+        width: 300px;
+        height:600px;
+        overflow-y: scroll;
+        right:35px;
+        bottom:10px;
+        z-index: -1;
+         /* style="max-height:200px; overflow-y:scroll;" */
+
+    }
+
+
+/* toggle buton filters */
+
+#toggle_button_filters{
+    background-color:  #4600bf;
+    float:right;
+    bottom: 0;
+    right:0;
+    position: fixed;
+}
+
+    /* --- */
+    /* VUEJS ANIMATIONS */
+    /* --- */
+    /* Las animaciones de entrada y salida pueden usar */
+    /* funciones de espera y duración diferentes.      */
+    .slide-fade-enter-active {
+        transition: all .2s ease;
+    }
+    .slide-fade-leave-active {
+        transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+    .slide-fade-enter, .slide-fade-leave-to
+    /* .slide-fade-leave-active below version 2.1.8 */ {
+        transform: translateX(10px);
+        opacity: 0;
+    }
+
+</style>
+
 <script>
     export default {
         props:['root_dir'],
@@ -112,6 +248,21 @@
                 currentPage:1,
                 lastPage:1,
                 operating:false,
+
+                //advanced searching tools
+                show:{
+                    tog_but_adv_sear:false
+                },
+
+                //needed data to advanced searching tools about user info
+                //'data loadeed from server'
+                filters:{
+                    extensions:[], //all avaliabled extensions
+                    selectedExtensions:[],//all selected extension
+                    sort:{field:'',type:'desc'},
+                    widthHeight:{width:'',height:''}
+
+                }
             }
         },
         methods:{
@@ -120,6 +271,7 @@
                 let that = this;
                 let data = new FormData();
                 data.append('file_name_to_find',this.fileNameToFind);
+                data.append('filters',JSON.stringify(this.filters));
 
                 if (reset) {
                     this.currentPage = 1;
@@ -130,8 +282,6 @@
 
                  axios.post('/file/advanced_searching?page='+this.currentPage,data).then(
                     (response) => {
-                        // that.foundFiles = data.result;
-
                         if (reset) {
                             console.log('[reset]');
                             that.foundFiles = response.data.result;
@@ -157,12 +307,22 @@
 
                 //deleting file...
                 if (Number.isInteger(value)) {
-                    console.log('deleting file parent event');
                    this.foundFiles['data'].splice(value, 1);
                 }
-
-
                 this.operating = false;
+            },
+            applyFilters(){
+                console.log('Selected filters !');
+                console.log('____________');
+
+                console.log('extensions');
+                console.log(this.filters.selectedExtensions);
+
+                console.log('sort');
+                console.log(this.filters.sort);
+
+                console.log('width - height');
+                console.log(this.filters.widthHeight);
             }
         },
 

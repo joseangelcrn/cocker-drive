@@ -11,7 +11,23 @@ class Fichero extends Model
 {
     //
     protected $table = "ficheros";
-    protected $fillable = ['nombre_real','nombre_hash','user_id','extension'];
+    protected $fillable = ['nombre_real','nombre_hash','user_id','extension','size','width','height'];
+
+    private static  $extensions = [
+        'img'=>[
+            'jpg',
+            'jpeg',
+            'png',
+            'gif',
+            'webp',
+            'tiff',
+            'psd',
+            'raw',
+            'bmp',
+            'heif',
+            'indd'
+        ]
+    ];
 
     public static  $DIR_FICHEROS = '/ficheros';
 
@@ -38,7 +54,8 @@ class Fichero extends Model
      }
 
      /**
-      * Returns total used disk space from a directory (MB)
+      * Returns total used disk space from a directory (MB).
+      * File searching level !!
       */
       public static function getEspacioUsado($rootDir = '')
       {
@@ -77,6 +94,97 @@ class Fichero extends Model
       }
 
 
+
+      /**
+       * Parse bytes to MB
+       */
+
+    public static function parseToMB($bytesAmount)
+    {
+        return $bytesAmount/1048576;
+    }
+
+    /**
+    * Check if file is image
+    */
+
+    public static function isImage($extension)
+    {
+        return in_array($extension,self::$extensions['img']);
+    }
+
+    /**
+     * Function to get files with specifics parameters(extension,size,width,height...) which was selected
+     * by user on file searcher view.
+     */
+
+    public static function applyFilters($preSearching,$filters)
+    {
+        $extensionsFilter = $filters->extensions;
+        $sortFilter = $filters->sort;
+        $widthHeight = $filters->widthHeight;
+
+        if (sizeof($extensionsFilter) > 0) {
+
+        }
+
+        //width - height
+        // $widthHeigt->width != '' ? $preSearching->where('width',$widthHeigt->width) : null;
+        // $widthHeigt->height != '' ? $preSearching->where('height',$widthHeigt->height) : null;
+
+        if ($widthHeight->width != '') {
+            $minAllowedWidth = self::getMinSearchingRangeValue($widthHeight->width);
+            $preSearching->whereBetween('width',[$minAllowedWidth,$widthHeight->width]);
+        }
+        if ($widthHeight->height != '') {
+            $minAllowedHeight  = self::getMinSearchingRangeValue($widthHeight->height);
+            $preSearching->whereBetween('height',[$minAllowedHeight,$widthHeight->height]);
+        }
+
+        //order conditions must be last one
+        $sortFilter->field != '' ? $preSearching->orderBy($sortFilter->field,$sortFilter->type) : null;
+
+
+        return $preSearching;
+    }
+
+    /**
+     * return minimal searching range value allowed to find file by 'width' value
+     */
+    public static function getMinSearchingRangeValue($value)
+    {
+
+        switch ($value) {
+                case 144:
+                    $minAllowedValue = 0;
+                    break;
+                case 240:
+                    $minAllowedValue = 144.001;
+                    break;
+                case 360:
+                    $minAllowedValue = 240.001;
+                    break;
+                case 480:
+                    $minAllowedValue = 360.001;
+                    break;
+                case 720:
+                    $minAllowedValue = 480.001;
+                    break;
+                case 1080:
+                    $minAllowedValue = 720.001;
+                break;
+                case 1920:
+                    $minAllowedValue = 1080.001;
+                    break;
+                default:
+                    $minAllowedValue = 0;
+                break;
+        }
+
+        return $minAllowedValue;
+    }
+
+
     /**
      * Return filename (and its extension) from path
      */
@@ -84,6 +192,7 @@ class Fichero extends Model
     {
         return substr($path, strrpos($path, '/') + 1);
     }
+
      /**
       * Create bin of file in default disk
       */
@@ -91,16 +200,28 @@ class Fichero extends Model
      {
         $nombreReal = $fichero->getClientOriginalName();
         $extension = $fichero->extension();
-        // $fullNombreReal = $nombreReal.'.'.$extension;
+        $size = $fichero->getSize();//in Bytes
+        $width = 0;
+        $height = 0;
 
         $path = self::defaultDisk()->put(self::$DIR_FICHEROS.'/'.$hashRootDir.'/',$fichero);
-
         $nombreHash = self::getNombreFicheroByPath($path);
+
+        //if is an image file I will save its width/height
+        if (self::isImage($extension)) {
+            $widthHeight = getimagesize($fichero);
+            $width = $widthHeight[0];
+            $height = $widthHeight[1];
+        }
 
         $resultado = array(
             'nombre_hash'=> $nombreHash,
             'nombre_real'=> $nombreReal,
-            'extension'=>$extension
+            'extension'=>$extension,
+            'size'=>$size, //MB
+            'width'=>$width,
+            'height'=>$height,
+
         );
 
         return $resultado;
@@ -110,14 +231,17 @@ class Fichero extends Model
       * Store info of file on the  database
       */
 
-     public static function crearData($nombreReal,$nombreHash,$extension,$userId)
+     public static function crearData($nombreReal,$nombreHash,$extension,$size,$width,$height,$userId)
      {
         $nuevoFichero = Fichero::create(
             [
             'nombre_real'=>$nombreReal,
             'nombre_hash'=>$nombreHash,
             'extension'=>$extension,
-            'user_id'=>$userId
+            'size'=>$size,
+            'width'=>$width,
+            'height'=>$height,
+            'user_id'=>$userId,
             ]
 
         );
@@ -138,17 +262,21 @@ class Fichero extends Model
         $nombreReal = $resultBin['nombre_real'];
         $nombreHash = $resultBin['nombre_hash'];
         $extension = $resultBin['extension'];
+        $size = $resultBin['size'];
+        $width = $resultBin['width'];
+        $height = $resultBin['height'];
 
-        if ($nombreReal != null and $nombreHash != null) {
-            $resultado = self::crearData($nombreReal,$nombreHash,$extension,$user->id);
+        if ($nombreReal != null and $nombreHash != null and $size != null) {
+            $resultado = self::crearData($nombreReal,$nombreHash,$extension,$size,$width,$height,$user->id);
         }
 
         return $resultado;
      }
 
      /**
-      * Save bin and data bd + check if all files was correctly uploaded.
-      * Main function to upload files.
+      * Save bin and data bd + check. if all files was correctly uploaded will return true.
+      *
+      * -- Main function to upload files. --
       */
 
 
@@ -192,7 +320,8 @@ class Fichero extends Model
 
                 $tempArray = array(
                     'label' => $extension,
-                    'value' => floatval(number_format((floatval($size) /number_format($totalDiskUsed,2)) * 100,2))
+                    // 'value' => floatval(number_format((floatval($size) /number_format($totalDiskUsed,2)) * 100,2))
+                    'value' => ($size/$totalDiskUsed) * 100
                 );
                 array_push($parsedData,$tempArray);
             }
@@ -260,5 +389,8 @@ class Fichero extends Model
 
         return $result;
     }
+
+
+
 
 }
