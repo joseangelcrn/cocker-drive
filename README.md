@@ -19,8 +19,8 @@ This web aplication contains  uploaded files such as icon of web, images as icon
 
 # php.ini file configuration server  *( example configuration, feel free to adjust it to your needs)*
 
-> post_max_size = 750M <br>
-upload_max_filesize = 750M  <br>
+> post_max_size = 1024M <br>
+upload_max_filesize = 1024M  <br>
 max_execution_time = 5000  <br>
 max_input_time = 5000  <br>
 memory_limit = 1000M  <br>
