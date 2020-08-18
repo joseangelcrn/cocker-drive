@@ -7,7 +7,7 @@
     :start-angle="0" :auto-adjust-text-size="true"
     @section-click="handleSectionClick">
     <label>Espacio usado</label>
-    <h3>{{size_disk_used}}MB</h3>
+    <h3>{{parsedTotalSize.amount}} {{parsedTotalSize.type}}</h3>
   </vc-donut>
 </template>
 
@@ -16,11 +16,7 @@
     props:['data_param','size_disk_used'],
     data() {
       return {
-        sections: [
-          { label: 'Red section', value: 25 },
-          { label: 'Green section', value: 25},
-          { label: 'Blue section', value: 25}
-        ]
+        sections: []
       };
     },
     beforeMount(){
@@ -30,6 +26,24 @@
       handleSectionClick(section, event) {
         console.log(`${section.label} clicked.`);
       }
+    },
+    computed:{
+        //check if is possible parse  used disk to GB
+        parsedTotalSize(){
+            //init size on MB
+
+            let result = {amount:this.$props.size_disk_used,type:'MB'};
+            //parse to GB
+            let sizeToGB = this.$props.size_disk_used/1024;
+
+            //there is, at least, 1 gb of memory
+            if (sizeToGB >= 1) {
+                result.amount =(Math.round(sizeToGB * 100) / 100).toFixed(2);
+                result.type = 'GB';
+            }
+
+            return result;
+        }
     }
   };
 </script>
