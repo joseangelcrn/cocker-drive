@@ -2699,7 +2699,7 @@ __webpack_require__.r(__webpack_exports__);
         image: ['png', 'jpg', 'jpeg'],
         music: ['mp3'],
         document: ['docs', 'doc', 'docx'],
-        video: ['avi', 'mp4'],
+        video: ['avi', 'mp4', 'mov'],
         compressed: ['rar', 'zip', 'qt']
       }
     };
