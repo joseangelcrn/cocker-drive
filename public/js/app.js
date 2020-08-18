@@ -42000,92 +42000,120 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _vm.extensions.image.includes(_vm.fichero.extension)
-      ? _c("div", { staticClass: "text-center sombra" }, [
-          _vm.creating
-            ? _c("img", {
-                staticClass: "img-thumbnail",
-                staticStyle: { height: "250px" },
-                attrs: { src: _vm.fichero.url, alt: "fichero" }
-              })
-            : _c("img", {
-                staticClass: "img-thumbnail",
-                staticStyle: { height: "250px" },
-                attrs: {
-                  src:
-                    "../storage/ficheros/" +
-                    _vm.root_dir +
-                    "/" +
-                    _vm.fichero.nombre_hash,
-                  alt: "fichero"
-                }
-              })
-        ])
+      ? _c(
+          "div",
+          { staticClass: "text-center", class: { sombra: _vm.creating } },
+          [
+            _vm.creating
+              ? _c("img", {
+                  staticClass: "img-thumbnail",
+                  staticStyle: { height: "250px" },
+                  attrs: { src: _vm.fichero.url, alt: "fichero" }
+                })
+              : _c("img", {
+                  staticClass: "img-thumbnail",
+                  staticStyle: { height: "250px" },
+                  attrs: {
+                    src:
+                      "../storage/ficheros/" +
+                      _vm.root_dir +
+                      "/" +
+                      _vm.fichero.nombre_hash,
+                    alt: "fichero"
+                  }
+                })
+          ]
+        )
       : _vm.fichero.extension == "pdf"
-      ? _c("div", { staticClass: "text-center sombra" }, [
-          _c("img", {
-            staticClass: "img-thumbnail",
-            staticStyle: { height: "250px" },
-            attrs: {
-              src: "../storage/sistema/iconos/pdf.svg",
-              alt: "Icono PDF"
-            }
-          })
-        ])
+      ? _c(
+          "div",
+          { staticClass: "text-center", class: { sombra: _vm.creating } },
+          [
+            _c("img", {
+              staticClass: "img-thumbnail",
+              staticStyle: { height: "250px" },
+              attrs: {
+                src: "../storage/sistema/iconos/pdf.svg",
+                alt: "Icono PDF"
+              }
+            })
+          ]
+        )
       : _vm.extensions.document.includes(_vm.fichero.extension)
-      ? _c("div", { staticClass: "text-center sombra" }, [
-          _c("img", {
-            staticClass: "img-thumbnail",
-            staticStyle: { height: "250px" },
-            attrs: {
-              src: "../storage/sistema/iconos/doc.jpg",
-              alt: "Icono PDF"
-            }
-          })
-        ])
+      ? _c(
+          "div",
+          { staticClass: "text-center", class: { sombra: _vm.creating } },
+          [
+            _c("img", {
+              staticClass: "img-thumbnail",
+              staticStyle: { height: "250px" },
+              attrs: {
+                src: "../storage/sistema/iconos/doc.jpg",
+                alt: "Icono PDF"
+              }
+            })
+          ]
+        )
       : _vm.fichero.extension == "txt"
-      ? _c("div", { staticClass: "text-center sombra" }, [
-          _c("img", {
-            staticClass: "img-thumbnail",
-            staticStyle: { height: "250px" },
-            attrs: {
-              src: "../storage/sistema/iconos/txt.png",
-              alt: "Icono TXT"
-            }
-          })
-        ])
+      ? _c(
+          "div",
+          { staticClass: "text-center", class: { sombra: _vm.creating } },
+          [
+            _c("img", {
+              staticClass: "img-thumbnail",
+              staticStyle: { height: "250px" },
+              attrs: {
+                src: "../storage/sistema/iconos/txt.png",
+                alt: "Icono TXT"
+              }
+            })
+          ]
+        )
       : _vm.extensions.music.includes(_vm.fichero.extension)
-      ? _c("div", { staticClass: "text-center sombra" }, [
-          _c("img", {
-            staticClass: "img-thumbnail",
-            staticStyle: { height: "250px" },
-            attrs: {
-              src: "../storage/sistema/iconos/music.png",
-              alt: "Icono MUSIC"
-            }
-          })
-        ])
+      ? _c(
+          "div",
+          { staticClass: "text-center", class: { sombra: _vm.creating } },
+          [
+            _c("img", {
+              staticClass: "img-thumbnail",
+              staticStyle: { height: "250px" },
+              attrs: {
+                src: "../storage/sistema/iconos/music.png",
+                alt: "Icono MUSIC"
+              }
+            })
+          ]
+        )
       : _vm.extensions.video.includes(_vm.fichero.extension)
-      ? _c("div", { staticClass: "text-center sombra" }, [
-          _c("img", {
-            staticClass: "img-thumbnail",
-            staticStyle: { height: "250px" },
-            attrs: {
-              src: "../storage/sistema/iconos/video.png",
-              alt: "Icono VIDEO"
-            }
-          })
-        ])
+      ? _c(
+          "div",
+          { staticClass: "text-center", class: { sombra: _vm.creating } },
+          [
+            _c("img", {
+              staticClass: "img-thumbnail",
+              staticStyle: { height: "250px" },
+              attrs: {
+                src: "../storage/sistema/iconos/video.png",
+                alt: "Icono VIDEO"
+              }
+            })
+          ]
+        )
       : _vm.extensions.compressed.includes(_vm.fichero.extension)
-      ? _c("div", { staticClass: "text-center sombra" }, [
-          _c("img", {
-            staticClass: "img-thumbnail",
-            staticStyle: { height: "250px" },
-            attrs: {
-              src: "../storage/sistema/iconos/compressed.png",
-              alt: "Icono VIDEO"
-            }
-          })
-        ])
+      ? _c(
+          "div",
+          { staticClass: "text-center", class: { sombra: _vm.creating } },
+          [
+            _c("img", {
+              staticClass: "img-thumbnail",
+              staticStyle: { height: "250px" },
+              attrs: {
+                src: "../storage/sistema/iconos/compressed.png",
+                alt: "Icono VIDEO"
+              }
+            })
+          ]
+        )
       : _vm._e()
   ])
 }
