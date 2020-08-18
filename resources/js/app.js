@@ -46,7 +46,7 @@ Vue.component('buscador', require('./components/Buscador/Buscador.vue').default)
 
 Vue.component('gif-loading', require('./components/Gif/GifLoading.vue').default);
 
-Vue.component('chart', require('./components/grafico/Chart.vue').default);
+Vue.component('chart-donut', require('./components/grafico/ChartDonut.vue').default);
 
 
 //confirm dialog
