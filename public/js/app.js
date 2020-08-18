@@ -2735,16 +2735,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ['data_param', 'size_disk_used'],
   data: function data() {
     return {
-      sections: [{
-        label: 'Red section',
-        value: 25
-      }, {
-        label: 'Green section',
-        value: 25
-      }, {
-        label: 'Blue section',
-        value: 25
-      }]
+      sections: []
     };
   },
   beforeMount: function beforeMount() {
@@ -2753,6 +2744,25 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     handleSectionClick: function handleSectionClick(section, event) {
       console.log("".concat(section.label, " clicked."));
+    }
+  },
+  computed: {
+    //check if is possible parse  used disk to GB
+    parsedTotalSize: function parsedTotalSize() {
+      //init size on MB
+      var result = {
+        amount: this.$props.size_disk_used,
+        type: 'MB'
+      }; //parse to GB
+
+      var sizeToGB = this.$props.size_disk_used / 1024; //there is, at least, 1 gb of memory
+
+      if (sizeToGB >= 1) {
+        result.amount = (Math.round(sizeToGB * 100) / 100).toFixed(2);
+        result.type = 'GB';
+      }
+
+      return result;
     }
   }
 });
@@ -42122,7 +42132,13 @@ var render = function() {
     [
       _c("label", [_vm._v("Espacio usado")]),
       _vm._v(" "),
-      _c("h3", [_vm._v(_vm._s(_vm.size_disk_used) + "MB")])
+      _c("h3", [
+        _vm._v(
+          _vm._s(_vm.parsedTotalSize.amount) +
+            " " +
+            _vm._s(_vm.parsedTotalSize.type)
+        )
+      ])
     ]
   )
 }
