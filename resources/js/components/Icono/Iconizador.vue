@@ -68,6 +68,7 @@
                     video:[
                         'avi',
                         'mp4',
+                        'mov'
                     ],
                     compressed:[
                         'rar',
