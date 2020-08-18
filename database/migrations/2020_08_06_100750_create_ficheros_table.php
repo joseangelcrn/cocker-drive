@@ -18,7 +18,7 @@ class CreateFicherosTable extends Migration
             $table->string('nombre_real');
             $table->string('nombre_hash');
             $table->string('extension');
-            $table->float('size');
+            $table->decimal('size',50,5);
             $table->float('width')->nullable()->default(null);
             $table->float('height')->nullable()->default(null);
             $table->unsignedBigInteger('user_id');

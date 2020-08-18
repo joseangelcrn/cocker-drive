@@ -2341,16 +2341,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       ficheros: [],
-      //extensiones de imagenes permitidas
-      extImagenesPermitidas: ['png', 'jpg', 'jpeg'],
-      extDocs: ['docs', 'doc', 'docx'],
-      resultado: null
+      resultado: null,
+      csrf: null
     };
   },
   methods: {
@@ -2413,6 +2409,12 @@ __webpack_require__.r(__webpack_exports__);
       }, function (error) {
         _this.resultado = false;
       });
+    }
+  },
+  beforeMount: function beforeMount() {
+    setCsrf: {
+      console.log('hola');
+      this.csrf = document.querySelector('meta[name="csrf-token"]').content;
     }
   },
   mounted: function mounted() {},
@@ -2667,21 +2669,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    'fichero_param': {
+    'fichero': {
       "default": {}
     },
     'root_dir': {
       type: String,
       "default": ''
+    },
+    'creating': {
+      type: Boolean,
+      "default": false
     }
   },
   data: function data() {
     return {
-      fichero: null,
-      extImagenesPermitidas: ['png', 'jpg', 'jpeg'],
-      extDocs: ['docs', 'doc', 'docx']
+      extensions: {
+        image: ['png', 'jpg', 'jpeg'],
+        music: ['mp3'],
+        document: ['docs', 'doc', 'docx'],
+        video: ['avi', 'mp4', 'mov'],
+        compressed: ['rar', 'zip', 'qt']
+      }
     };
   },
   beforeMount: function beforeMount() {}
@@ -7191,6 +7211,25 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 // module
 exports.push([module.i, "\n.fixed-right{\n        position: fixed;\n        right: 0;\n        z-index: 1;\n}\n#filters_box{\n        position: fixed;\n        width: 300px;\n        height:600px;\n        overflow-y: scroll;\n        right:35px;\n        bottom:10px;\n        z-index: -1;\n         /* style=\"max-height:200px; overflow-y:scroll;\" */\n}\n\n\n/* toggle buton filters */\n#toggle_button_filters{\n    background-color:  #4600bf;\n    float:right;\n    bottom: 0;\n    right:0;\n    position: fixed;\n}\n\n    /* --- */\n    /* VUEJS ANIMATIONS */\n    /* --- */\n    /* Las animaciones de entrada y salida pueden usar */\n    /* funciones de espera y duración diferentes.      */\n.slide-fade-enter-active {\n        transition: all .2s ease;\n}\n.slide-fade-leave-active {\n        transition: all .1s cubic-bezier(1.0, 0.5, 0.8, 1.0);\n}\n.slide-fade-enter, .slide-fade-leave-to\n    /* .slide-fade-leave-active below version 2.1.8 */ {\n        transform: translateX(10px);\n        opacity: 0;\n}\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Fichero/FicheroCreate.vue?vue&type=style&index=0&lang=css&":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Fichero/FicheroCreate.vue?vue&type=style&index=0&lang=css& ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.list-item {\ndisplay: inline-block;\nmargin-right: 10px;\n}\n.list-enter-active, .list-leave-active {\ntransition: all 1s;\n}\n.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {\nopacity: 0;\ntransform: translateY(30px);\n}\n", ""]);
 
 // exports
 
@@ -38405,6 +38444,36 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Fichero/FicheroCreate.vue?vue&type=style&index=0&lang=css&":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Fichero/FicheroCreate.vue?vue&type=style&index=0&lang=css& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./FicheroCreate.vue?vue&type=style&index=0&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Fichero/FicheroCreate.vue?vue&type=style&index=0&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Fichero/FicheroMiniatura.vue?vue&type=style&index=0&id=69fd4c00&scoped=true&lang=css&":
 /*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Fichero/FicheroMiniatura.vue?vue&type=style&index=0&id=69fd4c00&scoped=true&lang=css& ***!
@@ -41488,207 +41557,174 @@ var render = function() {
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row bg-white rounded p-3" }, [
       _c("div", { staticClass: "col-12 " }, [
-        _c("form", { attrs: { action: "", method: "post" } }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _vm._m(1),
+        _c(
+          "form",
+          { attrs: { action: "", method: "post" } },
+          [
+            _vm._m(0),
             _vm._v(" "),
-            _c("input", {
-              staticClass: "form-control",
-              attrs: { type: "file", name: "ficheros", multiple: "" },
-              on: { change: _vm.precargarFicheros }
-            }),
+            _c("div", { staticClass: "form-group" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: { type: "file", name: "ficheros", multiple: "" },
+                on: { change: _vm.precargarFicheros }
+              }),
+              _vm._v(" "),
+              _c("span", { staticClass: "ml-3" }, [
+                _vm._v("Extensiones permitidas: .jpg, .jpeg, .png, .txt, .pdf")
+              ])
+            ]),
             _vm._v(" "),
-            _c("span", { staticClass: "ml-3" }, [
-              _vm._v("Extensiones permitidas: .jpg, .jpeg, .png, .txt, .pdf")
-            ])
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "form-group row h-100" },
-            _vm._l(_vm.ficheros, function(fichero, index) {
-              return _c(
-                "div",
-                {
-                  key: fichero + index,
-                  staticClass: "col-lg-3 col-md-6   mt-2"
-                },
-                [
-                  _vm.extImagenesPermitidas.includes(fichero.extension)
-                    ? _c("div", { staticClass: "text-center" }, [
-                        _c("img", {
-                          staticClass: "img-thumbnail",
-                          staticStyle: { height: "250px" },
-                          attrs: { src: fichero.url, alt: "fichero" }
-                        })
-                      ])
-                    : fichero.extension == "pdf"
-                    ? _c("div", { staticClass: "text-center" }, [
-                        _c("img", {
-                          staticClass: "img-thumbnail",
-                          staticStyle: { height: "250px" },
-                          attrs: {
-                            src: "../storage/sistema/iconos/pdf.svg",
-                            alt: "Icono PDF"
-                          }
-                        })
-                      ])
-                    : _vm.extDocs.includes(fichero.extension)
-                    ? _c("div", { staticClass: "text-center" }, [
-                        _c("img", {
-                          staticClass: "img-thumbnail",
-                          staticStyle: { height: "250px" },
-                          attrs: {
-                            src: "../storage/sistema/iconos/doc.jpg",
-                            alt: "Icono PDF"
-                          }
-                        })
-                      ])
-                    : fichero.extension == "txt"
-                    ? _c("div", { staticClass: "text-center" }, [
-                        _c("img", {
-                          staticClass: "img-thumbnail",
-                          staticStyle: { height: "250px" },
-                          attrs: {
-                            src: "../storage/sistema/iconos/txt.png",
-                            alt: "Icono TXT"
-                          }
-                        })
-                      ])
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c("br"),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: fichero.nombre_real,
-                        expression: "fichero.nombre_real"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "text",
-                      title: "Nombre con el que se guardara el fichero."
-                    },
-                    domProps: { value: fichero.nombre_real },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+            _c(
+              "transition-group",
+              {
+                staticClass: "form-group row h-100",
+                attrs: { tag: "div", name: "list" }
+              },
+              _vm._l(_vm.ficheros, function(fichero, index) {
+                return _c(
+                  "div",
+                  { key: fichero + index, staticClass: "col-lg-6" },
+                  [
+                    _c("iconizador", {
+                      attrs: { fichero: fichero, creating: true }
+                    }),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: fichero.nombre_real,
+                          expression: "fichero.nombre_real"
                         }
-                        _vm.$set(fichero, "nombre_real", $event.target.value)
+                      ],
+                      staticClass: "form-control sombra",
+                      attrs: {
+                        type: "text",
+                        title: "Nombre con el que se guardara el fichero."
+                      },
+                      domProps: { value: fichero.nombre_real },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(fichero, "nombre_real", $event.target.value)
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-sm btn-danger w-100 align-bottom",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.eliminarFichero(index)
+                          }
+                        }
+                      },
+                      [_vm._v("Eliminar")]
+                    )
+                  ],
+                  1
+                )
+              }),
+              0
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _vm.resultado === false
+                ? _c(
+                    "div",
+                    {
+                      staticClass:
+                        "alert alert-danger alert-dismissible fade show",
+                      attrs: { role: "alert" }
+                    },
+                    [
+                      _c("strong", [_vm._v("Oops..!")]),
+                      _vm._v(
+                        " Ha habido un problema al guardar tu(s) archivo(s).\n                          "
+                      ),
+                      _vm._m(2)
+                    ]
+                  )
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "form-group row" },
+              [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: {
+                      type: "button",
+                      disabled: _vm.disabledForm || _vm.resultado != null
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.guardar()
                       }
                     }
-                  }),
-                  _vm._v(" "),
-                  _c("br"),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-sm btn-danger w-100 align-bottom",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          return _vm.eliminarFichero(index)
-                        }
-                      }
-                    },
-                    [_vm._v("Eliminar")]
-                  )
-                ]
-              )
-            }),
-            0
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _vm.resultado === false
-              ? _c(
-                  "div",
-                  {
-                    staticClass:
-                      "alert alert-danger alert-dismissible fade show",
-                    attrs: { role: "alert" }
                   },
                   [
-                    _c("strong", [_vm._v("Oops..!")]),
                     _vm._v(
-                      " Ha habido un problema al guardar tu(s) archivo(s).\n                          "
-                    ),
-                    _vm._m(2)
-                  ]
-                )
-              : _vm._e()
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "form-group row" },
-            [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-primary",
-                  attrs: {
-                    type: "button",
-                    disabled: _vm.disabledForm || _vm.resultado != null
-                  },
-                  on: {
-                    click: function($event) {
-                      return _vm.guardar()
-                    }
-                  }
-                },
-                [
-                  _vm._v(
-                    "\n                          Guardar Fichero\n                      "
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _c("gif-loading", {
-                staticClass: "ml-3",
-                attrs: { show: _vm.resultado != null }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _vm.ficheros.length > 0
-            ? _c("div", { staticClass: "form-group border p-2" }, [
-                _c("h4", [_vm._v("Información de la subida")]),
-                _vm._v(" "),
-                _c("p", {}, [
-                  _vm._v("Archivos seleccionados: "),
-                  _c("b", [_vm._v(_vm._s(_vm.ficheros.length))]),
-                  _vm._v(".")
-                ]),
-                _vm._v(" "),
-                _c("p", {}, [
-                  _vm._v("Peso total de la subida:  "),
-                  _c("b", [_vm._v(_vm._s(_vm.getTotalSizeOfFiles))]),
-                  _vm._v(" KB. ( "),
-                  _c("b", [
-                    _vm._v(
-                      _vm._s(
-                        Math.round(
-                          (_vm.getTotalSizeOfFiles / 1024 + Number.EPSILON) *
-                            100
-                        ) / 100
-                      ) + " MB"
+                      "\n                          Guardar Fichero\n                      "
                     )
+                  ]
+                ),
+                _vm._v(" "),
+                _c("gif-loading", {
+                  staticClass: "ml-3",
+                  attrs: { show: _vm.resultado != null }
+                })
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _vm.ficheros.length > 0
+              ? _c("div", { staticClass: "form-group border p-2" }, [
+                  _c("h4", [_vm._v("Información de la subida")]),
+                  _vm._v(" "),
+                  _c("p", {}, [
+                    _vm._v("Archivos seleccionados: "),
+                    _c("b", [_vm._v(_vm._s(_vm.ficheros.length))]),
+                    _vm._v(".")
                   ]),
-                  _vm._v(" )")
+                  _vm._v(" "),
+                  _c("p", {}, [
+                    _vm._v("Peso total de la subida:  "),
+                    _c("b", [_vm._v(_vm._s(_vm.getTotalSizeOfFiles))]),
+                    _vm._v(" KB. ( "),
+                    _c("b", [
+                      _vm._v(
+                        _vm._s(
+                          Math.round(
+                            (_vm.getTotalSizeOfFiles / 1024 + Number.EPSILON) *
+                              100
+                          ) / 100
+                        ) + " MB"
+                      )
+                    ]),
+                    _vm._v(" )")
+                  ])
                 ])
-              ])
-            : _vm._e()
-        ])
+              : _vm._e()
+          ],
+          1
+        )
       ])
     ])
   ])
@@ -41766,7 +41802,11 @@ var render = function() {
         },
         [
           _c("iconizador", {
-            attrs: { fichero_param: _vm.fichero_param, root_dir: _vm.root_dir }
+            attrs: {
+              fichero: _vm.fichero_param,
+              root_dir: _vm.root_dir,
+              creating: false
+            }
           })
         ],
         1
@@ -41949,25 +41989,31 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm.extImagenesPermitidas.includes(_vm.fichero_param.extension)
-      ? _c("div", { staticClass: "text-center" }, [
-          _c("img", {
-            staticClass: "img-thumbnail w-100",
-            staticStyle: { height: "250px" },
-            attrs: {
-              src:
-                "../storage/ficheros/" +
-                _vm.root_dir +
-                "/" +
-                _vm.fichero_param.nombre_hash,
-              alt: "Imagen"
-            }
-          })
+    _vm.extensions.image.includes(_vm.fichero.extension)
+      ? _c("div", { staticClass: "text-center sombra" }, [
+          _vm.creating
+            ? _c("img", {
+                staticClass: "img-thumbnail",
+                staticStyle: { height: "250px" },
+                attrs: { src: _vm.fichero.url, alt: "fichero" }
+              })
+            : _c("img", {
+                staticClass: "img-thumbnail",
+                staticStyle: { height: "250px" },
+                attrs: {
+                  src:
+                    "../storage/ficheros/" +
+                    _vm.root_dir +
+                    "/" +
+                    _vm.fichero.nombre_hash,
+                  alt: "fichero"
+                }
+              })
         ])
-      : _vm.fichero_param.extension == "pdf"
-      ? _c("div", { staticClass: "text-center" }, [
+      : _vm.fichero.extension == "pdf"
+      ? _c("div", { staticClass: "text-center sombra" }, [
           _c("img", {
-            staticClass: "img-thumbnail w-100",
+            staticClass: "img-thumbnail",
             staticStyle: { height: "250px" },
             attrs: {
               src: "../storage/sistema/iconos/pdf.svg",
@@ -41975,10 +42021,10 @@ var render = function() {
             }
           })
         ])
-      : _vm.extDocs.includes(_vm.fichero_param.extension)
-      ? _c("div", { staticClass: "text-center" }, [
+      : _vm.extensions.document.includes(_vm.fichero.extension)
+      ? _c("div", { staticClass: "text-center sombra" }, [
           _c("img", {
-            staticClass: "img-thumbnail w-100",
+            staticClass: "img-thumbnail",
             staticStyle: { height: "250px" },
             attrs: {
               src: "../storage/sistema/iconos/doc.jpg",
@@ -41986,14 +42032,47 @@ var render = function() {
             }
           })
         ])
-      : _vm.fichero_param.extension == "txt"
-      ? _c("div", { staticClass: "text-center" }, [
+      : _vm.fichero.extension == "txt"
+      ? _c("div", { staticClass: "text-center sombra" }, [
           _c("img", {
-            staticClass: "img-thumbnail w-100",
+            staticClass: "img-thumbnail",
             staticStyle: { height: "250px" },
             attrs: {
               src: "../storage/sistema/iconos/txt.png",
               alt: "Icono TXT"
+            }
+          })
+        ])
+      : _vm.extensions.music.includes(_vm.fichero.extension)
+      ? _c("div", { staticClass: "text-center sombra" }, [
+          _c("img", {
+            staticClass: "img-thumbnail",
+            staticStyle: { height: "250px" },
+            attrs: {
+              src: "../storage/sistema/iconos/music.png",
+              alt: "Icono MUSIC"
+            }
+          })
+        ])
+      : _vm.extensions.video.includes(_vm.fichero.extension)
+      ? _c("div", { staticClass: "text-center sombra" }, [
+          _c("img", {
+            staticClass: "img-thumbnail",
+            staticStyle: { height: "250px" },
+            attrs: {
+              src: "../storage/sistema/iconos/video.png",
+              alt: "Icono VIDEO"
+            }
+          })
+        ])
+      : _vm.extensions.compressed.includes(_vm.fichero.extension)
+      ? _c("div", { staticClass: "text-center sombra" }, [
+          _c("img", {
+            staticClass: "img-thumbnail",
+            staticStyle: { height: "250px" },
+            attrs: {
+              src: "../storage/sistema/iconos/compressed.png",
+              alt: "Icono VIDEO"
             }
           })
         ])
@@ -54497,7 +54576,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _FicheroCreate_vue_vue_type_template_id_53c25e46___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FicheroCreate.vue?vue&type=template&id=53c25e46& */ "./resources/js/components/Fichero/FicheroCreate.vue?vue&type=template&id=53c25e46&");
 /* harmony import */ var _FicheroCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FicheroCreate.vue?vue&type=script&lang=js& */ "./resources/js/components/Fichero/FicheroCreate.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _FicheroCreate_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./FicheroCreate.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/Fichero/FicheroCreate.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
 
 
 
@@ -54505,7 +54586,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _FicheroCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _FicheroCreate_vue_vue_type_template_id_53c25e46___WEBPACK_IMPORTED_MODULE_0__["render"],
   _FicheroCreate_vue_vue_type_template_id_53c25e46___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
@@ -54534,6 +54615,22 @@ component.options.__file = "resources/js/components/Fichero/FicheroCreate.vue"
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FicheroCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./FicheroCreate.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Fichero/FicheroCreate.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FicheroCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Fichero/FicheroCreate.vue?vue&type=style&index=0&lang=css&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/Fichero/FicheroCreate.vue?vue&type=style&index=0&lang=css& ***!
+  \********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FicheroCreate_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./FicheroCreate.vue?vue&type=style&index=0&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Fichero/FicheroCreate.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FicheroCreate_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FicheroCreate_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FicheroCreate_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FicheroCreate_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_FicheroCreate_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 

@@ -1,7 +1,7 @@
 <template>
     <div class="card" style="width: 18rem;"  title="">
         <a id="imagen" :href="'/fichero/'+fichero_param.id" target="_blank">
-            <iconizador  :fichero_param="fichero_param" :root_dir="root_dir" ></iconizador>
+            <iconizador  :fichero="fichero_param" :root_dir="root_dir" :creating="false"></iconizador>
         </a>
         <div class="card-body">
             <h6  v-if="!editableName" class="card-title" style="overflow-x: scroll; height:50px;">{{fichero_param.nombre_real}}.{{fichero_param.extension}}</h6>
