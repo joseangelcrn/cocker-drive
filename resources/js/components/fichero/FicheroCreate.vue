@@ -13,12 +13,10 @@
                     </div>
                         <transition-group  tag="div" name="list" class="form-group row h-100" >
                             <div class="col-lg-6" :key="fichero+index" v-for="(fichero,index) in ficheros">
-                            <!-- <transition-group name="fade" tag="div" class="text-center"> -->
                                 <iconizador :fichero="fichero" :creating="true"></iconizador>
                                 <br>
                                 <input class="form-control sombra" type="text" title="Nombre con el que se guardara el fichero."   v-model="fichero.nombre_real">
-                                <br>
-                                <button type="button" class="btn btn-sm btn-danger w-100 align-bottom" @click="eliminarFichero(index)">Eliminar</button>
+                                <button type="button" class="btn btn-sm btn-danger w-100  mb-2" @click="eliminarFichero(index)"><i class="fa fa-trash" aria-hidden="true"></i></button>
 
                             </div>
                         </transition-group>
@@ -72,16 +70,8 @@
         methods:{
             precargarFicheros(event){
                 let ficheros = event.target.files;
-                console.log('Ficheros precargados');
-                console.log(ficheros);
-
                 for (let i = 0; i < ficheros.length; i++) {
                     let fichero = ficheros[i];
-
-                    /**
-                     * Aqui me preparo un json personalizado parahacer mas comoda la legibilidad y
-                     * su uso mas adelante en la vista.
-                     */
 
                     let customJson = {};
                     customJson.bin = fichero;
@@ -93,14 +83,28 @@
                     this.ficheros.push(customJson);
                 }
 
-                console.log(this.ficheros);
             },
             eliminarFichero(index){
-                let seguro = confirm('¿Estas seguro que deseas eliminar esta imagen?');
-                if (seguro) {
-                    delete this.ficheros.splice(index, 1);
-                }
-            },
+                this.$confirm(
+                                {
+                                message: `¿Estas seguro que deseas eliminar este archivo?`,
+                                button: {
+                                    no: 'No',
+                                    yes: 'Si'
+                                },
+                                /**
+                                 * Callback Function
+                                 * @param {Boolean} confirm
+                                 */
+                                callback: confirm => {
+                                    console.log('call back');
+                                    if (confirm) {
+                                        delete this.ficheros.splice(index, 1);
+                                    }
+                                }
+                            }
+                        );
+                },
             guardar(){
                 console.log('Guardar Ficheros !');
                 console.log(this.ficheros);
