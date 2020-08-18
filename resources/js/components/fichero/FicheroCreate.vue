@@ -11,31 +11,17 @@
                        <input @change="precargarFicheros" class="form-control" type="file" name="ficheros" multiple>
                        <span class="ml-3">Extensiones permitidas: .jpg, .jpeg, .png, .txt, .pdf</span>
                     </div>
-                    <div class="form-group row h-100">
-                        <div class="col-lg-3 col-md-6   mt-2" :key="fichero+index" v-for="(fichero,index) in ficheros">
-                            <!-- Si es Imagen pongo su imagen preview -->
-                            <div v-if="extImagenesPermitidas.includes(fichero.extension)" class="text-center">
-                                <img style="height:250px;" class="img-thumbnail" :src="fichero.url" alt="fichero">
-                            </div>
-                            <!-- Si es PDF: Icono PDF -->
-                            <div v-else-if="fichero.extension == 'pdf'" class="text-center">
-                                <img style="height:250px;" class="img-thumbnail" :src="'../storage/sistema/iconos/pdf.svg'" alt="Icono PDF">
-                            </div>
-                            <!-- Si es Doc/Docx: Icono Doc -->
-                            <div v-else-if="extDocs.includes(fichero.extension)" class="text-center">
-                                <img style="height:250px;" class="img-thumbnail" :src="'../storage/sistema/iconos/doc.jpg'" alt="Icono PDF">
-                            </div>
-                            <!-- Si es TXT:  Icono Txt -->
-                            <div v-else-if="fichero.extension == 'txt'" class="text-center">
-                                <img style="height:250px;" class="img-thumbnail" :src="'../storage/sistema/iconos/txt.png'" alt="Icono TXT">
-                            </div>
+                        <transition-group  tag="div" name="list" class="form-group row h-100" >
+                            <div class="col-lg-6" :key="fichero+index" v-for="(fichero,index) in ficheros">
+                            <!-- <transition-group name="fade" tag="div" class="text-center"> -->
+                                <iconizador :fichero="fichero" :creating="true"></iconizador>
+                                <br>
+                                <input class="form-control sombra" type="text" title="Nombre con el que se guardara el fichero."   v-model="fichero.nombre_real">
+                                <br>
+                                <button type="button" class="btn btn-sm btn-danger w-100 align-bottom" @click="eliminarFichero(index)">Eliminar</button>
 
-                            <br>
-                            <input class="form-control" type="text" title="Nombre con el que se guardara el fichero."   v-model="fichero.nombre_real">
-                            <br>
-                            <button type="button" class="btn btn-sm btn-danger w-100 align-bottom" @click="eliminarFichero(index)">Eliminar</button>
-                        </div>
-                    </div>
+                            </div>
+                        </transition-group>
                     <div class="form-group">
                         <div class="alert alert-danger alert-dismissible fade show" role="alert" v-if="resultado === false">
                             <strong>Oops..!</strong> Ha habido un problema al guardar tu(s) archivo(s).
@@ -61,24 +47,26 @@
 
     </div>
 </template>
-
+<style>
+    .list-item {
+    display: inline-block;
+    margin-right: 10px;
+    }
+    .list-enter-active, .list-leave-active {
+    transition: all 1s;
+    }
+    .list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+    opacity: 0;
+    transform: translateY(30px);
+    }
+</style>
 <script>
     export default {
         data(){
             return{
                 ficheros:[],
-                //extensiones de imagenes permitidas
-                extImagenesPermitidas:[
-                    'png',
-                    'jpg',
-                    'jpeg',
-                ],
-                extDocs:[
-                    'docs',
-                    'doc',
-                    'docx'
-                ],
-                resultado:null
+                resultado:null,
+                csrf:null
             }
         },
         methods:{
@@ -148,6 +136,12 @@
                         this.resultado = false;
                     }
                 )
+            }
+        },
+        beforeMount(){
+            setCsrf: {
+                console.log('hola');
+               this.csrf = document.querySelector('meta[name="csrf-token"]').content;
             }
         },
         mounted() {
