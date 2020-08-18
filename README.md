@@ -17,6 +17,16 @@ This web aplication contains  uploaded files such as icon of web, images as icon
 
 <hr>
 
+# php.ini file configuration server  *( example configuration, feel free to adjust it to your needs)*
+
+> post_max_size = 750M <br>
+upload_max_filesize = 750M  <br>
+max_execution_time = 5000  <br>
+max_input_time = 5000  <br>
+memory_limit = 1000M  <br>
+
+<hr>
+
 # Prerequisites:
 
 - Official guide of laravel installation: https://laravel.com/docs/7.x/installation
@@ -33,7 +43,7 @@ This web aplication contains  uploaded files such as icon of web, images as icon
 
 > cp .env.example .env
 
-### 2.1 Configuration for localhost (XAMP,WAMP,..).
+###  2.1 Configuration for localhost (XAMP,WAMP,..).
 
 > DB_CONNECTION=mysql <br>
 DB_HOST=127.0.0.1 <br>
@@ -41,6 +51,7 @@ DB_PORT=3306 <br>
 DB_DATABASE=cocker-drive (database name, it must previously exist  or you will get error. So yout must create it in your database manager as phpmyadmin. )<br>
 DB_USERNAME=root (database username, default: root) <br>
 DB_PASSWORD= (password  database, default: 'empty') <br>
+
 
 ## 3. Install composer/laravel dependences of project.
 
