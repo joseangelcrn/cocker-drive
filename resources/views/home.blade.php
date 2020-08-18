@@ -11,7 +11,7 @@
                 <a href="{{route('fichero.download-all-files')}}" class="btn btn-warning" title="Descargar todos los archivo en carpeta comprimida."><i class="far fa-file-archive"></i></a>
             </div>
             <div class="col-12 text-center">
-                <chart class="my-4" :size_disk_used="{{$sizeDiskUsed}}" :data_param="'{{json_encode($parsedData)}}'"></chart>
+                <chart-donut class="my-4" :size_disk_used="{{$sizeDiskUsed}}" :data_param="'{{json_encode($parsedData)}}'"></chart-donut>
             </div>
         </div>
     </div>
