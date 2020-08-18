@@ -6,6 +6,7 @@ use App\Fichero;
 use App\Seguridad;
 use Illuminate\Http\Request;
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 use File;
 use Illuminate\Support\Facades\Storage;
@@ -174,8 +175,9 @@ class FicheroController extends Controller
         if (file_exists($pathUserFiles)) {
             //creating zip
             $zip = new ZipArchive;
+            $ddMmYyyyToday = Carbon::now()->format('d-m-Y');
 
-            $fileName = 'mis_archivos_'.Seguridad::uniqueId().'.zip';
+            $fileName = 'cocker-drive_mis_archivos_'.Seguridad::uniqueId().'_'.$ddMmYyyyToday.'.zip';
 
             if ( $zip->open(public_path('storage\\temp\\'.$fileName), ZipArchive::CREATE) === TRUE)
             {
