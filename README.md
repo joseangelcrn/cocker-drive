@@ -24,6 +24,7 @@ upload_max_filesize = 750M  <br>
 max_execution_time = 5000  <br>
 max_input_time = 5000  <br>
 memory_limit = 1000M  <br>
+max_file_uploads= 500 <br>
 
 <hr>
 
