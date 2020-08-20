@@ -11,32 +11,15 @@
                        <input @change="precargarFicheros" class="form-control" type="file" name="ficheros" multiple>
                        <span class="ml-3">Extensiones permitidas: .jpg, .jpeg, .png, .txt, .pdf</span>
                     </div>
+                        <transition-group  tag="div" name="list" class="form-group row h-100" >
+                            <div class="col-lg-6" :key="fichero+index" v-for="(fichero,index) in ficheros">
+                                <iconizador :fichero="fichero" :creating="true"></iconizador>
+                                <br>
+                                <input class="form-control sombra" type="text" title="Nombre con el que se guardara el fichero."   v-model="fichero.nombre_real">
+                                <button type="button" class="btn btn-sm btn-danger w-100  mb-2" @click="eliminarFichero(index)"><i class="fa fa-trash" aria-hidden="true"></i></button>
 
-                    <div class="form-group row h-100">
-                        <div class="col-lg-3 col-md-6   mt-2" :key="fichero+index" v-for="(fichero,index) in ficheros">
-                            <!-- Si es Imagen pongo su imagen preview -->
-                            <div v-if="extImagenesPermitidas.includes(fichero.extension)" class="text-center">
-                                <img style="height:250px;" class="img-thumbnail" :src="fichero.url" alt="fichero">
                             </div>
-                            <!-- Si es PDF: Icono PDF -->
-                            <div v-else-if="fichero.extension == 'pdf'" class="text-center">
-                                <img style="height:250px;" class="img-thumbnail" :src="'../storage/sistema/iconos/pdf.svg'" alt="Icono PDF">
-                            </div>
-                            <!-- Si es Doc/Docx: Icono Doc -->
-                            <div v-else-if="extDocs.includes(fichero.extension)" class="text-center">
-                                <img style="height:250px;" class="img-thumbnail" :src="'../storage/sistema/iconos/doc.jpg'" alt="Icono PDF">
-                            </div>
-                            <!-- Si es TXT:  Icono Txt -->
-                            <div v-else-if="fichero.extension == 'txt'" class="text-center">
-                                <img style="height:250px;" class="img-thumbnail" :src="'../storage/sistema/iconos/txt.png'" alt="Icono TXT">
-                            </div>
-
-                            <br>
-                            <input class="form-control" type="text" title="Nombre con el que se guardara el fichero."   v-model="fichero.nombre_real">
-                            <br>
-                            <button type="button" class="btn btn-sm btn-danger w-100 align-bottom" @click="eliminarFichero(index)">Eliminar</button>
-                        </div>
-                    </div>
+                        </transition-group>
                     <div class="form-group">
                         <div class="alert alert-danger alert-dismissible fade show" role="alert" v-if="resultado === false">
                             <strong>Oops..!</strong> Ha habido un problema al guardar tu(s) archivo(s).
@@ -50,7 +33,11 @@
                             Guardar Fichero
                         </button>
                         <gif-loading class="ml-3"  :show="resultado != null"></gif-loading>
-
+                    </div>
+                    <div class="form-group border p-2" v-if="ficheros.length > 0">
+                         <h4>Información de la subida</h4>
+                         <p class="">Archivos seleccionados: <b>{{ficheros.length}}</b>.</p>
+                         <p class="">Peso total de la subida:  <b>{{getTotalSizeOfFiles}}</b> KB. ( <b>{{Math.round((getTotalSizeOfFiles/1024 + Number.EPSILON) * 100) / 100}} MB</b> )</p>
                     </div>
                 </form>
             </div>
@@ -58,39 +45,33 @@
 
     </div>
 </template>
-
+<style>
+    .list-item {
+    display: inline-block;
+    margin-right: 10px;
+    }
+    .list-enter-active, .list-leave-active {
+    transition: all 1s;
+    }
+    .list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+    opacity: 0;
+    transform: translateY(30px);
+    }
+</style>
 <script>
     export default {
         data(){
             return{
                 ficheros:[],
-                //extensiones de imagenes permitidas
-                extImagenesPermitidas:[
-                    'png',
-                    'jpg',
-                    'jpeg',
-                ],
-                extDocs:[
-                    'docs',
-                    'doc',
-                    'docx'
-                ],
-                resultado:null
+                resultado:null,
+                csrf:null
             }
         },
         methods:{
             precargarFicheros(event){
                 let ficheros = event.target.files;
-                console.log('Ficheros precargados');
-                console.log(ficheros);
-
                 for (let i = 0; i < ficheros.length; i++) {
                     let fichero = ficheros[i];
-
-                    /**
-                     * Aqui me preparo un json personalizado parahacer mas comoda la legibilidad y
-                     * su uso mas adelante en la vista.
-                     */
 
                     let customJson = {};
                     customJson.bin = fichero;
@@ -102,14 +83,28 @@
                     this.ficheros.push(customJson);
                 }
 
-                console.log(this.ficheros);
             },
             eliminarFichero(index){
-                let seguro = confirm('¿Estas seguro que deseas eliminar esta imagen?');
-                if (seguro) {
-                    delete this.ficheros.splice(index, 1);
-                }
-            },
+                this.$confirm(
+                                {
+                                message: `¿Estas seguro que deseas eliminar este archivo?`,
+                                button: {
+                                    no: 'No',
+                                    yes: 'Si'
+                                },
+                                /**
+                                 * Callback Function
+                                 * @param {Boolean} confirm
+                                 */
+                                callback: confirm => {
+                                    console.log('call back');
+                                    if (confirm) {
+                                        delete this.ficheros.splice(index, 1);
+                                    }
+                                }
+                            }
+                        );
+                },
             guardar(){
                 console.log('Guardar Ficheros !');
                 console.log(this.ficheros);
@@ -147,6 +142,12 @@
                 )
             }
         },
+        beforeMount(){
+            setCsrf: {
+                console.log('hola');
+               this.csrf = document.querySelector('meta[name="csrf-token"]').content;
+            }
+        },
         mounted() {
         },
         computed: {
@@ -158,6 +159,19 @@
                     resultado =  false;
                 }
                 return resultado;
+            },
+
+            getTotalSizeOfFiles(){
+                let sumSize = 0;
+
+                this.ficheros.forEach(file => {
+                    // console.log(file);
+                    let sizeKB = file.bin.size / 1024;
+
+                    sumSize += Math.round((sizeKB + Number.EPSILON) * 100) / 100;
+                });
+
+                return sumSize;
             }
         }
     }

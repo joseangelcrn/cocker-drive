@@ -65,7 +65,7 @@
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        <i class="fas fa-sign-out-alt"></i>
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -91,8 +91,23 @@
                     </div>
                 </div>
             @endauth
+            @if (\Session::has('error'))
+                <div class="row d-flex justify-content-center">
+                    <div class="col-6">
+                        <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                            <strong class="h4">Oops! </strong> {{\Session::get('error')}}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            @endif
             @yield('content')
         </main>
     </div>
+    <script>
+        // document.addEventListener('contextmenu', event => event.preventDefault());
+    </script>
 </body>
 </html>

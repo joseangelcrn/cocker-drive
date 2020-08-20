@@ -1,7 +1,7 @@
 <template>
     <div class="card" style="width: 18rem;"  title="">
         <a id="imagen" :href="'/fichero/'+fichero_param.id" target="_blank">
-            <iconizador  :fichero_param="fichero_param" :root_dir="root_dir" ></iconizador>
+            <iconizador  :fichero="fichero_param" :root_dir="root_dir" :creating="false"></iconizador>
         </a>
         <div class="card-body">
             <h6  v-if="!editableName" class="card-title" style="overflow-x: scroll; height:50px;">{{fichero_param.nombre_real}}.{{fichero_param.extension}}</h6>
@@ -11,15 +11,23 @@
             <h6 class="card-title">{{(fichero_param.size / (1024*1024)).toFixed(2)}} MB</h6>
 
             <!-- Rename - Delete -->
-            <div id="botonera" v-if="!editableName" >
-                <button class="btn btn-sm btn-warning" :disabled="operating" @click="editableName = true; newName=fichero_param.nombre_real" >Renombrar</button>
-                <button class="btn btn-sm  btn-danger" :disabled="operating" @click="renameOrDelete(2)" >Borrar</button>
+            <div class="row d-flex justify-content-between" id="botonera" v-if="!editableName" >
+                <button class="btn btn-warning" :disabled="operating" @click="editableName = true; newName=fichero_param.nombre_real" title="Editar el nombre de archivo"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-success" :disabled="operating" @click="download" title="Descargar archivo"><i class="fas fa-download"></i></button>
+                <button class="btn btn-danger" :disabled="operating" @click="renameOrDelete(2)" title="Eliminar archivo" ><i class="fa fa-trash" aria-hidden="true"></i></button>
+                <gif-loading style="position:absolute; width:100px; right:10px;"  :show="loading"></gif-loading>
             </div>
 
             <!-- OK - Cancel -->
-            <div v-else class="mt-3">
-                <button :disabled="operating" @click="renameOrDelete(1)" class="btn btn-sm btn-success">OK</button>
-                <button :disabled="operating" @click="editableName = false;" class="btn btn-sm btn-danger">Cancelar</button>
+            <div v-else class="row d-flex justify-content-between  mt-3">
+                <div class="col-6">
+                    <button :disabled="operating" @click="renameOrDelete(1)" class="btn btn-success"><i class="fas fa-check"></i></button>
+                    <button :disabled="operating" @click="editableName = false;" class="btn btn-danger"><i class="fas fa-times"></i></button>
+
+                </div>
+                <div class="col-1">
+                    <gif-loading  style="position:absolute; width:100px; right:10px;" :show="loading"></gif-loading>
+                </div>
             </div>
         </div>
     </div>
@@ -63,7 +71,8 @@
                 fichero:{},
                 editableName:false,
                 deletableFile:false,
-                newName:''
+                newName:'',
+                loading:false
             }
         },
         methods:{
@@ -103,7 +112,10 @@
                 }
             },
             rename(){
+                this.loading = true;
+
                 // console.log(this.fichero);
+                console.log('RENAMING !');
                 let data = new FormData();
                 data.append('file',this.$props.fichero_param);
                 data.append('new_name',this.newName);
@@ -122,8 +134,11 @@
                             that.editableName = false;
                             that.$emit('operation_done',true);
                         }
+                        that.loading = false;
+
                     },
                     error=>{
+                        that.loading = false;
                         console.log('Error on remane file.');
                     }
                 )
@@ -131,6 +146,7 @@
             delete(){
                 console.log('delete !');
                 let that = this;
+                this.loading = true;
 
                 axios.delete('/fichero/'+this.$props.fichero_param.id).then(
                     response => {
@@ -140,17 +156,38 @@
 
                          console.log('enviar evento');
                         that.$emit('operation_done',that.$props.index);
-
+                        that.loading = false;
                     },
                     error=>{
                         that.$emit('deleted','error');
                         console.log('Error al actualizar el nombre de la imagen');
+                        that.loading = false;
                     }
                 )
-            }
+            },
+            download(){
+                // window.location.href = "file/download-single-file?file_id="+this.$props.fichero_param.id;
+                // this.loading = true;
+                let that = this;
+                this.loading = true;
+
+                axios.get('file/download-single-file?file_id='+this.$props.fichero_param.id, { responseType: 'blob' })
+                    .then(response => {
+                        const blob = new Blob([response.data], { type: 'application/'+that.$props.fichero_param.id });
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = "cocker-drive_"+that.$props.fichero_param.nombre_real+'.'+that.$props.fichero_param.extension;
+                        link.click();
+                        URL.revokeObjectURL(link.href);
+                        that.loading = false;
+                    }).catch((error)=>{
+                        console.log('Error !');
+                        console.log(error);
+                        that.loading = false;
+                    });
+            },
         },
          beforeMount() {
-                // this.fichero = this.$props.fichero_param;
                 this.newName = this.fichero.nombre_real;
             }
     }

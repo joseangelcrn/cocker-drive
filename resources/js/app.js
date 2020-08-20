@@ -37,6 +37,8 @@ Vue.use(VueConfirmDialog)
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
+Vue.component('home', require('./components/home/Home.vue').default);
+
 Vue.component('fichero-create', require('./components/Fichero/FicheroCreate.vue').default);
 Vue.component('fichero-miniatura', require('./components/Fichero/FicheroMiniatura.vue').default);
 
@@ -46,7 +48,8 @@ Vue.component('buscador', require('./components/Buscador/Buscador.vue').default)
 
 Vue.component('gif-loading', require('./components/Gif/GifLoading.vue').default);
 
-Vue.component('chart', require('./components/grafico/Chart.vue').default);
+Vue.component('chart-donut', require('./components/grafico/ChartDonut.vue').default);
+
 
 
 //confirm dialog

@@ -6,8 +6,10 @@ use App\Fichero;
 use App\Seguridad;
 use Illuminate\Http\Request;
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 use File;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Storage;
 use ZipArchive;
 
@@ -141,6 +143,30 @@ class FicheroController extends Controller
     }
 
     /**
+     * Delete all files of logged user
+     */
+
+    public function fullDelete(Request $request)
+    {
+        $result = false;
+
+        $user = auth()->user();
+        $files = $user->ficheros;
+        $arrayDeletingStatus = array();
+
+        foreach ($files as $file) {
+            $deleted = $file->fullDelete();
+            array_push($arrayDeletingStatus,$deleted);
+        }
+
+        //if all status are true, every file was successfully uploaded.
+        if (count(array_unique($arrayDeletingStatus)) === 1 && end($arrayDeletingStatus) === true) {
+            $result = true;
+        }
+        return response()->json($result);
+    }
+
+    /**
      * Returns all matching files by user search
      */
 
@@ -168,33 +194,36 @@ class FicheroController extends Controller
     public function downloadCompressedFiles()
     {
         $user = auth()->user();
-        $ficheros = $user->ficheros;
+        $path = Fichero::compressAllFilesByUser($user);
 
-        //creating zip
-        $zip = new ZipArchive;
-
-        $fileName = 'mis_archivos_'.Seguridad::uniqueId().'.zip';
-        $pathUserFiles = public_path('storage\\ficheros\\'.$user->getRootDir());
-        if ($zip->open(public_path('storage\\temp\\'.$fileName), ZipArchive::CREATE) === TRUE)
-        {
-
-            $files = File::files($pathUserFiles);
-
-            foreach ($files as $key => $value) {
-                $relativeNameInZipFile = basename($value);
-                $dbDataFile = Fichero::select('nombre_hash','nombre_real')->where('nombre_hash',$relativeNameInZipFile)->where('user_id',$user->id)->first();
-                $realFileName = $dbDataFile->nombre_real;
-                $realExtensionFile = $dbDataFile->nombre_hash;
-
-                $fullRealName = $realFileName.".".$realExtensionFile;
-                // $zip->addFile($value, $relativeNameInZipFile);
-                $zip->addFile($value, $fullRealName);
-            }
-
-            $zip->close();
+        if ($path != null) {
+            return response()->download($path);
+        }
+        else{
+            return response()->json(false);
         }
 
-        return response()->download(public_path('storage\\temp\\'.$fileName));
+
+    }
+    /**
+     * Return selected file of current user comprissed in zip package.
+     */
+
+    public function downloadSingleFile(Request $request)
+    {
+        $fileId = $request->file_id;
+        $user = auth()->user();
+        $file = $user->ficheros()->find($fileId);
+        $pathFile = $file->getPublicPath();
+
+        if (file_exists($pathFile)) {
+            $fullRealFileName = $file->nombre_real.'.'.$file->extension;
+            return response()->download($pathFile, $fullRealFileName,[]);
+        }
+
+        return response()->json([false]);
+
+
 
     }
 

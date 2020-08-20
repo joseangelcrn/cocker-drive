@@ -35,6 +35,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/mis-ficheros', 'FicheroController@misFicheros')->name('fichero.mis-ficheros');
     Route::post('file/advanced_searching', 'FicheroController@advancedSearching')->name('fichero.advanced-searching');
     Route::get('file/download-all-compressed-files', 'FicheroController@downloadCompressedFiles')->name('fichero.download-all-files');
+    Route::get('file/download-single-file', 'FicheroController@downloadSingleFile')->name('fichero.download-single-file');
+    Route::delete('file/delete-all-files-current-user', 'FicheroController@fullDelete')->name('fichero.delete-all-files-current-user');
     Route::resource('/fichero', 'FicheroController')->name('fichero','*');
 
 });
