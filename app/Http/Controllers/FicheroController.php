@@ -194,38 +194,14 @@ class FicheroController extends Controller
     public function downloadCompressedFiles()
     {
         $user = auth()->user();
-        $pathUserFiles = public_path('storage\\ficheros\\'.$user->getRootDir());
+        $path = Fichero::compressAllFilesByUser($user);
 
-        //first check if exist path
-        if (file_exists($pathUserFiles)) {
-            //creating zip
-            $zip = new ZipArchive;
-            $ddMmYyyyToday = Carbon::now()->format('d-m-Y');
-
-            $fileName = 'cocker-drive_mis_archivos_'.Seguridad::uniqueId().'_'.$ddMmYyyyToday.'.zip';
-
-            if ( $zip->open(public_path('storage\\temp\\'.$fileName), ZipArchive::CREATE) === TRUE)
-            {
-
-                $files = File::files($pathUserFiles);
-
-                foreach ($files as $key => $value) {
-                    $relativeNameInZipFile = basename($value);
-                    $dbDataFile = Fichero::select('nombre_hash','nombre_real')->where('nombre_hash',$relativeNameInZipFile)->where('user_id',$user->id)->first();
-                    $realFileName = $dbDataFile->nombre_real;
-                    $realExtensionFile = $dbDataFile->nombre_hash;
-
-                    $fullRealName = $realFileName.".".$realExtensionFile;
-                    $zip->addFile($value, $fullRealName);
-                }
-
-                $zip->close();
-                return response()->download(public_path('storage\\temp\\'.$fileName));
-
-            }
+        if ($path != null) {
+            return response()->download($path);
         }
-
-        return response()->json(false);
+        else{
+            return response()->json(false);
+        }
 
 
     }
@@ -236,7 +212,6 @@ class FicheroController extends Controller
     public function downloadSingleFile(Request $request)
     {
         $fileId = $request->file_id;
-        // $file = Fichero::find($fileId);
         $user = auth()->user();
         $file = $user->ficheros()->find($fileId);
         $pathFile = $file->getPublicPath();
