@@ -60,7 +60,7 @@
                         const blob = new Blob([response.data], { type: 'application/zip' })
                         const link = document.createElement('a');
                         link.href = URL.createObjectURL(blob);
-                        link.download = "cocker-mis_archivos_"+fullDate;
+                        link.download = "cocker-drive_mis_archivos_"+fullDate;
                         link.click();
                         URL.revokeObjectURL(link.href);
                         that.loading = false;
