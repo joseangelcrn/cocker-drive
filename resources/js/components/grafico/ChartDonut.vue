@@ -20,7 +20,7 @@
       };
     },
     beforeMount(){
-        this.sections = JSON.parse(this.$props.data_param);
+        this.sections = this.$props.data_param;
     },
     methods: {
       handleSectionClick(section, event) {
