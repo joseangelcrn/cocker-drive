@@ -239,15 +239,13 @@ class FicheroController extends Controller
         // $file = Fichero::find($fileId);
         $user = auth()->user();
         $file = $user->ficheros()->find($fileId);
-        $pathFile = public_path('storage\\ficheros\\'.$user->getRootDir().'\\'.$file->nombre_hash);
-
-        // $owned = $user->id === $file->user_id ? true:false;
+        $pathFile = $file->getPublicPath();
 
         if (file_exists($pathFile)) {
             $fullRealFileName = $file->nombre_real.'.'.$file->extension;
             return response()->download($pathFile, $fullRealFileName,[]);
         }
-        
+
         return response()->json([false]);
 
 
