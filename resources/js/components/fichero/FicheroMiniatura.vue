@@ -11,15 +11,16 @@
             <h6 class="card-title">{{(fichero_param.size / (1024*1024)).toFixed(2)}} MB</h6>
 
             <!-- Rename - Delete -->
-            <div id="botonera" v-if="!editableName" >
-                <button class="btn btn-sm btn-warning" :disabled="operating" @click="editableName = true; newName=fichero_param.nombre_real" >Renombrar</button>
-                <button class="btn btn-sm  btn-danger" :disabled="operating" @click="renameOrDelete(2)" >Borrar</button>
+            <div class="row d-flex justify-content-between" id="botonera" v-if="!editableName" >
+                <button class="btn btn-warning" :disabled="operating" @click="editableName = true; newName=fichero_param.nombre_real" title="Editar el nombre de archivo"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-success" :disabled="operating" @click="download" title="Descargar archivo"><i class="fas fa-download"></i></button>
+                <button class="btn btn-danger" :disabled="operating" @click="renameOrDelete(2)" title="Eliminar archivo" ><i class="fa fa-trash" aria-hidden="true"></i></button>
             </div>
 
             <!-- OK - Cancel -->
             <div v-else class="mt-3">
-                <button :disabled="operating" @click="renameOrDelete(1)" class="btn btn-sm btn-success">OK</button>
-                <button :disabled="operating" @click="editableName = false;" class="btn btn-sm btn-danger">Cancelar</button>
+                <button :disabled="operating" @click="renameOrDelete(1)" class="btn btn-success"><i class="fas fa-check"></i></button>
+                <button :disabled="operating" @click="editableName = false;" class="btn btn-danger"><i class="fas fa-times"></i></button>
             </div>
         </div>
     </div>
@@ -147,10 +148,12 @@
                         console.log('Error al actualizar el nombre de la imagen');
                     }
                 )
+            },
+            download(){
+                window.location.href = "file/download-single-file?file_id="+this.$props.fichero_param.id;
             }
         },
          beforeMount() {
-                // this.fichero = this.$props.fichero_param;
                 this.newName = this.fichero.nombre_real;
             }
     }
