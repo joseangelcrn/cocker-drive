@@ -55,7 +55,7 @@ class Fichero extends Model
 
      /**
       * Returns total used disk space from a directory (MB).
-      * File searching level !!
+      * File searching level !! (Not used right now)
       */
       public static function getEspacioUsado($rootDir = '')
       {
@@ -191,6 +191,12 @@ class Fichero extends Model
     public static  function getNombreFicheroByPath($path)
     {
         return substr($path, strrpos($path, '/') + 1);
+    }
+
+    public function getPublicPath()
+    {
+       $path =  public_path('storage\\ficheros\\'.$this->user->getRootDir().'\\'.$this->nombre_hash);
+       return $path;
     }
 
      /**
@@ -389,8 +395,6 @@ class Fichero extends Model
 
         return $result;
     }
-
-
 
 
 }
