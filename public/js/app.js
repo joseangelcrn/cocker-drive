@@ -2497,6 +2497,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     'fichero_param': {
@@ -2525,7 +2532,8 @@ __webpack_require__.r(__webpack_exports__);
       fichero: {},
       editableName: false,
       deletableFile: false,
-      newName: ''
+      newName: '',
+      loading: false
     };
   },
   methods: {
@@ -2565,7 +2573,9 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     rename: function rename() {
-      // console.log(this.fichero);
+      this.loading = true; // console.log(this.fichero);
+
+      console.log('RENAMING !');
       var data = new FormData();
       data.append('file', this.$props.fichero_param);
       data.append('new_name', this.newName);
@@ -2582,26 +2592,52 @@ __webpack_require__.r(__webpack_exports__);
           that.editableName = false;
           that.$emit('operation_done', true);
         }
+
+        that.loading = false;
       }, function (error) {
+        that.loading = false;
         console.log('Error on remane file.');
       });
     },
     "delete": function _delete() {
       console.log('delete !');
       var that = this;
+      this.loading = true;
       axios["delete"]('/fichero/' + this.$props.fichero_param.id).then(function (response) {
         console.log('response.data');
         console.log(response.data);
         var data = response.data;
         console.log('enviar evento');
         that.$emit('operation_done', that.$props.index);
+        that.loading = false;
       }, function (error) {
         that.$emit('deleted', 'error');
         console.log('Error al actualizar el nombre de la imagen');
+        that.loading = false;
       });
     },
     download: function download() {
-      window.location.href = "file/download-single-file?file_id=" + this.$props.fichero_param.id;
+      // window.location.href = "file/download-single-file?file_id="+this.$props.fichero_param.id;
+      // this.loading = true;
+      var that = this;
+      this.loading = true;
+      axios.get('file/download-single-file?file_id=' + this.$props.fichero_param.id, {
+        responseType: 'blob'
+      }).then(function (response) {
+        var blob = new Blob([response.data], {
+          type: 'application/' + that.$props.fichero_param.id
+        });
+        var link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = "cocker-drive_" + that.$props.fichero_param.nombre_real + '.' + that.$props.fichero_param.extension;
+        link.click();
+        URL.revokeObjectURL(link.href);
+        that.loading = false;
+      })["catch"](function (error) {
+        console.log('Error !');
+        console.log(error);
+        that.loading = false;
+      });
     }
   },
   beforeMount: function beforeMount() {
@@ -2843,7 +2879,7 @@ __webpack_require__.r(__webpack_exports__);
         });
         var link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = "cocker-mis_archivos_" + fullDate;
+        link.download = "cocker-drive_mis_archivos_" + fullDate;
         link.click();
         URL.revokeObjectURL(link.href);
         that.loading = false;
@@ -42080,38 +42116,70 @@ var render = function() {
                       attrs: { "aria-hidden": "true" }
                     })
                   ]
+                ),
+                _vm._v(" "),
+                _c("gif-loading", {
+                  staticStyle: {
+                    position: "absolute",
+                    width: "100px",
+                    right: "10px"
+                  },
+                  attrs: { show: _vm.loading }
+                })
+              ],
+              1
+            )
+          : _c(
+              "div",
+              { staticClass: "row d-flex justify-content-between  mt-3" },
+              [
+                _c("div", { staticClass: "col-6" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-success",
+                      attrs: { disabled: _vm.operating },
+                      on: {
+                        click: function($event) {
+                          return _vm.renameOrDelete(1)
+                        }
+                      }
+                    },
+                    [_c("i", { staticClass: "fas fa-check" })]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger",
+                      attrs: { disabled: _vm.operating },
+                      on: {
+                        click: function($event) {
+                          _vm.editableName = false
+                        }
+                      }
+                    },
+                    [_c("i", { staticClass: "fas fa-times" })]
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "col-1" },
+                  [
+                    _c("gif-loading", {
+                      staticStyle: {
+                        position: "absolute",
+                        width: "100px",
+                        right: "10px"
+                      },
+                      attrs: { show: _vm.loading }
+                    })
+                  ],
+                  1
                 )
               ]
             )
-          : _c("div", { staticClass: "mt-3" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-success",
-                  attrs: { disabled: _vm.operating },
-                  on: {
-                    click: function($event) {
-                      return _vm.renameOrDelete(1)
-                    }
-                  }
-                },
-                [_c("i", { staticClass: "fas fa-check" })]
-              ),
-              _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-danger",
-                  attrs: { disabled: _vm.operating },
-                  on: {
-                    click: function($event) {
-                      _vm.editableName = false
-                    }
-                  }
-                },
-                [_c("i", { staticClass: "fas fa-times" })]
-              )
-            ])
       ])
     ]
   )
