@@ -142,6 +142,30 @@ class FicheroController extends Controller
     }
 
     /**
+     * Delete all files of logged user
+     */
+
+    public function fullDelete(Request $request)
+    {
+        $result = false;
+
+        $user = auth()->user();
+        $files = $user->ficheros;
+        $arrayDeletingStatus = array();
+
+        foreach ($files as $file) {
+            $deleted = $file->fullDelete();
+            array_push($arrayDeletingStatus,$deleted);
+        }
+
+        //if all status are true, every file was successfully uploaded.
+        if (count(array_unique($arrayDeletingStatus)) === 1 && end($arrayDeletingStatus) === true) {
+            $result = true;
+        }
+        return response()->json($result);
+    }
+
+    /**
      * Returns all matching files by user search
      */
 
@@ -191,7 +215,6 @@ class FicheroController extends Controller
                     $realExtensionFile = $dbDataFile->nombre_hash;
 
                     $fullRealName = $realFileName.".".$realExtensionFile;
-                    // $zip->addFile($value, $relativeNameInZipFile);
                     $zip->addFile($value, $fullRealName);
                 }
 
@@ -201,7 +224,29 @@ class FicheroController extends Controller
             }
         }
 
-        return redirect()->back()->with('error', 'Aún no has subido ningún archivo.');
+        return response()->json(false);
+
+
+    }
+    /**
+     * Return selected file of current user comprissed in zip package.
+     */
+
+    public function downloadSingleFile(Request $request)
+    {
+        $fileId = $request->file_id;
+        // $file = Fichero::find($fileId);
+        $user = auth()->user();
+        $file = $user->ficheros()->find($fileId);
+        $pathFile = public_path('storage\\ficheros\\'.$user->getRootDir().'\\'.$file->nombre_hash);
+
+        $owned = $user->id === $file->user_id ? true:false;
+
+        if (file_exists($pathFile) and $owned) {
+            return response()->download($pathFile);
+        }
+            return response()->json([false]);
+
 
 
     }
