@@ -2,10 +2,12 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use ZipArchive;
 
 class Fichero extends Model
 {
@@ -193,10 +195,47 @@ class Fichero extends Model
         return substr($path, strrpos($path, '/') + 1);
     }
 
-    public function getPublicPath()
+    /**
+     * Compress all files by user and return path of zip file which contains his/her files.
+     */
+    public static function compressAllFilesByUser(User $user)
     {
-       $path =  public_path('storage\\ficheros\\'.$this->user->getRootDir().'\\'.$this->nombre_hash);
-       return $path;
+
+        $pathUserFiles = public_path('storage\\ficheros\\'.$user->getRootDir());
+        $path = null;
+
+        //first check if exist path
+        if (file_exists($pathUserFiles)) {
+            //creating zip
+            $zip = new ZipArchive;
+            $ddMmYyyyToday = Carbon::now()->format('d-m-Y');
+
+            $fileName = 'cocker-drive_mis_archivos_'.Seguridad::uniqueId().'_'.$ddMmYyyyToday.'.zip';
+
+            if ( $zip->open(public_path('storage\\temp\\'.$fileName), ZipArchive::CREATE) === TRUE)
+            {
+
+                $files = File::files($pathUserFiles);
+
+                foreach ($files as $key => $value) {
+                    $relativeNameInZipFile = basename($value);
+                    $dbDataFile = Fichero::select('nombre_hash','nombre_real','extension')->where('nombre_hash',$relativeNameInZipFile)->where('user_id',$user->id)->first();
+                    $realFileName = $dbDataFile->nombre_real;
+                    $realExtensionFile = $dbDataFile->extension;
+
+                    $fullRealName = $realFileName.".".$realExtensionFile;
+                    $zip->addFile($value, $fullRealName);
+                }
+
+                $zip->close();
+                $path = public_path('storage\\temp\\'.$fileName);
+                // return response()->download(public_path('storage\\temp\\'.$fileName));
+
+            }
+        }
+
+        return $path;
+
     }
 
      /**
@@ -396,5 +435,15 @@ class Fichero extends Model
         return $result;
     }
 
+
+    /**
+     * Return public path where is saved this file
+     */
+
+    public function getPublicPath()
+    {
+       $path =  public_path('storage\\ficheros\\'.$this->user->getRootDir().'\\'.$this->nombre_hash);
+       return $path;
+    }
 
 }
