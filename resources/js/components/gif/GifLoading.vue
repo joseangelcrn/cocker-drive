@@ -1,6 +1,6 @@
 <template>
     <div>
-       <img class="img-fluid" style="height:40px; width:40px;"  v-if="show" :src="'../storage/sistema/gifs/loading-dog.gif'" alt="Gif loading">
+       <img class="img-fluid" style="height:40px; width:40px;"  v-if="show" :src="src" alt="Gif loading">
     </div>
 </template>
 
@@ -15,6 +15,7 @@
         },
         data(){
             return{
+                src:'../storage/sistema/gifs/loading-dog.gif'
             }
         },
         beforeMount() {
