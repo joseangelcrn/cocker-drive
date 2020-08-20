@@ -30,8 +30,11 @@ class Fichero extends Model
             'indd'
         ]
     ];
+    private const PREFIX_DOWNLOADED_FILE = 'cocker-drive';
 
     public static  $DIR_FICHEROS = '/ficheros';
+
+
 
     /**
      * Relations
@@ -210,7 +213,7 @@ class Fichero extends Model
             $zip = new ZipArchive;
             $ddMmYyyyToday = Carbon::now()->format('d-m-Y');
 
-            $fileName = 'cocker-drive_mis_archivos_'.Seguridad::uniqueId().'_'.$ddMmYyyyToday.'.zip';
+            $fileName = self::PREFIX_DOWNLOADED_FILE.'_mis_archivos_'.Seguridad::uniqueId().'_'.$ddMmYyyyToday.'.zip';
 
             if ( $zip->open(public_path('storage\\temp\\'.$fileName), ZipArchive::CREATE) === TRUE)
             {
