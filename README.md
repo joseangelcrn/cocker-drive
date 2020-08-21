@@ -87,15 +87,17 @@ DB_PASSWORD= (password  database, default: 'empty') <br>
 # Release 0.1.0
 
  - **Link**: https://github.com/joseangelcrn/cocker-drive/releases/tag/0.1.0
- - Can upload , rename and delete files.
- - Can search your files by it filename.
- - Home view display used storage group by extension type.
- 
- <br>
+
  
  # Release 0.1.1
-
+ 
  - **Link**: https://github.com/joseangelcrn/cocker-drive/releases/tag/0.1.1
- - With this release, mainly I fix usability problem in buscador (searcher) component, where now the displayed data is  shown lightly different, in adition, usabilty of this page  was improved.
- - Also, with this changes, on searcher view I have fixed problems like when user tried to rename/delete some file.
-
+ 
+ # Release 0.2.0
+ 
+ - **Link**: https://github.com/joseangelcrn/cocker-drive/releases/tag/0.2.0
+ 
+ # Release 0.3.0
+ 
+ - **Link**: https://github.com/joseangelcrn/cocker-drive/releases/tag/0.3.0
+ 
