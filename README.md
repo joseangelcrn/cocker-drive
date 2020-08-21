@@ -86,6 +86,7 @@ DB_PASSWORD= (password  database, default: 'empty') <br>
 
 # Future thoughts
 
++ Tests for correct working of application. (Working on this, right now !)
 + Labeling system for each file. (like twitter)
 + Temporal urls for sharing and another uses.
 + Fichero Class will be splited in two files:
@@ -94,5 +95,4 @@ DB_PASSWORD= (password  database, default: 'empty') <br>
 
 Those changes will produce an improving of code reading and comprehension.
 
-+ Tests for correct working of application. (Working on this, right now !)
 
