@@ -82,3 +82,17 @@ DB_PASSWORD= (password  database, default: 'empty') <br>
 ## 8. Run serve.
 
 > php artisan serve
+
+
+# Future thoughts
+
++ Labeling system for each file. (like twitter)
++ Temporal urls for sharing and another uses.
++ Fichero Class will be splited in two files:
+  - FileBinManager: Refering to bin part of files (Uploading, deleting, etc..).
+  - FileDataManager: Refering to storaged data on database about file information (Extension, created_at, real_name, hash_name,etc..).
+
+Those changes will produce an improving of code reading and comprehension.
+
++ Tests for correct working of application. (Working on this, right now !)
+
