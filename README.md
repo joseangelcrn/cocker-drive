@@ -115,4 +115,6 @@ DB_PASSWORD= (password  database, default: 'empty') <br>
   - FileBinManager: Refering to bin part of files (Uploading, deleting, etc..).
   - FileDataManager: Refering to storaged data on database about file information (Extension, created_at, real_name, hash_name,etc..).
 
-Those changes will produce an improving of code reading and comprehension
+Those changes will produce an improving of code reading and comprehension.
+
++ Tests for correct working of application. (Working on this, right now !)
