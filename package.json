@@ -28,6 +28,7 @@
         "chart.js": "^2.9.3",
         "vue-chartjs": "^3.5.0",
         "vue-confirm-dialog": "^1.0.2",
-        "vue-css-donut-chart": "^1.3.0"
+        "vue-css-donut-chart": "^1.3.0",
+        "vue-date-time-picker-js": "^1.0.2"
     }
 }
