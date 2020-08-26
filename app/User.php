@@ -93,7 +93,7 @@ class User extends Authenticatable
        */
       public  function getUsedSpaceDisk()
       {
-          $files = $this->ficheros;
+          $files = $this->ficheros()->where('active',1)->get();
 
           $data = array();
 
