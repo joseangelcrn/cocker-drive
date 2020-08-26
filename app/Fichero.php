@@ -3,6 +3,7 @@
 namespace App;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\File;
@@ -13,7 +14,7 @@ class Fichero extends Model
 {
     //
     protected $table = "ficheros";
-    protected $fillable = ['nombre_real','nombre_hash','user_id','extension','size','width','height'];
+    protected $fillable = ['nombre_real','nombre_hash','user_id','extension','size','width','height','active'];
 
     private static  $extensions = [
         'img'=>[
@@ -44,6 +45,10 @@ class Fichero extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function logs()
+    {
+        return $this->hasMany(Log::class,'file_id');
+    }
 
     /**
      * Functions
@@ -57,6 +62,27 @@ class Fichero extends Model
      {
         return Storage::disk('public');
      }
+
+     /**
+      * Enable data (database level)
+      */
+      public function enable()
+      {
+        $disabled =   $this->update([
+            'active' => true
+        ]);
+        return $disabled;
+      }
+      /**
+       * Enable data (database level)
+       */
+      public function disable()
+      {
+        $disabled =   $this->update([
+            'active' => false
+        ]);
+        return $disabled;
+      }
 
      /**
       * Returns total used disk space from a directory (MB).
@@ -294,7 +320,7 @@ class Fichero extends Model
 
         );
 
-        return $nuevoFichero != null ? true : false;
+        return $nuevoFichero;
      }
 
      /**
@@ -330,18 +356,35 @@ class Fichero extends Model
 
     public static function fullGuardado($ficheros,User $user)
     {
-        $resultado = false;
-        $statusFicherosGuardados = array();
+        $result = array();
+        $savedFiles = new Collection();
         foreach ($ficheros as $fichero) {
-           $guardado =  Fichero::guardar($fichero,$user);
-           array_push($statusFicherosGuardados,$guardado);
+           $savedFile =  Fichero::guardar($fichero,$user);
+           $savedFiles->push($savedFile);
         }
         //if all status are true, every file was successfully uploaded.
-        if (count(array_unique($statusFicherosGuardados)) === 1 && end($statusFicherosGuardados) === true) {
-            $resultado = true;
-        }
+        // if (count(array_unique($result['files'])) === 1 && end($result['files']) != null) {
+        //     $result['all_files_saved'] = true;
+        // }
+       $someNullItem =  $savedFiles->contains(function($file, $key) {
+            return (
+                       $file->id === null &&
+                       $file->nombre_real === null &&
+                       $file->nombre_hash === null &&
+                       $file->extension === null &&
+                       $file->size === null &&
+                       $file->active === null &&
+                    //    $file->width === null &&
+                    //    $file->height === null &&
+                       $file->user_id === null
 
-        return $resultado;
+                   );
+        });
+
+        $result['savedFiles'] = $savedFiles;
+        $result['someNullItem'] = $someNullItem;
+
+        return $result;
     }
 
     /**
@@ -400,7 +443,8 @@ class Fichero extends Model
      */
     public function deleteData()
     {
-        return $this->delete();
+        $disabled = $this->disable();
+        return $disabled;
     }
 
 
@@ -417,7 +461,7 @@ class Fichero extends Model
          if ($deletedBin) {
              $deletedData = $this->deleteData();
              if ($deletedData) {
-                 $result = true;
+                $result = true;
              }
          }
 
