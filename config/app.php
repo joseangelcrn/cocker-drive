@@ -175,6 +175,11 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /**
+         * laravelvuedatatable
+         */
+        JamesDordoy\LaravelVueDatatable\Providers\LaravelVueDatatableServiceProvider::class,
+
     ],
 
     /*
