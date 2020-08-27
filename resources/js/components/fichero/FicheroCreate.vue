@@ -29,10 +29,10 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <button @click="guardar()" type="button" :disabled="disabledForm || resultado!= null" class="btn btn-primary">
+                        <button @click="guardar()" type="button" :disabled="disabledForm || resultado!= null && resultado != false" class="btn btn-primary">
                             Guardar Fichero
                         </button>
-                        <gif-loading class="ml-3"  :show="resultado != null"></gif-loading>
+                        <gif-loading class="ml-3"  :show="resultado != null && resultado != false"></gif-loading>
                     </div>
                     <div class="form-group border p-2" v-if="ficheros.length > 0">
                          <h4>Información de la subida</h4>
