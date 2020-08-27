@@ -2,9 +2,18 @@
     <div class="container">
         <div class="row ">
             <div class="col-12 text-center">
-                <a :disabled="loading"  :class="{'disabled':loading}" :href="url_list_files" class="btn btn-secondary" @click="loading=true" title="Ver mis archivos"><i class="fas fa-list"></i></a>
-                <a :disabled="loading"  :class="{'disabled':loading}"  :href="url_upload_files" class="btn btn-success" @click="loading=true" title="Subir archivos"><i class="fas fa-cloud-upload-alt"></i></a>
-                <a :disabled="loading" :class="{'disabled':loading}"  @click.prevent="downloadCompressedFiles" class="btn btn-warning"  title="Descargar todos los archivo en carpeta comprimida."><i class="far fa-file-archive"></i></a>
+                <a :disabled="loading"  :class="{'disabled':loading}" :href="url_list_files" class="btn btn-secondary" @click="loading=true" title="Ver mis archivos">
+                    <i class="fas fa-list"></i>
+                </a>
+                <a :disabled="loading"  :class="{'disabled':loading}"  :href="url_upload_files" class="btn btn-success" @click="loading=true" title="Subir archivos">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </a>
+                <a :disabled="loading" :class="{'disabled':loading}" :href="url_logs"  class="btn btn-info" @click="loading=true"  title="Historial de subidaes,modificaciones y borrados de tus archivos.">
+                    <i class="fas fa-info-circle"></i>
+                </a>
+                <a :disabled="loading" :class="{'disabled':loading}"  @click.prevent="downloadCompressedFiles" class="btn btn-warning"  title="Descargar todos los archivo en carpeta comprimida.">
+                    <i class="far fa-file-archive"></i>
+                </a>
                 <a   :disabled="loading" :class="{'disabled':loading}"   @click.prevent="deleteAllFiles" class="btn btn-danger"  title="Borrar todos los archivos.">
                     <i class="fas fa-folder-open"></i>
                     <i class="fas fa-dumpster"></i>
@@ -28,7 +37,8 @@
             'url_list_files',
             'url_upload_files',
             'url_download_all_compressed_files',
-            'url_delete_all'
+            'url_delete_all',
+            'url_logs'
         ],
         data(){
             return{

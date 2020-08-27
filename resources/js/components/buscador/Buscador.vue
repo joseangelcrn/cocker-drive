@@ -295,7 +295,7 @@
                         that.labelButtonAdvancedSearching = 'Busqueda Avanzada';
                     },
                     error=>{
-                        console.log('Error al actualizar el nombre de la imagen');
+                        console.log('Error al hacer la busqueda avanzada');
                         that.labelButtonAdvancedSearching = 'Busqueda Avanzada';
                     }
                 )

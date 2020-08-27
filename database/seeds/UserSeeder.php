@@ -13,6 +13,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         //
-       User::crear('jose','jose@gmail.com','josejose');
+        User::truncate();
+        User::crear('jose','jose@gmail.com','josejose');
     }
 }
