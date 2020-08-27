@@ -15,13 +15,47 @@ import 'vue-css-donut-chart/dist/vcdonut.css';
 //confirm dialog
 import VueConfirmDialog from 'vue-confirm-dialog'
 
+//date-time picker
+import VueDatetimePickerJs from 'vue-date-time-picker-js';
+
+//data-table
+import DataTable from 'laravel-vue-datatable';
+
+
+//==============================
+
+
 //uses
+
 
 //chart donut
 Vue.use(Donut);
 
 //vue-confirm-dialog
-Vue.use(VueConfirmDialog)
+Vue.use(VueConfirmDialog);
+
+//date-time-picker
+Vue.use(VueDatetimePickerJs,
+    {
+        name:'date-picker',
+        props: {
+            inputFormat: 'YYYY-MM-DD HH:mm',
+            format: 'YYYY-MM-DD HH:mm',
+            editable: true,
+            inputClass: 'form-control border',
+            placeholder: 'Introduce una fecha',
+            altFormat: 'YYYY-MM-DD HH:mm',
+            color: '#4d4dff',
+            autoSubmit: false,
+            //...
+            //... And whatever you want to set as default
+            //...
+        }
+    });
+
+//data-table
+Vue.use(DataTable);
+
 
 
 /**
@@ -50,10 +84,16 @@ Vue.component('gif-loading', require('./components/Gif/GifLoading.vue').default)
 
 Vue.component('chart-donut', require('./components/grafico/ChartDonut.vue').default);
 
+Vue.component('log', require('./components/log/Log.vue').default);
+
 
 
 //confirm dialog
 Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
+
+//date-time picker
+Vue.component('date-picker', VueDatetimePickerJs);
+
 
 
 /**
