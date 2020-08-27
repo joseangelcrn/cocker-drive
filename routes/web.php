@@ -1,5 +1,8 @@
 <?php
 
+use App\Fichero;
+use App\Log;
+use App\LogType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -21,14 +24,12 @@ Route::get('/', function () {
     } else {
         return redirect()->route('home');
     }
-
-    return view('welcome');
 });
 
 Auth::routes();
 
 
-//Rutas protegidas
+//Protected routes.
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/home', 'HomeController@index')->name('home');
@@ -38,5 +39,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('file/download-single-file', 'FicheroController@downloadSingleFile')->name('fichero.download-single-file');
     Route::delete('file/delete-all-files-current-user', 'FicheroController@fullDelete')->name('fichero.delete-all-files-current-user');
     Route::resource('/fichero', 'FicheroController')->name('fichero','*');
+
+
+    Route::get('/log', 'LogController@index')->name('log.index');
+    Route::get('/log/searching', 'LogController@searching')->name('log.searching');
 
 });
