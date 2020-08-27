@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Fichero;
+use App\Log;
 use App\Seguridad;
 use Illuminate\Http\Request;
 use Auth;
@@ -15,6 +16,7 @@ use ZipArchive;
 
 class FicheroController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -51,10 +53,21 @@ class FicheroController extends Controller
 
             $ficheros = $request->ficheros;
             $user = Auth()->user();
-            $resultado = Fichero::fullGuardado($ficheros,$user);
+            $result = Fichero::fullGuardado($ficheros,$user);
         }
 
-        return response()->json(['resultado'=>$resultado]);
+        $uploadedFiles = $result['savedFiles'];
+
+        foreach ($uploadedFiles as $file) {
+            $file = $file->getAttributes();
+            $fileId = $file['id'];
+            Log::add('store',$fileId);
+        }
+
+        //if there isnt any null item ($result['someNullItem'] was false) mean is all ok.
+        //That why im using '!' on result.
+
+        return response()->json(['resultado'=>!$result['someNullItem']]);
     }
 
     /**
@@ -101,9 +114,15 @@ class FicheroController extends Controller
         $newFileName = $request->new_name;
         $file = Fichero::findOrFail($id);
 
+        $oldFileName = $file->nombre_real;
+
         if ($newFileName != null  and $newFileName != '') {
             $updatedFile = $file->updateFileNameDb($newFileName);
             $newFileName == $updatedFile->nombre_real ? $result = true: $result = false;
+        }
+
+        if ($result) {
+            Log::add('update',$file->id, $oldFileName,$newFileName);
         }
 
         return response()->json([
@@ -125,6 +144,10 @@ class FicheroController extends Controller
         $file = Fichero::findOrFail($id);
 
         $result = $file->fullDelete();
+
+        if ($result) {
+            Log::add('destroy',$file->id);
+        }
 
         return response()->json(['result'=>$result]);
 
@@ -156,6 +179,11 @@ class FicheroController extends Controller
 
         foreach ($files as $file) {
             $deleted = $file->fullDelete();
+
+            if ($deleted) {
+                Log::add('destroy',$file->id);
+            }
+
             array_push($arrayDeletingStatus,$deleted);
         }
 
@@ -178,7 +206,8 @@ class FicheroController extends Controller
         $filesPerPage = 3;
 
         // $matchedFiles = $user->ficheros()->where('nombre_real','like',$fileNameToFind.'%')->paginate($filesPerPage);
-        $preSearching = $user->ficheros()->where('nombre_real','like',$fileNameToFind.'%');
+        $preSearching = $user->ficheros()->where('nombre_real','like',$fileNameToFind.'%')
+        ->where('active','=',1);
 
         //Additionals filters which users can select for a better searching.
         $preSearching = Fichero::applyFilters($preSearching,$filters);
