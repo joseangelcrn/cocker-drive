@@ -22,6 +22,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/global.css') }}" rel="stylesheet">
+
 </head>
 <body>
     <div id="app">
@@ -61,8 +62,19 @@
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                <div class="dropdown-menu dropdown-menu-right my-0 py-0"  aria-labelledby="navbarDropdown">
+                                    {{--  --}}
+                                    <a  class="nav-link bg-secondary text-center text-white rounded-top" href="{{route('fichero.mis-ficheros')}}">
+                                        <b>Listar archivos</b>
+                                    </a>
+                                    <a  class="nav-link bg-success text-center" href="{{route('fichero.create')}}">
+                                        <b>Subir archivos</b>
+                                    </a>
+                                    <a  class="nav-link bg-info text-center" href="{{route('log.index')}}">
+                                        <b>Log</b>
+                                    </a>
+                                    {{--  --}}
+                                    <a class="nav-link bg-info text-center text-white bg-dark rounded-bottom" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         <i class="fas fa-sign-out-alt"></i>
@@ -71,6 +83,8 @@
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
+
+
                                 </div>
                             </li>
                         @endguest
