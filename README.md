@@ -86,12 +86,14 @@ DB_PASSWORD= (password  database, default: 'empty') <br>
 
 # Future thoughts
 
-+ Tests for correct working of application. (Working on this, right now !)
-+ Labeling system for each file. (like twitter)
+
++ Fichero class will change. With a class inheritance system i will optimize and clarify code. This feature will improve reading and it will get modularity in order to reuse code. (Working right now !)
+
+<hr>
+
++ Tests for correct working of application.
++ Labeling system for each user file. (like twitter)
 + Temporal urls for sharing and another uses.
-+ Fichero Class will be splited in two files:
-  - FileBinManager: Refering to bin part of files (Uploading, deleting, etc..).
-  - FileDataManager: Refering to storaged data on database about file information (Extension, created_at, real_name, hash_name,etc..).
 
 Those changes will produce an improving of code reading and comprehension.
 
