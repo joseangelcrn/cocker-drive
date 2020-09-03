@@ -2,6 +2,7 @@
 
 namespace App\Utils\File\Handler;
 
+use App\Fichero;
 use App\User;
 use App\Utils\File\Types\ImageFile;
 use Facade\Ignition\Support\ComposerClassMap;
@@ -60,29 +61,51 @@ class FileHandler
        * @param $file = must be a File Object
        */
 
-    public static function discoverClass($file)
+    public static function discoverClassByFile($file)
     {
         $fileTypesList = self::getFileTypesList();
         $class = null;
-        $index = 0;
-        $maxIndex = sizeof($fileTypesList);
         $extension = $file->extension();
         $fileName = $file->getClientOriginalName();
+
+        $class = self::findClassType($extension,$file,$fileName);
+        // while ($class === null and $index <= ($maxIndex-1)) {
+        //     $path = $fileTypesList[$index];
+        //     $fixedPath = self::fixPath($path);
+        //     $fixedClass = new $fixedPath($file,$fileName,$extension);
+
+        //     if ($fixedClass->isThisType()) {
+        //         $class = $fixedClass;
+        //     }
+
+        //     $index++;
+        // }
+
+        return $class;
+
+    }
+
+    //mechanic to find class
+    public static function findClassType($extension,$file = null,$fileName = null)
+    {
+        $fileTypesList = self::getFileTypesList();
+
+        $class = null;
+        $index = 0;
+        $maxIndex = sizeof($fileTypesList);
+
 
         while ($class === null and $index <= ($maxIndex-1)) {
             $path = $fileTypesList[$index];
             $fixedPath = self::fixPath($path);
             $fixedClass = new $fixedPath($file,$fileName,$extension);
-
             if ($fixedClass->isThisType()) {
                 $class = $fixedClass;
             }
 
             $index++;
         }
-
         return $class;
-
     }
 
     /**
@@ -91,7 +114,7 @@ class FileHandler
 
     public static function store($file,User $user,$fileName = null)
     {
-        $class = self::discoverClass($file);
+        $class = self::discoverClassByFile($file);
 
         if ($fileName === null) {
             $fileName = $file->getClientOriginalName();
@@ -106,5 +129,22 @@ class FileHandler
         return $result;
     }
 
+    /**
+     * Return string path to show in any view
+     */
+
+     public static function getPath(Fichero $file)
+     {
+        $class = self::findClassType($file->extension);
+        $typeClass = new $class();
+        $path = $typeClass->getPublicPathOfFile($file);
+        return $path;
+    }
+
+    public static function getPublicPath(Fichero $file)
+    {
+        $path = self::getPath($file);
+        return public_path($path);
+    }
 
 }
