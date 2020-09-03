@@ -2,6 +2,7 @@
 
 namespace App\Utils\File\Core;
 
+use App\Fichero;
 use App\User;
 use Illuminate\Support\Facades\Storage;
 
@@ -132,6 +133,7 @@ class  PrototypeFile
         return $path;
     }
 
+    //delete binary file in default disk
     public function deleteBin(User $owner,$hashedFileName)
     {
         $userPath = self::getUserPath($owner->getRootDir());
@@ -181,6 +183,8 @@ class  PrototypeFile
         return $result;
     }
 
+
+
     //return true if exist file on this user directory
     public static function exist(User $user, $hashedFileName)
     {
@@ -190,5 +194,11 @@ class  PrototypeFile
         return $exist;
     }
 
+    //this function is used to show file in any view
+    public  function getPublicPathOfFile(Fichero $file)
+    {
+        $userPath =self::getUserPath($file->user->getRootDir()).$file->nombre_hash;
 
+        return $userPath;
+    }
 }
