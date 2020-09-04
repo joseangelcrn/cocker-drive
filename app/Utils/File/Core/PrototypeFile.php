@@ -198,7 +198,7 @@ class  PrototypeFile
     public  function getPublicPathOfFile(Fichero $file)
     {
         $userPath =self::getUserPath($file->user->getRootDir()).$file->nombre_hash;
-
-        return $userPath;
+        $publicPath = public_path("storage\\$userPath");
+        return $publicPath;
     }
 }
