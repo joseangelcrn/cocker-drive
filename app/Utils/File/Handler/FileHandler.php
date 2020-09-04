@@ -69,17 +69,6 @@ class FileHandler
         $fileName = $file->getClientOriginalName();
 
         $class = self::findClassType($extension,$file,$fileName);
-        // while ($class === null and $index <= ($maxIndex-1)) {
-        //     $path = $fileTypesList[$index];
-        //     $fixedPath = self::fixPath($path);
-        //     $fixedClass = new $fixedPath($file,$fileName,$extension);
-
-        //     if ($fixedClass->isThisType()) {
-        //         $class = $fixedClass;
-        //     }
-
-        //     $index++;
-        // }
 
         return $class;
 
@@ -130,10 +119,27 @@ class FileHandler
     }
 
     /**
+     * Function to delete file from storage
+     */
+
+    public static function delete(Fichero $file)
+    {
+        $hashedName = $file->nombre_hash;
+        $extension = $file->extension;
+        $user = $file->user;
+
+        $class = self::findClassType($extension);
+        $prototypeClass = new $class();
+        $deletedFile = $prototypeClass->deleteBin($user,$hashedName);
+
+        return $deletedFile;
+    }
+
+    /**
      * Return string path to show in any view
      */
 
-     public static function getPath(Fichero $file)
+     private static function getPath(Fichero $file)
      {
         $class = self::findClassType($file->extension);
         $typeClass = new $class();
@@ -141,6 +147,9 @@ class FileHandler
         return $path;
     }
 
+    /**
+     * This function is used to display file in browser by it  stringfy path
+     */
     public static function getPublicPath(Fichero $file)
     {
         $path = self::getPath($file);
