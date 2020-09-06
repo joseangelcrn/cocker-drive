@@ -40,6 +40,11 @@ class  PrototypeFile
         $this->extension= $extension;
     }
 
+    public function __destruct()
+    {
+        // dd('destruyendo prototipo');
+    }
+
     /**##############################
      *  Default disk.
      * ##############################
@@ -162,6 +167,7 @@ class  PrototypeFile
         $path = public_path('storage\\');
         dd($path);
     }
+
 
      /**
       * Object util functions
