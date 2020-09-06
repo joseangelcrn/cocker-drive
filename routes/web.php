@@ -3,7 +3,13 @@
 use App\Fichero;
 use App\Log;
 use App\LogType;
+use App\User;
+use App\Utils\File\Handler\FileHandler;
+use App\Utils\File\Types\ImageFile;
+use Illuminate\Http\Request;
+use Illuminate\Http\Testing\FileFactory;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,3 +51,19 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/log/searching', 'LogController@searching')->name('log.searching');
 
 });
+
+Route::get('/test',  function (Request $request)
+{
+    $fakeFile = new FileFactory();
+    $file = $fakeFile->create('test.mp3',3);
+// dd($file);
+$user = User::first();
+    Auth::login($user);
+    $image = new ImageFile();
+
+    $fichero = Fichero::first();
+    dd(
+        FileHandler::compressAndDownloadAllFilesByUser($user)
+    );
+});
+
