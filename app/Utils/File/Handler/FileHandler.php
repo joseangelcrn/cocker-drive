@@ -39,7 +39,7 @@ class FileHandler
     }
 
     //return existing custom types of files classes directory
-        private static function getFileTypesList()
+        public static function getFileTypesList()
         {
             $path =self::getUtilsDir().'\\Types';
             $list = glob($path.'\\*.php');
@@ -48,18 +48,25 @@ class FileHandler
 
         //return simulated full path class as string by import classes.
         //Starting from 'App\' directory.
-        private static function fixPath($path,$nameSpaceArray = null)
+        public static function fixPath($path,$nameSpaceArray = [])
         {
-            $filePathWithOutExtension = str_replace('.php','',$path);
-            $splitedPathByApp = explode('\\app',$filePathWithOutExtension);
+            // $filePathWithOutExtension = str_replace('.php','',$path);
+            $splitedPathByApp = explode('\\app',$path);
             $fixedPath = 'App'.$splitedPathByApp[1];
-// dd('namespace',$nameSpaceArray);
-            if ($nameSpaceArray != null) {
-                dd('fixPath',$fixedPath);
+            $className =str_replace('.php','',explode('\\',$fixedPath)[sizeof(explode('\\',$fixedPath))-1]);
+            // dd($fixedPath,$className);
+            // if (in_array($fixedPath,$nameSpaceArray)) {
+            //     $fixedPath = explode('\\',$fixedPath)[sizeof(explode('\\',$fixedPath))-1];
+            // }
+            // //if namespace is new
+            // else{
+            //     array_push($nameSpaceArray,$fixedPath);
+            // }
+            $result['path'] = $fixedPath;
+            $result['className'] = $className;
 
-            }
-
-            return $fixedPath;
+            // dd($result);
+            return $result;
         }
 
      /**
@@ -96,8 +103,11 @@ class FileHandler
 
         while ($class === null and $index <= ($maxIndex-1)) {
             $path = $fileTypesList[$index];
+
             $fixedPath = self::fixPath($path,$nameSpaceArray);
-            $fixedClass = new $fixedPath($file,$fileName,$extension);
+            require_once $fixedPath['path'];
+            // dd($fixedPath);
+            $fixedClass = new $fixedPath['className']($file,$fileName,$extension);
 
             if ($fixedClass->isThisType()) {
                 $class = $fixedClass;
@@ -218,7 +228,7 @@ class FileHandler
     {
         $files = $user->ficheros;
         $ddMmYyyyToday = Carbon::now()->format('d-m-Y');
-        $nameSpaceArray = array();
+        $nameSpaceArray = [];
 
         $zip = new ZipArchive;
         $zipFilename  = self::PREFIX_DOWNLOADED_FILE.'_my_files_'.Seguridad::uniqueId().'_'.$ddMmYyyyToday.'.zip';
@@ -237,9 +247,7 @@ class FileHandler
                 //-->
                 // dd('compress files',$class);
                 $typeClass = new $class(null,$hashedName,$extension);
-                // dd($typeClass);
                 $userPathOfThisFileType = $typeClass->getUserPath($user->getRootDir());
-                // dd($userPathOfThisFileType);
                 $filePath = $userPathOfThisFileType."\\$hashedName";
 
                 $fullRealName = $realName.".".$extension;

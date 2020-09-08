@@ -54,16 +54,35 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('/test',  function (Request $request)
 {
+
+    $user = User::first();
+    Auth::login($user);
+    
     $fakeFile = new FileFactory();
     $file = $fakeFile->create('test.mp3',3);
 // dd($file);
-$user = User::first();
-    Auth::login($user);
+
     $image = new ImageFile();
 
     $fichero = Fichero::first();
     dd(
         FileHandler::compressAndDownloadAllFilesByUser($user)
     );
+//     //---------------------------------------------------
+
+// $nameSpaceOrigin = [];
+// for ($i=0; $i < 2; $i++) {
+//     foreach (FileHandler::getFileTypesList() as $file) {
+//         array_push($nameSpaceOrigin,$file);
+//     }
+// }
+// $nameSpaceResult = [];
+
+// foreach ($nameSpaceOrigin as $ns) {
+//    $nsFixed = FileHandler::fixPath($ns,$nameSpaceResult);
+//    array_push($nameSpaceResult,$nsFixed);
+// }
+
+// dd($nameSpaceOrigin,$nameSpaceResult);
 });
 
