@@ -41,27 +41,21 @@ class FileHandler
     //return existing custom types of files classes directory
         public static function getFileTypesList()
         {
-            $path =self::getUtilsDir().'\\Types';
-            $list = glob($path.'\\*.php');
+            $path =self::getUtilsDir().'/Types';
+            $list = glob($path.'/*.php');
             return $list;
         }
 
         //return simulated full path class as string by import classes.
         //Starting from 'App\' directory.
-        public static function fixPath($path,$nameSpaceArray = [])
+        public static function fixPath($path)
         {
             // $filePathWithOutExtension = str_replace('.php','',$path);
-            $splitedPathByApp = explode('\\app',$path);
+            $splitedPathByApp = explode('/app',$path);
             $fixedPath = 'App'.$splitedPathByApp[1];
-            $className =str_replace('.php','',explode('\\',$fixedPath)[sizeof(explode('\\',$fixedPath))-1]);
-            // dd($fixedPath,$className);
-            // if (in_array($fixedPath,$nameSpaceArray)) {
-            //     $fixedPath = explode('\\',$fixedPath)[sizeof(explode('\\',$fixedPath))-1];
-            // }
-            // //if namespace is new
-            // else{
-            //     array_push($nameSpaceArray,$fixedPath);
-            // }
+            $fixedPath = str_replace('.php','',$fixedPath);
+            $className =str_replace('.php','',explode('/',$fixedPath)[sizeof(explode('/',$fixedPath))-1]);
+
             $result['path'] = $fixedPath;
             $result['className'] = $className;
 
@@ -69,6 +63,25 @@ class FileHandler
             return $result;
         }
 
+        //this function work like 'fixPath' but for path array
+        // instead of unique path string
+        public  static function fixPathList($pathArray)
+        {
+
+            $fixedNSArray = array();
+            foreach ($pathArray  as $path) {
+              $fixedPath =  self::fixPath($path);
+              if (in_array($fixedPath['path'],$fixedNSArray)) {
+                array_push($fixedNSArray,$fixedPath['className']);
+              }
+              else{
+               array_push($fixedNSArray,$fixedPath['path']);
+              }
+            }
+
+            return $fixedNSArray;
+
+        }
      /**
       * Functions
       */
@@ -91,8 +104,8 @@ class FileHandler
 
     }
 
-    //mechanic to find class
-    public static function findClassType($extension,$file = null,$fileName = null,$nameSpaceArray = null)
+    //mechanism to find class
+    public static function findClassType($extension,$file = null,$fileName = null)
     {
         $fileTypesList = self::getFileTypesList();
 
@@ -100,13 +113,11 @@ class FileHandler
         $index = 0;
         $maxIndex = sizeof($fileTypesList);
 
-
         while ($class === null and $index <= ($maxIndex-1)) {
             $path = $fileTypesList[$index];
 
-            $fixedPath = self::fixPath($path,$nameSpaceArray);
-            require_once $fixedPath['path'];
-            // dd($fixedPath);
+            $fixedPath = self::fixPath($path);
+
             $fixedClass = new $fixedPath['className']($file,$fileName,$extension);
 
             if ($fixedClass->isThisType()) {
@@ -246,6 +257,7 @@ class FileHandler
                 //aqui deberia estar corregido
                 //-->
                 // dd('compress files',$class);
+                // dd($class);
                 $typeClass = new $class(null,$hashedName,$extension);
                 $userPathOfThisFileType = $typeClass->getUserPath($user->getRootDir());
                 $filePath = $userPathOfThisFileType."\\$hashedName";
