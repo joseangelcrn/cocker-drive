@@ -2,17 +2,7 @@
 
 namespace App\Utils\File\Handler;
 
-use App\Fichero;
-use App\Seguridad;
-use App\User;
-use App\Utils\File\Types\ImageFile;
-use Carbon\Carbon;
-use Facade\Ignition\Support\ComposerClassMap;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
-use PhpParser\Builder\Namespace_;
-use Symfony\Component\ClassLoader\ClassMapGenerator;
+
 use ZipArchive;
 
 
@@ -29,287 +19,138 @@ class FileHandler
     }
 
     /**
-     * Getters
+     * Directory getter
      */
-    //return root dir where is all utils features
-    public static function getUtilsDir()
-    {
-        $path = dirname(dirname(__FILE__));
+
+     //return root dir where is all utils features
+     // 'app\Utils'
+     public static function getUtilsDir(...$subDirs)
+     {
+        $path = app_path('Utils'.DIRECTORY_SEPARATOR.join(DIRECTORY_SEPARATOR,$subDirs));
         return $path;
     }
 
-    //return existing custom types of files classes directory
-        public static function getFileTypesList()
-        {
-            $path =self::getUtilsDir().'/Types';
-            $list = glob($path.'/*.php');
-            return $list;
-        }
-
-        //return simulated full path class as string by import classes.
-        //Starting from 'App\' directory.
-        public static function fixPath($path)
-        {
-            // $filePathWithOutExtension = str_replace('.php','',$path);
-            $splitedPathByApp = explode('/app',$path);
-            $fixedPath = 'App'.$splitedPathByApp[1];
-            $fixedPath = str_replace('.php','',$fixedPath);
-            $className =str_replace('.php','',explode('/',$fixedPath)[sizeof(explode('/',$fixedPath))-1]);
-
-            $result['path'] = $fixedPath;
-            $result['className'] = $className;
-
-            // dd($result);
-            return $result;
-        }
-
-        //this function work like 'fixPath' but for path array
-        // instead of unique path string
-        public  static function fixPathList($pathArray)
-        {
-
-            $fixedNSArray = array();
-            foreach ($pathArray  as $path) {
-              $fixedPath =  self::fixPath($path);
-              if (in_array($fixedPath['path'],$fixedNSArray)) {
-                array_push($fixedNSArray,$fixedPath['className']);
-              }
-              else{
-               array_push($fixedNSArray,$fixedPath['path']);
-              }
-            }
-
-            return $fixedNSArray;
-
-        }
-     /**
-      * Functions
-      */
-      /**
-       * This function try to parse $file param in one of Types of files included in App\Utils\File\Type directory.
-       * One way to detect which custom file class is.
-       *
-       * @param $file = must be a File Object
-       */
-
-    public static function discoverClassByFile($file)
+    //return 'app\Utils\File'
+    public static function getUtilsFileDir()
     {
-        $class = null;
-        $extension = $file->extension();
-        $fileName = $file->getClientOriginalName();
-
-        $class = self::findClassType($extension,$file,$fileName);
-
-        return $class;
-
+        $path = self::getUtilsDir('File');
+        return $path;
     }
 
-    //mechanism to find class
-    public static function findClassType($extension,$file = null,$fileName = null)
+    //return 'app\Utils\File\Core'
+    public static function getUtilsFileCoreDir()
     {
-        $fileTypesList = self::getFileTypesList();
+        $path = self::getUtilsFileDir().DIRECTORY_SEPARATOR.'Core';
+        return $path;
+    }
 
-        $class = null;
+    //return 'app\Utils\File\Types'
+    public static function getUtilsFileTypeDir()
+    {
+        $path = self::getUtilsFileDir().DIRECTORY_SEPARATOR.'Types';
+        return $path;
+    }
+
+
+
+    /**
+     * Return list of path of every files inside in app/Utils/File/Types
+     */
+    public static function getFileTypes()
+    {
+        $path =self::getUtilsFileTypeDir();
+        $types = glob($path.DIRECTORY_SEPARATOR.'*.php');
+        return $types;
+    }
+
+    /**
+     * Fixers
+     */
+
+    //  //Return fixed path(namespace) , it mean: from App/
+     public static function fixPath($path)
+     {
+        $splitedPathByApp = explode(DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR,$path);
+
+        $fixedNameSpace = 'App'.DIRECTORY_SEPARATOR.$splitedPathByApp[1];
+        $fixedNameSpace = str_replace('.php','',$fixedNameSpace);
+
+        $className =str_replace('.php','',explode(DIRECTORY_SEPARATOR,$fixedNameSpace)[sizeof(explode(DIRECTORY_SEPARATOR,$fixedNameSpace))-1]);
+
+        $result['nameSpace'] = '\\'.str_replace(DIRECTORY_SEPARATOR,'\\',$fixedNameSpace);//here im doing replace because of not found class eror in Linux envs
+        $result['className'] = $className;
+
+        return $result;
+     }
+
+     //Return fixed path(namespace) by an array
+     //
+    //  public static function fixPathList($pathArray)
+    //  {
+    //     $fixedPathArray = array();
+    //     foreach ($pathArray  as $path) {
+    //         $fixedPath =  self::fixPath($path);
+    //         if (in_array($fixedPath['path'],$fixedPathArray)) {
+    //           array_push($fixedPathArray,$fixedPath['className']);
+    //         }
+    //         else{
+    //          array_push($fixedPathArray,$fixedPath['path']);
+    //         }
+    //       }
+
+    //     return $fixedPathArray;
+    // }
+
+    /**
+     * Finders
+     */
+
+    public static function findClass($extension)
+    {
+
+        $fileTypes = self::getFileTypes();
         $index = 0;
-        $maxIndex = sizeof($fileTypesList);
+        $max = sizeof($fileTypes)-1;
+        $foundClass = null;
 
-        while ($class === null and $index <= ($maxIndex-1)) {
-            $path = $fileTypesList[$index];
+        $imports  = array();
 
-            $fixedPath = self::fixPath($path);
+        $result = array();
 
-            $fixedClass = new $fixedPath['className']($file,$fileName,$extension);
+        while ($foundClass === null or $index <=$max) {
 
-            if ($fixedClass->isThisType()) {
-                $class = $fixedClass;
+
+            $class = $fileTypes[$index];
+            $fixedClass  =self::fixPath($class);
+            // dd($fixedClass);
+            //if namespace exist
+            if (in_array($fixedClass['nameSpace'],$imports)) {
+                $initClass = new $fixedClass['className'](null,null,$extension);
             }
+            //if namespace not exist
+            else{
+                array_push($imports,$fixedClass['nameSpace']);
+                $initClass = new $fixedClass['nameSpace'](null,null,$extension);
+            }
+// dd($imports);
+            // array_push($result,$initClass);
+
+            // if ($initClass->isThisType()) {
+            //     // $foundClass = $initClass;
+            //     // $tokenWay = $fixedClass[$fixPathRresultIndex];
+            //     array_push($result,$initClass);
+            // }
 
             $index++;
         }
-        return $class;
-    }
 
-    /**
-     * Store current file on current user directory
-     */
 
-    public static function store($file,User $user,$fileName = null)
-    {
-        $class = self::discoverClassByFile($file);
+        // $result['foundClass'] = $foundClass;
+        // $result['way'] = $tokenWay;
 
-        if ($fileName === null) {
-            $fileName = $file->getClientOriginalName();
-        }
-
-        $result = false;
-
-        if ($class != null) {
-            $result = $class->storeBin($user);
-        }
-
+        dd($result,123);
         return $result;
-    }
-
-    /**
-     * Function to delete file from storage
-     */
-
-    public static function delete(Fichero $file)
-    {
-        $hashedName = $file->nombre_hash;
-        $extension = $file->extension;
-        $user = $file->user;
-
-        $class = self::findClassType($extension);
-        $prototypeClass = new $class();
-        $deletedFile = $prototypeClass->deleteBin($user,$hashedName);
-
-        return $deletedFile;
-    }
-
-    /**
-     * Return string path to show in any view
-     */
-
-     private static function getPath(Fichero $file)
-     {
-        $class = self::findClassType($file->extension);
-        $typeClass = new $class();
-        $path = $typeClass->getPublicPathOfFile($file);
-        return $path;
-    }
-
-    /**
-     * This function is used to display file in browser by it  stringfy path
-     */
-    public static function getPublicPath(Fichero $file)
-    {
-        $path = self::getPath($file);
-        return public_path($path);
-    }
-
-
-    public static function parseToMB($bytesAmount)
-    {
-        return $bytesAmount/1048576;
-    }
-
-    /**
-    * Returns total used disk space from a directory (MB).
-    * DB searching level !! (reworked function)
-    */
-    public static function getStorageInfoByUser(User $user)
-    {
-        $files = $user->ficheros()->where('active',1)->get();
-
-        $data = array();
-
-
-        foreach ($files as $file) {
-
-          $sizeMb = self::parseToMB($file->size);
-          $sizeMb = number_format($sizeMb,2);
-
-          //extension
-          if (!isset($data['ext'][$file->extension])) {
-              $data['ext'][$file->extension] = $sizeMb;
-          }
-          else{
-              $data['ext'][$file->extension] += $sizeMb;
-          }
-
-
-          //total
-          if (!isset($data['total'])) {
-              $data['total'] = $sizeMb;
-          } else {
-              $data['total'] += $sizeMb;
-          }
-
-        }
-
-
-        return $data;
-    }
-
-    /**
-     * Compress all files by user and return path of zip file which contains his/her files.
-     */
-    public static function compressAndDownloadAllFilesByUser(User $user)
-    {
-        $files = $user->ficheros;
-        $ddMmYyyyToday = Carbon::now()->format('d-m-Y');
-        $nameSpaceArray = [];
-
-        $zip = new ZipArchive;
-        $zipFilename  = self::PREFIX_DOWNLOADED_FILE.'_my_files_'.Seguridad::uniqueId().'_'.$ddMmYyyyToday.'.zip';
-
-
-        if ( $zip->open(public_path('storage\\temp\\'.$zipFilename), ZipArchive::CREATE) === TRUE){
-
-            foreach ($files as $file) {
-
-                $hashedName = $file->nombre_hash;
-                $realName = $file->nombre_real;
-                $extension = $file->extension;
-
-                $class = self::findClassType($extension,null,null,$nameSpaceArray);
-                //aqui deberia estar corregido
-                //-->
-                // dd('compress files',$class);
-                // dd($class);
-                $typeClass = new $class(null,$hashedName,$extension);
-                $userPathOfThisFileType = $typeClass->getUserPath($user->getRootDir());
-                $filePath = $userPathOfThisFileType."\\$hashedName";
-
-                $fullRealName = $realName.".".$extension;
-                $zip->addFile($filePath, $fullRealName);
-
-            }
-
-
-            $zip->close();
-            $path = public_path('storage\\temp\\'.$zipFilename);
-
-            return response()->download($path);
-        }
-        //-----------------------------------------------------
-        // $pathUserFiles = public_path('storage\\ficheros\\'.$user->getRootDir());
-        // $path = null;
-
-        // //first check if exist path
-        // if (file_exists($pathUserFiles)) {
-        //     //creating zip
-        //     $zip = new ZipArchive;
-        //     $ddMmYyyyToday = Carbon::now()->format('d-m-Y');
-
-        //     $fileName = self::PREFIX_DOWNLOADED_FILE.'_mis_archivos_'.Seguridad::uniqueId().'_'.$ddMmYyyyToday.'.zip';
-
-        //     if ( $zip->open(public_path('storage\\temp\\'.$fileName), ZipArchive::CREATE) === TRUE)
-        //     {
-
-        //         $files = File::files($pathUserFiles);
-
-        //         foreach ($files as $key => $value) {
-        //             $relativeNameInZipFile = basename($value);
-        //             $dbDataFile = Fichero::select('nombre_hash','nombre_real','extension')->where('nombre_hash',$relativeNameInZipFile)->where('user_id',$user->id)->first();
-        //             $realFileName = $dbDataFile->nombre_real;
-        //             $realExtensionFile = $dbDataFile->extension;
-
-        //             $fullRealName = $realFileName.".".$realExtensionFile;
-        //             $zip->addFile($value, $fullRealName);
-        //         }
-
-        //         $zip->close();
-        //         $path = public_path('storage\\temp\\'.$fileName);
-        //         // return response()->download(public_path('storage\\temp\\'.$fileName));
-
-        //     }
-        // }
-
-        // return $path;
 
     }
-
 
 }

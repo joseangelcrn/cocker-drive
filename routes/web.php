@@ -55,34 +55,24 @@ Route::group(['middleware' => 'auth'], function () {
 Route::get('/test',  function (Request $request)
 {
 
-    $user = User::first();
-    Auth::login($user);
-    
-    $fakeFile = new FileFactory();
-    $file = $fakeFile->create('test.mp3',3);
-// dd($file);
+    dd(FileHandler::findClass('avi'));
+// $user = User::first();
 
-    $image = new ImageFile();
+// $pathArray = array();
 
-    $fichero = Fichero::first();
-    dd(
-        FileHandler::compressAndDownloadAllFilesByUser($user)
-    );
-//     //---------------------------------------------------
-
-// $nameSpaceOrigin = [];
 // for ($i=0; $i < 2; $i++) {
-//     foreach (FileHandler::getFileTypesList() as $file) {
-//         array_push($nameSpaceOrigin,$file);
+//     foreach (FileHandler::getFileTypesList() as $pathFile) {
+//         array_push($pathArray,$pathFile);
 //     }
 // }
-// $nameSpaceResult = [];
 
-// foreach ($nameSpaceOrigin as $ns) {
-//    $nsFixed = FileHandler::fixPath($ns,$nameSpaceResult);
-//    array_push($nameSpaceResult,$nsFixed);
-// }
+// // dd($pathArray);
+// dd(
 
-// dd($nameSpaceOrigin,$nameSpaceResult);
+
+//     FileHandler::findClassType('mp3')
+
+
+// );
 });
 
